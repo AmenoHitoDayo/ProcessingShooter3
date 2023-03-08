@@ -88,3 +88,4 @@ class Jiki extends Machine{
     }
   }
 }
+//てすと
