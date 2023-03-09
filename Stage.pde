@@ -2,6 +2,7 @@ class Stage{
     Shots jikiShots;
     Shots enemyShots;
     Enemys enemys;
+    Items items;
     Jiki jiki;
     int count = 0;
 
@@ -9,6 +10,7 @@ class Stage{
         jikiShots = new Shots();
         enemyShots = new Shots();
         enemys = new Enemys();
+        items = new Items();
         jiki = new Jiki();
         count = 0;
     }
@@ -20,6 +22,7 @@ class Stage{
         jiki.updateMe();
         jiki.hit(this);
         jiki.Shot(this);
+        items.updateMe(this);
         count++;
         enemySpawn();
     }
@@ -34,6 +37,11 @@ class Stage{
 
     int getEnemyCount(){
         return enemys.getArray().size();
+    }
+
+    void startNewStage(Stage s){
+        s.jiki = this.jiki;
+        playingStage = s;
     }
 }
 

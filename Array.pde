@@ -68,3 +68,30 @@ class Enemys{
         return Enemys;
     }
 }
+
+class Items{
+    ArrayList<Item> Items;
+
+    Items(){
+        Items = new ArrayList<Item>();
+    }
+
+    void updateMe(Stage stage){
+        Iterator<Item> it = Items.iterator();
+        while(it.hasNext()){
+            Item i = it.next();
+            i.updateMe(stage);
+            if(i.pos.x < 0 - i.size || i.pos.x > width + i.size || i.pos.y < 0 - i.size || i.pos.y > height + i.size){
+                it.remove();
+            }
+        }
+    }
+
+    void addItem(Item i){
+        Items.add(i);
+    }
+
+    ArrayList<Item> getArray(){
+        return Items;
+    }
+}

@@ -1,7 +1,5 @@
 class Shot extends Mover{
     color col = color(255);
-    float size = 4;
-    PVector accel = new PVector(0, 0);
 
     Shot(float _x, float _y){
         super(_x, _y);
@@ -19,8 +17,9 @@ class Shot extends Mover{
     }
 
     void drawMe(){
+        noStroke();
         fill(col);
-        ellipse(pos.x, pos.y, size, size);
+        ellipse(pos.x, pos.y, size * 2, size * 2);
     }
 
     boolean collision(Machine m){
