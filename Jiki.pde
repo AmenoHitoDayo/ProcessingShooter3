@@ -107,9 +107,12 @@ class Jiki extends Machine{
       if(isAbsorbing()){
         float d = dist(pos.x, pos.y, s.pos.x, s.pos.y);
         if(d < s.size + absorbArea){
-          Item i = new Item(s.pos.x, s.pos.y, red(s.col), green(s.col), blue(s.col));
+          Shot explode = new Shot(s.pos.x, s.pos.y);
+          explode.col = color(255, 127);
+          explode.size = s.size * 2;
+          explode.vel = new PVector(1, 0);
           it.remove();  //多重削除になることがあるなこれ
-          stage.items.addItem(i);
+          stage.jikiShots.addShot(explode);
           print("absorb");
         }
       }
