@@ -143,7 +143,7 @@ class Jiki extends Machine{
     if(isAbsorbing()){
       absorbArea += absorbMaxArea / absorbFrame;
       stroke(255);
-      strokeWeight(1);
+      strokeWeight(0);
       fill(255, 180 / absorbFrame * (absorbCount - count));
       ellipse(pos.x, pos.y, absorbArea * 2, absorbArea * 2);
     }else{
