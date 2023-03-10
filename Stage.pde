@@ -19,9 +19,7 @@ class Stage{
         jikiShots.updateMe();
         enemyShots.updateMe();
         enemys.updateMe(this);
-        jiki.updateMe();
-        jiki.hit(this);
-        jiki.Shot(this);
+        jiki.updateMe(this);
         items.updateMe(this);
         count++;
         enemySpawn();

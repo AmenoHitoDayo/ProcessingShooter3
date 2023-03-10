@@ -7,6 +7,8 @@ class Jiki extends Machine{
   int absorbCount = 0;
   int absorbArea = 0;
   int absorbMaxArea = 150;
+  int releaseWaitFrame = 30;
+  int releaseWaitCount = 0;
   float RedP, GreenP, BlueP;
   boolean isRelease = false;  //開放しているかどうか
 
@@ -20,7 +22,7 @@ class Jiki extends Machine{
     BlueP = 0;
   }
 
-  void updateMe(){
+  void updateMe(Stage stage){
     vel = new PVector(0, 0);
     if(keyPressed){
       if(up){
@@ -42,9 +44,12 @@ class Jiki extends Machine{
     }else{
       vel.mult(speed);
     }
+    shot(stage);
+    hit(stage);
+    absorb();
+    release(stage);
     super.updateMe();
     bound();
-    absorb();
   }
 
   void drawMe(){
@@ -58,9 +63,21 @@ class Jiki extends Machine{
         easyTriangle(pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
         fill(0, 0, 255, BlueP);
         easyTriangle(pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
+      }else{
+        if(isRelease){
+          noStroke();
+          fill(255, 0, 0, RedP / 2);
+          easyTriangle(pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
+          fill(0, 255, 0, GreenP / 2);
+          easyTriangle(pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
+          fill(0, 0, 255, BlueP / 2);
+          easyTriangle(pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
+        }
       }
-      if(isInvincible()){
-        fill(col, 127);
+      if((isInvincible() && count % 2 == 0) || isRelease == true){
+        fill(0);
+      }else if(slow){
+        fill(col, 180);
       }else{
         fill(col);
       }
@@ -69,7 +86,14 @@ class Jiki extends Machine{
       easyTriangle(pos, 0, 16);
     pop();
     noStroke();
-    fill(0);
+    if(isRelease){
+      stroke(0);
+      strokeWeight(1);
+      fill(255);
+    }else{
+      noStroke();
+      fill(0);
+    }
     ellipse(pos.x, pos.y, size * 2, size * 2);
   }
 
@@ -78,7 +102,7 @@ class Jiki extends Machine{
     pos.y = min(max(pos.y, 0), height);
   }
 
-  void Shot(Stage stage){
+  void shot(Stage stage){
     if(z){
       if(count % 8 == 0){
         print("z");
@@ -95,20 +119,50 @@ class Jiki extends Machine{
     }
   }
 
+  //赤：追尾弾
+  //青：デカレーザー、弾消し効果あり
+  //緑：自機周りのバリア、確率で弾消し
+  void releaseShot(Stage stage){
+    if(RedP > 0){
+      RedP = max(RedP - 5, 0);
+      Shot redShot = new Shot(pos.x, pos.y, 3, radians(-30));
+      redShot.size = 16;
+      redShot.col = color(255, 0, 0);
+      stage.jikiShots.addShot(redShot);
+    }
+    if(GreenP > 0){
+      GreenP = max(GreenP - 5, 0);
+      Shot greenShot = new Shot(pos.x, pos.y, 3, radians(0));
+      greenShot.size = 16;
+      greenShot.col = color(0, 255, 0);
+      stage.jikiShots.addShot(greenShot);
+    }
+    if(BlueP > 0){
+      BlueP = max(BlueP - 5, 0);
+      Shot blueShot = new Shot(pos.x, pos.y, 3, radians(30));
+      blueShot.size = 16;
+      blueShot.col = color(0, 0, 255);
+      stage.jikiShots.addShot(blueShot);
+    }
+  }
+
   void hit(Stage stage){
     Iterator<Shot> it = stage.enemyShots.getShots().iterator();
     while(it.hasNext()){
       Shot s = it.next();
+      //被弾判定
+      //collision関数はmoverのデフォであったほうがいいね多分これ・・・
       if(s.collision(this) == true){
           it.remove();
           HPDown(1);
           continue;
       }
+      //吸収システム用の判定
       if(isAbsorbing()){
         float d = dist(pos.x, pos.y, s.pos.x, s.pos.y);
         if(d < s.size + absorbArea){
           Item i = new Item(s.pos.x, s.pos.y, red(s.col), green(s.col), blue(s.col));
-          it.remove();  //多重削除になることがあるなこれ
+          it.remove();
           stage.items.addItem(i);
           print("absorb");
         }
@@ -116,10 +170,10 @@ class Jiki extends Machine{
     }
   
     Iterator<Enemy> it2 = stage.enemys.getArray().iterator();
+    //敵との接触判定
     while(it2.hasNext()){
       Enemy e = it2.next();
-      float d = dist(pos.x, pos.y, e.pos.x, e.pos.y);
-      if(d < e.size + size){
+      if(e.collision(this)){
           //e.HP--;
           HPDown(1);
       }
@@ -128,8 +182,7 @@ class Jiki extends Machine{
     Iterator<Item> it3 = stage.items.getArray().iterator();
     while(it3.hasNext()){
       Item i = it3.next();
-      float d = dist(pos.x, pos.y, i.pos.x, i.pos.y);
-      if(d < i.size + size * 3){
+      if(i.collision(this)){
         getColorP(i.RP / 30, i.GP / 30, i.BP / 30);
         it3.remove();
       }
@@ -144,12 +197,40 @@ class Jiki extends Machine{
       fill(255, 180 / absorbFrame * (absorbCount - count));
       ellipse(pos.x, pos.y, absorbArea * 2, absorbArea * 2);
     }else{
-      if(!isInvincible() && c){
+      if(!isInvincible() && !isRelease && c){
         if(absorbArea > 0){
           absorbArea = 0;
         }
         absorbCount = count + absorbFrame;
         print("c");
+      }
+    }
+  }
+
+  //これだとX長押しで無限切り替えできてしまいます・・・連続発動不可能なフレームを作るのが手っ取り早いと思う
+  void release(Stage stage){
+    if(isRelease){
+      releaseShot(stage);
+      if(!canRelease()){
+        isRelease = false;
+      }
+    }
+  }
+
+  void releaseKey(){
+    if(key == 'x' || key == 'X'){
+      if(isRelease){
+        if(count > releaseWaitCount){
+          releaseWaitCount = count + releaseWaitFrame;
+          isRelease = false;
+        }
+      }else{
+        if(count > releaseWaitCount){
+          if(canRelease()){
+            releaseWaitCount = count + releaseWaitFrame;
+            isRelease = true;
+          }
+        }
       }
     }
   }
@@ -177,6 +258,14 @@ class Jiki extends Machine{
 
   boolean isAbsorbing(){
     if(absorbCount > count){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  boolean canRelease(){
+    if(RedP > 0 || GreenP > 0 || BlueP > 0){
       return true;
     }else{
       return false;

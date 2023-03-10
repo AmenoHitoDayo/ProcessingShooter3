@@ -9,7 +9,7 @@ class Item extends Mover{
     }
 
     void drawMe(){
-        print("drawme");
+        //print("drawme");
         noStroke();
         
         push();

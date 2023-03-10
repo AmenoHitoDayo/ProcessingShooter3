@@ -21,13 +21,4 @@ class Shot extends Mover{
         fill(col);
         ellipse(pos.x, pos.y, size * 2, size * 2);
     }
-
-    boolean collision(Machine m){
-        float d = dist(pos.x, pos.y, m.pos.x, m.pos.y);
-        if(d < (size + m.size)){
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

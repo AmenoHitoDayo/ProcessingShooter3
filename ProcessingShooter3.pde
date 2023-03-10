@@ -20,6 +20,8 @@ void draw() {
 }
 
 void keyPressed(){
+    playingStage.jiki.releaseKey();
+
     if(key == 'w' || keyCode == UP) up = true;
     if(key == 'd' || keyCode == RIGHT) right = true;
     if(key == 's' || keyCode == DOWN) down = true;

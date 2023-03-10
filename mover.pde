@@ -22,6 +22,15 @@ class Mover{
     fill(255);
     ellipse(pos.x, pos.y, 10, 10);
   }
+
+    boolean collision(Mover m){
+        float d = dist(pos.x, pos.y, m.pos.x, m.pos.y);
+        if(d < (size + m.size)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
 
 class Machine extends Mover{
