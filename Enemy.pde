@@ -36,8 +36,8 @@ class SampleEnemy extends Enemy{
                 rectShot shot = new rectShot(pos.x, pos.y, 15);
                 shot.setVelocity(1.75, radians(angle) + TWO_PI / way * i);
                 shot.size = 6;
-                shot.col = HSVtoRGB(hue, 255 - 32, 255);
-                MoveCue cue = new MoveCue(60, 
+                shot.col = HSVtoRGB(hue, 255 - 64, 255);
+                ShotMoveCue cue = new ShotMoveCue(60, 
                     PVector.mult(shot.vel, 4),
                     new PVector(0, 0),
                     HSVtoRGB(hue, 255, 255));
