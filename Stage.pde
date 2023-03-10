@@ -16,11 +16,11 @@ class Stage{
     }
 
     void updateMe(){
-        jikiShots.updateMe();
-        enemyShots.updateMe();
         enemys.updateMe(this);
         jiki.updateMe(this);
         items.updateMe(this);
+        jikiShots.updateMe();
+        enemyShots.updateMe();
         count++;
         enemySpawn();
     }

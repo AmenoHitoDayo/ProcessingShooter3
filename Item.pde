@@ -29,7 +29,7 @@ class Item extends Mover{
 
             noStroke();
             fill(255);
-            ellipse(pos.x, pos.y, size, size);
+            ellipse(pos.x, pos.y, 6, 6);
 
 
         pop();

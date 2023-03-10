@@ -4,11 +4,14 @@ class Mover{
   PVector accel;
   int count;  //タイマー　寿命計算とかに使う
   float size = 4; //当たり判定の半径
+  color col;
+  ArrayList<MoveCue> cues;
 
   Mover(float _x, float _y){
     pos = new PVector(_x, _y);
     vel = new PVector(0, 0);
     accel = new PVector(0, 0);
+    cues = new ArrayList<MoveCue>();
   }
 
   void updateMe(){
@@ -16,6 +19,17 @@ class Mover{
     drawMe();
     vel.add(accel);
     pos.add(vel);
+    
+    if(cues.size() > 0){
+      for(int i = 0; i < cues.size(); i++){
+        MoveCue cue = cues.get(i);
+        if(cue.count == this.count){
+          this.vel = cue.vel;
+          this.accel = cue.accel;
+          this.col = cue.col;
+        }
+      }
+    }
   }
 
   void drawMe(){
@@ -31,12 +45,15 @@ class Mover{
             return false;
         }
     }
+
+  void addCue(MoveCue cue){
+      cues.add(cue);
+  }
 }
 
 class Machine extends Mover{
   int HP;
   int size;
-  color col;
   
   Machine(float _x, float _y, int _HP){
     super(_x, _y);
@@ -57,4 +74,18 @@ class Machine extends Mover{
              pos.x + cos(radians(60)) * size, pos.y + sin(radians(60)) * size);
     */
   }
+}
+
+class MoveCue{
+    int count;
+    PVector vel;
+    PVector accel;
+    color col;
+
+    MoveCue(int _c, PVector _v, PVector _a, int _col){
+      count = _c;
+      vel = _v;
+      accel = _a;
+      col = _col;
+    }
 }

@@ -77,7 +77,7 @@ class Jiki extends Machine{
       if((isInvincible() && count % 2 == 0) || isRelease == true){
         fill(0);
       }else if(slow){
-        fill(col, 180);
+        fill(col, 127);
       }else{
         fill(col);
       }
