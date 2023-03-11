@@ -17,7 +17,7 @@ class Jiki extends Machine{
     col = color(255, 255, 255, 255);
     size = 4;
     HP = 10;
-    RedP = 0;
+    RedP = 1;
     GreenP = 0;
     BlueP = 0;
   }
@@ -124,10 +124,26 @@ class Jiki extends Machine{
   //緑：自機周りのバリア、確率で弾消し
   void releaseShot(Stage stage){
     if(RedP > 0){
-      RedP = max(RedP - 5, 0);
-      Shot redShot = new Shot(pos.x, pos.y, 3, radians(-30));
-      redShot.size = 16;
-      redShot.col = color(255, 0, 0);
+      RedP = max(RedP - 10, 0);
+      JikiRockOnShot redShot = new JikiRockOnShot(pos.x, pos.y);
+      redShot.size = 10;
+      
+      //追尾する敵を設定
+      Enemy t = null;
+      float distant = 10000;
+      Iterator<Enemy> it = stage.enemys.getArray().iterator();
+      while(it.hasNext()){
+        Enemy e = it.next();
+        float d = dist(pos.x, pos.y, e.pos.x, e.pos.y);
+        if(d < distant){
+          distant = d;
+          t = e;
+        }
+      }
+      if(t != null){
+        redShot.setTarget(t);
+      }
+
       stage.jikiShots.addShot(redShot);
     }
     if(GreenP > 0){
@@ -152,15 +168,18 @@ class Jiki extends Machine{
       Shot s = it.next();
       //被弾判定
       //collision関数はmoverのデフォであったほうがいいね多分これ・・・
-      if(s.collision(this) == true){
+      if(s.collision(this)){
+        if(s.isDeletable == true && s.isHittable){
           it.remove();
-          HPDown(1);
-          continue;
+        }
+        HPDown(1);
+        continue;
       }
+
       //吸収システム用の判定
       if(isAbsorbing()){
         float d = dist(pos.x, pos.y, s.pos.x, s.pos.y);
-        if(d < s.size + absorbArea){
+        if(d < s.size + absorbArea && s.isDeletable == true && s.isHittable){
           Item i = new Item(s.pos.x, s.pos.y, red(s.col), green(s.col), blue(s.col));
           it.remove();
           stage.items.addItem(i);

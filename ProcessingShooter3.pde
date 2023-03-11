@@ -8,8 +8,9 @@ boolean right = false, left = false, up = false, down = false, z = false, slow =
 void setup() {
     size(640, 480);
     background(0);
-    smooth();
-    playingStage = new SampleStage();
+    //smooth();
+    rectMode(CENTER);
+    playingStage = new Stage01();
     ui = new UI();
 }
 

@@ -63,3 +63,25 @@ color HSVtoRGB(float h, float s, float v){
 
     return color(r, g, b);
 }
+
+boolean lineCollision2(float cx, float cy, float r, float x1, float y1, float x2, float y2){
+    float dist1 = dist(cx, cy, x1, y1);
+    float dist2 = dist(cx, cy, x2, y2);
+
+    float lineLen = dist(x1, y1, x2, y2);
+
+    if(dist1 > r && dist2 > r){
+        return false;
+    }else{
+        if(dist1 < r || dist2 < r){
+            return true;
+        }
+
+        float area = abs((x2 - x1) * (cy - y1) - (cx - x1) * (y2 - y1));
+        if(area / lineLen < r && dist1 < lineLen && dist2 < lineLen){
+            return true;
+        }
+
+        return false;
+    }
+}

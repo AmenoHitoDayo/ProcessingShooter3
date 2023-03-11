@@ -1,12 +1,12 @@
 class Shots{
-    ArrayList<Shot> Shots;
+    ArrayList<Shot> shots;
 
     Shots(){
-        Shots = new ArrayList<Shot>();
+        shots = new ArrayList<Shot>();
     }
 
     void updateMe(){
-        Iterator<Shot> it = Shots.iterator();
+        Iterator<Shot> it = shots.iterator();
         while(it.hasNext()){
             Shot s = it.next();
             s.updateMe();
@@ -17,32 +17,36 @@ class Shots{
     }
 
     void addShot(Shot s){
-        Shots.add(s);
+        shots.add(s);
     }
 
     ArrayList<Shot> getShots(){
-        return Shots;
+        return shots;
     }
 }
 
 class Enemys{
-    ArrayList<Enemy> Enemys;
+    ArrayList<Enemy> enemys;
 
     Enemys(){
-        Enemys = new ArrayList<Enemy>();
+        enemys = new ArrayList<Enemy>();
     }
 
     void updateMe(Stage stage){
-        Iterator<Enemy> it = Enemys.iterator();
+        Iterator<Enemy> it = enemys.iterator();
         while(it.hasNext()){
             Enemy e = it.next();
             e.updateMe();
-            e.Shot(stage);
+            e.shot(stage);
             hit(stage, e);
             if(e.pos.x < 0 - e.size || e.pos.x > width + e.size || e.pos.y < 0 - e.size || e.pos.y > height + e.size){
+                e.isDead = true;
                 it.remove();
             }
             if(e.HP <= 0){
+                e.isDead = true;
+                rectParticle r = new rectParticle(e.pos.x, e.pos.y, e.col);
+                stage.particles.addParticle(r);
                 it.remove();
             }
         }
@@ -61,23 +65,23 @@ class Enemys{
 
     void addEnemy(Enemy e){
         print("addenemy");
-        Enemys.add(e);
+        enemys.add(e);
     }
 
     ArrayList<Enemy> getArray(){
-        return Enemys;
+        return enemys;
     }
 }
 
 class Items{
-    ArrayList<Item> Items;
+    ArrayList<Item> items;
 
     Items(){
-        Items = new ArrayList<Item>();
+        items = new ArrayList<Item>();
     }
 
     void updateMe(Stage stage){
-        Iterator<Item> it = Items.iterator();
+        Iterator<Item> it = items.iterator();
         while(it.hasNext()){
             Item i = it.next();
             i.updateMe(stage);
@@ -88,10 +92,33 @@ class Items{
     }
 
     void addItem(Item i){
-        Items.add(i);
+        items.add(i);
     }
 
     ArrayList<Item> getArray(){
-        return Items;
+        return items;
+    }
+}
+
+class Particles{
+    ArrayList<Particle> particles;
+    
+    Particles(){
+        particles = new ArrayList<Particle>();
+    }
+    
+    void updateMe(){
+            Iterator<Particle> it = particles.iterator();
+            while(it.hasNext()){
+                Particle p = it.next();
+                p.updateMe();
+                if(p.count > p.lifeTime){
+                    it.remove();
+                }
+            }
+        }
+        
+    void addParticle(Particle p){
+        particles.add(p);
     }
 }

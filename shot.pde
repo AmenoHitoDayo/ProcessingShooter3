@@ -2,6 +2,8 @@ class Shot extends Mover{
     color col = color(255);
     int delay = 0;
     ArrayList<ShotMoveCue> cues;
+    boolean isDeletable = true;
+    boolean isHittable = true;
 
     Shot(float _x, float _y){
         super(_x, _y);
@@ -26,16 +28,11 @@ class Shot extends Mover{
 
     void updateMe(){
         super.updateMe();
-    
-        if(cues.size() > 0){
-            for(int i = 0; i < cues.size(); i++){
-                ShotMoveCue cue = cues.get(i);
-                if(cue.count == this.count){
-                    this.vel = cue.vel;
-                    this.accel = cue.accel;
-                    this.col = cue.col;
-                }
-            }
+        executeCue();
+        if(count < delay){
+            isHittable = false;
+        }else{
+            isHittable = true;
         }
     }
 
@@ -69,6 +66,19 @@ class Shot extends Mover{
         vel = new PVector(speed * cos(angle), speed * sin(angle));
     }
 
+    void executeCue(){
+        if(cues.size() > 0){
+            for(int i = 0; i < cues.size(); i++){
+                ShotMoveCue cue = cues.get(i);
+                if(cue.count == this.count){
+                    this.vel = cue.vel;
+                    this.accel = cue.accel;
+                    this.col = cue.col;
+                }
+            }
+        }
+    }
+
     void addCue(ShotMoveCue cue){
         cues.add(cue);
     }
@@ -89,16 +99,16 @@ class ShotMoveCue{
     }
 }
 
-class rectShot extends Shot{
-    rectShot(float _x, float _y){
+class RectShot extends Shot{
+    RectShot(float _x, float _y){
         super(_x, _y);
     }
 
-    rectShot(float _x, float _y, int _delay){
+    RectShot(float _x, float _y, int _delay){
         super(_x, _y, _delay);
     }
 
-    rectShot(float _x, float _y, float speed, float angle){
+    RectShot(float _x, float _y, float speed, float angle){
         super(_x, _y, speed, angle);
     }
 
@@ -126,5 +136,135 @@ class rectShot extends Shot{
                 rect(0, 0, delaysize * 2, delaysize * 2, delaysize / 4);
             }
         pop();
+    }
+}
+
+class LaserShot extends Shot{
+    float leng = 0, wid = 0;    //長さと太さ　sizeはつかわない
+    float mxLeng = 0;
+    PVector apex;   //先端の位置
+    PVector defPos; //初期位置
+
+    LaserShot(float _x, float _y, float _l, float _w){
+        super(_x, _y);
+        defPos = new PVector(_x, _y);
+        apex = new PVector(_x, _y);
+        mxLeng = _l;
+        wid = _w;
+        isDeletable = false;
+    }
+
+    void updateMe(){
+        super.updateMe();
+        if(leng < mxLeng){
+            leng = min(leng + vel.mag(), mxLeng);
+            pos = defPos;
+        }
+        apex = PVector.add(pos, PVector.mult(vel.normalize(null), leng));
+    }
+
+    void shotDraw(){
+        /*
+        strokeWeight(wid);
+        stroke(col);
+        line(apex.x, apex.y, pos.x, pos.y);
+        */
+        push();
+            noStroke();
+            fill(col);
+            PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
+            translate(center.x, center.y);
+            rotate(vel.heading());
+            rect(0, 0, leng, wid * 2, wid / 2);
+        pop();
+    }
+
+    void delayDraw(){
+        push();
+            //blendMode(ADD);
+            noStroke();
+            fill(col, map(delay - count, 0, delay, 255, 0));
+            PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
+            translate(center.x, center.y);
+            rotate(vel.heading());
+            float delaysize = map(delay - count, 0, delay, wid, 0);
+            rect(0, 0, leng, delaysize * 2, delaysize / 2);
+        pop();
+    }
+
+    boolean collision(Mover m){
+        //if(lineCollision(m, apex, pos)){return true;}
+        if(lineCollision2(m.pos.x, m.pos.y, m.size, apex.x, apex.y, pos.x, pos.y)){return true;}
+
+        
+        for(int i = 0; i <= m.size; i++){
+            
+            PVector posMinusI = new PVector(apex.x + i * cos(vel.heading()), apex.y + i * sin(vel.heading()));
+            PVector posPlusI = new PVector(apex.x + i * cos(vel.heading() + PI), apex.y + i * sin(vel.heading() + PI));
+            PVector baseMinusI = new PVector(pos.x + i * cos(vel.heading()), pos.y + i * sin(vel.heading()));
+            PVector basePlusI = new PVector(pos.x + i * cos(vel.heading() + PI), pos.y + i * sin(vel.heading() + PI));
+            
+            //if(lineCollision(m, posMinusI, baseMinusI)){return true;}
+            //if(lineCollision(m, posPlusI, basePlusI)){return true;}
+            
+            if(lineCollision2(m.pos.x, m.pos.y, m.size, posMinusI.x, posMinusI.y, baseMinusI.x, baseMinusI.y)){return true;}
+            if(lineCollision2(m.pos.x, m.pos.y, m.size, posPlusI.x, posPlusI.y, basePlusI.x, basePlusI.y)){return true;}
+            
+        }
+        
+
+        return false;
+    }
+    
+}
+
+class JikiRockOnShot extends Shot{
+    Enemy target = null;
+    float maxAngle = radians(30);
+    float accelValue = 0.25;
+
+    JikiRockOnShot(float _x, float _y){
+        super(_x, _y);
+        vel = new PVector(0, 0);
+        accel = new PVector(0.1, 0);
+        col = color(255, 0, 0);
+    }
+
+    void updateMe(){
+        super.updateMe();
+        if(target != null && !target.isDead){
+            homing();
+        }
+    }
+    
+    void shotDraw(){
+        push();
+            blendMode(ADD);
+            strokeWeight(1);
+            stroke(255);
+            fill(col, 127);
+            ellipse(pos.x, pos.y, size * 2, size * 2);
+        pop();
+    }
+
+    void homing(){
+        //ターゲットが死んでると暴走するっぽい(解決)
+        float angle = new PVector(target.pos.x - pos.x, target.pos.y - pos.y).heading();
+        if(angle > PI){
+            angle = map(angle, PI, TWO_PI, -PI, 0);
+        }
+        if(abs(angle) > maxAngle){
+            if(angle > 0){
+                accel = new PVector(accelValue * cos(maxAngle), accelValue * sin(maxAngle));
+            }else{
+                accel = new PVector(accelValue * cos(-maxAngle), accelValue * sin(-maxAngle));
+            }
+        }else{
+            accel = new PVector(accelValue * cos(angle), accelValue * sin(angle));
+        }
+    }
+
+    void setTarget(Enemy e){
+        target = e;
     }
 }
