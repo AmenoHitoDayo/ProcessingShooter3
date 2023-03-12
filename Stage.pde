@@ -73,5 +73,10 @@ class Stage01 extends Stage{
         if(count == 180){
             enemys.addEnemy(new Aim01(width, 120));
         }
+        if(count == 300){
+            Aim01 aim01_1 = new Aim01(width, height - 120);
+            aim01_1.setHue(205);
+            enemys.addEnemy(aim01_1);
+        }
     }
 }

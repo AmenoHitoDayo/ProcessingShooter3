@@ -3,7 +3,7 @@ class Enemy extends Machine{
     Enemy(float _x, float _y, int _HP){
         super(_x, _y, _HP);
         size = 16;
-        col = 255;
+        col = color(255);
     }
 
     void updateMe(){
@@ -97,7 +97,7 @@ class Aim01 extends Enemy{
 
     Aim01(float _x, float _y){
         super(_x, _y, 10);
-        HP = 10;
+        HP = 7;
         vel = new PVector(-0.07, -1);
         shotHue = 75;
         col = HSVtoRGB(shotHue, 255, 255);
@@ -131,5 +131,27 @@ class Aim01 extends Enemy{
                 shotHue -= 10;
             }
         }
+    }
+
+    void setHue(float hue){
+        shotHue = hue;
+        col = HSVtoRGB(shotHue, 255, 255);
+    }
+}
+
+class Circle01 extends Enemy{
+    Circle01(float _x, float _y){
+        super(_x, _y, 10);
+        HP = 7;
+        vel = new PVector(-0.07, -1);
+        col = HSVtoRGB(140, 255, 255);
+    }
+
+    void updateMe(){
+
+    }
+
+    void shot(Stage s){
+
     }
 }
