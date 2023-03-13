@@ -166,6 +166,8 @@ class Jiki extends Machine{
       //collision関数はmoverのデフォであったほうがいいね多分これ・・・
       if(s.collision(this)){
         if(s.isDeletable && s.isHittable){
+          rectParticle r = new rectParticle(s.pos.x, s.pos.y, s.col);
+          stage.particles.addParticle(r);
           s.isDeleted = true;
         }
         HPDown(1);

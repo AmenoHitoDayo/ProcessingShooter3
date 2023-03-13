@@ -343,9 +343,7 @@ class JikiBlueLaser extends LaserShot{
         if(count > width / 10){
             isDeleted = true;
         }
-        if(isHittable){
-            deleteShot();
-        }
+        deleteShot();
     }
 
     void drawMe(){
