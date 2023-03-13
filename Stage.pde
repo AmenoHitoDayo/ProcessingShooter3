@@ -81,5 +81,9 @@ class Stage01 extends Stage{
         if(count == 360){
             enemys.addEnemy(new Circle01(width, height / 2));
         }
+        if(count == 500){
+            enemys.addEnemy(new ShotGun01(width, 120, 180 - 30));
+            enemys.addEnemy(new ShotGun01(width, height - 120, 180 + 30));
+        }
     }
 }

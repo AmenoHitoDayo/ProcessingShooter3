@@ -185,6 +185,7 @@ class LaserShot extends Shot{
         line(apex.x, apex.y, pos.x, pos.y);
         */
         push();
+            //blendMode(ADD);
             noStroke();
             fill(col);
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
@@ -264,6 +265,7 @@ class JikiRockOnShot extends Shot{
 
     void homing(){
         //ターゲットが死んでると暴走するっぽい(解決)
+        //追尾が弱くて撃ち損な感じがあるので、追尾対象がなくなったら追尾対象探し直しとかするべきかと　
         float angle = new PVector(target.pos.x - pos.x, target.pos.y - pos.y).heading();
         if(angle > PI){
             angle = map(angle, PI, TWO_PI, -PI, 0);
@@ -291,7 +293,7 @@ class JikiBarrierShot extends Shot{
         vel = new PVector(0, 0);
         accel = new PVector(0, 0);
         col = color(0, 255, 0);
-        size = 127;
+        size = 64;
     }
 
     void updateMe(){
@@ -305,8 +307,8 @@ class JikiBarrierShot extends Shot{
     void drawMe(){
         strokeWeight(2);
         stroke(255);
-        fill(col, 64);
-        ellipse(pos.x, pos.y, size, size);
+        fill(col, 32);
+        ellipse(pos.x, pos.y, size * 2, size * 2);
     }
 
     void deleteShot(){
@@ -314,7 +316,7 @@ class JikiBarrierShot extends Shot{
         Iterator<Shot> it = stage.enemyShots.getShots().iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            if(this.collision(s) == true){
+            if(s.collision(this) == true){
                 float ransu = random(100);
                 if(s.isDeletable && ransu < 1){ //1%の確率でバリアに当たった弾がきえる
                     println("deleteshot");
@@ -347,7 +349,10 @@ class JikiBlueLaser extends LaserShot{
     }
 
     void drawMe(){
-        super.drawMe();
+        push();
+            blendMode(ADD);
+            super.drawMe();
+        pop();
     }
 
     void deleteShot(){

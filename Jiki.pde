@@ -17,9 +17,9 @@ class Jiki extends Machine{
     col = color(255, 255, 255, 255);
     size = 4;
     HP = 10;
-    RedP = 0;
-    GreenP = 0;
-    BlueP = 255;
+    RedP = 127;
+    GreenP = 127;
+    BlueP = 127;
   }
 
   void updateMe(Stage stage){
@@ -152,7 +152,7 @@ class Jiki extends Machine{
       stage.jikiShots.addShot(greenShot);
     }
     if(BlueP > 0){
-      BlueP = max(BlueP - 5, 0);
+      BlueP = max(BlueP - 2.5, 0);
       JikiBlueLaser blueShot = new JikiBlueLaser(pos.x + 10, pos.y);
       stage.jikiShots.addShot(blueShot);
     }

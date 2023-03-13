@@ -178,7 +178,7 @@ class Circle01 extends Enemy{
             float hue = shotCount * 10;
             if(shotCount % 2 == 0){
                 for(int i = 0; i < 13; i++){
-                    Shot shot = new Shot(pos.x, pos.y, 15);
+                    RectShot shot = new RectShot(pos.x, pos.y, 15);
                     shot.setVelocity(3, angle + TWO_PI / 13 * i);
                     shot.size = 8;
                     shot.col = HSVtoRGB(hue, 255, 255);
@@ -188,7 +188,7 @@ class Circle01 extends Enemy{
             }else{
                 angle += TWO_PI / 14 / 2;
                 for(int i = 0; i < 14; i++){
-                    Shot shot = new Shot(pos.x, pos.y, 15);
+                    RectShot shot = new RectShot(pos.x, pos.y, 15);
                     shot.setVelocity(3, angle + TWO_PI / 14 * i);
                     shot.size = 6;
                     shot.col = HSVtoRGB(hue, 255, 255);
@@ -197,6 +197,54 @@ class Circle01 extends Enemy{
                 }
             }
             shotCount++;
+        }
+    }
+}
+
+class ShotGun01 extends Enemy{
+    float shotAngle = 0, currentAngle = 0;
+    float bure = 15;
+    ShotGun01(float _x, float _y, float _angle){
+        super(_x, _y, 16);
+        size = 16;
+        shotAngle = _angle;
+        currentAngle = 180;
+        col = HSVtoRGB(90, 255, 255);
+    }
+
+    void updateMe(){
+        super.updateMe();
+        
+        if(count == 1){
+            vel = new PVector(-2, 0);
+        }
+        if(count > 30 && count <= 60){
+            vel = new PVector(0, 0);
+            currentAngle += (shotAngle - 180) / 30;
+        }
+        if(count > 90 && count <= 120){
+            currentAngle += (180 - shotAngle) / 30;
+        }
+        if(count > 120){
+            vel = new PVector(2, 0);
+        }
+    }
+
+    void drawMe(){
+        fill(col);
+        stroke(col);
+        easyTriangle(pos, radians(currentAngle), size);
+    }
+
+    void shot(Stage s){
+        if(count == 65){
+            for(int i = 0; i < 30; i++){
+                Shot shot = new Shot(pos.x, pos.y, 15);
+                shot.setVelocity(3 + random(-1, 1), radians(shotAngle + random(-bure, bure)));
+                shot.size = 6;
+                shot.col = HSVtoRGB(90, 120, 255);
+                s.enemyShots.addShot(shot);
+            }
         }
     }
 }
