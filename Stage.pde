@@ -8,12 +8,12 @@ class Stage{
     int count = 0;
 
     Stage(){
-        jikiShots = new Shots();
         enemyShots = new Shots();
         enemys = new Enemys();
         items = new Items();
-        particles = new Particles();
         jiki = new Jiki();
+        particles = new Particles();
+        jikiShots = new Shots();
         count = 0;
     }
 

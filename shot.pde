@@ -4,6 +4,7 @@ class Shot extends Mover{
     ArrayList<ShotMoveCue> cues;
     boolean isDeletable = true;
     boolean isHittable = true;
+    boolean isDeleted = false;
 
     Shot(float _x, float _y){
         super(_x, _y);
@@ -33,6 +34,10 @@ class Shot extends Mover{
             isHittable = false;
         }else{
             isHittable = true;
+        }
+
+        if(pos.x < 0 - size || pos.x > width + size || pos.y < 0 - size || pos.y > height + size){
+            isDeleted = true;
         }
     }
 
@@ -204,7 +209,7 @@ class LaserShot extends Shot{
 
     boolean collision(Mover m){
         //if(lineCollision(m, apex, pos)){return true;}
-        if(lineCollision2(m.pos.x, m.pos.y, m.size, apex.x, apex.y, pos.x, pos.y)){return true;}
+        if(lineCollision2(m.pos.x, m.pos.y, m.size, apex.x, apex.y, pos.x, pos.y)){print("hit");return true;}
 
         
         for(int i = 0; i <= m.size; i++){
@@ -217,8 +222,8 @@ class LaserShot extends Shot{
             //if(lineCollision(m, posMinusI, baseMinusI)){return true;}
             //if(lineCollision(m, posPlusI, basePlusI)){return true;}
             
-            if(lineCollision2(m.pos.x, m.pos.y, m.size, posMinusI.x, posMinusI.y, baseMinusI.x, baseMinusI.y)){return true;}
-            if(lineCollision2(m.pos.x, m.pos.y, m.size, posPlusI.x, posPlusI.y, basePlusI.x, basePlusI.y)){return true;}
+            if(lineCollision2(m.pos.x, m.pos.y, m.size, posMinusI.x, posMinusI.y, baseMinusI.x, baseMinusI.y)){print("hit");return true;}
+            if(lineCollision2(m.pos.x, m.pos.y, m.size, posPlusI.x, posPlusI.y, basePlusI.x, basePlusI.y)){print("hit");return true;}
             
         }
         
@@ -249,10 +254,10 @@ class JikiRockOnShot extends Shot{
     
     void shotDraw(){
         push();
-            blendMode(ADD);
-            strokeWeight(1);
+            //blendMode(ADD);
+            strokeWeight(2);
             stroke(255);
-            fill(col, 127);
+            fill(col);
             ellipse(pos.x, pos.y, size * 2, size * 2);
         pop();
     }
@@ -276,5 +281,86 @@ class JikiRockOnShot extends Shot{
 
     void setTarget(Enemy e){
         target = e;
+    }
+}
+
+//バリヤー要素、範囲内にあるショットを確率で消す
+class JikiBarrierShot extends Shot{
+    JikiBarrierShot(float _x, float _y){
+        super(_x, _y);
+        vel = new PVector(0, 0);
+        accel = new PVector(0, 0);
+        col = color(0, 255, 0);
+        size = 127;
+    }
+
+    void updateMe(){
+        super.updateMe();
+        if(count > 1){
+            isDeleted = true;
+        }
+        deleteShot();
+    }
+
+    void drawMe(){
+        strokeWeight(2);
+        stroke(255);
+        fill(col, 64);
+        ellipse(pos.x, pos.y, size, size);
+    }
+
+    void deleteShot(){
+        Stage stage = playingStage;
+        Iterator<Shot> it = stage.enemyShots.getShots().iterator();
+        while(it.hasNext()){
+            Shot s = it.next();
+            if(this.collision(s) == true){
+                float ransu = random(100);
+                if(s.isDeletable && ransu < 1){ //1%の確率でバリアに当たった弾がきえる
+                    println("deleteshot");
+                    s.isDeleted = true;
+                }
+            }
+        }
+    }
+}
+
+//見た目はできたんだけどなぜか当たり判定がぬえ
+class JikiBlueLaser extends LaserShot{
+    JikiBlueLaser(float _x, float _y){
+        super(_x, _y, width, 16);
+        vel = new PVector(10, 0);
+        accel = new PVector(0.1, 0);
+        col = color(64, 64, 255, 64);
+        delay = 0;
+    }
+
+    void updateMe(){
+        super.updateMe();
+        wid += 64 / (width / 10) * 2;
+        if(count > width / 10){
+            isDeleted = true;
+        }
+        if(isHittable){
+            deleteShot();
+        }
+    }
+
+    void drawMe(){
+        super.drawMe();
+    }
+
+    void deleteShot(){
+        Stage stage = playingStage;
+        Iterator<Shot> it = stage.enemyShots.getShots().iterator();
+        while(it.hasNext()){
+            Shot s = it.next();
+            if(this.collision(s) == true){
+                if(s.isDeletable){
+                    println("deleteshot");
+                    s.isDeleted = true;
+                }
+            }
+        }
     }
 }

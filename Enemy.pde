@@ -1,5 +1,6 @@
 class Enemy extends Machine{
     boolean isDead = false;
+    boolean isOutOfScreen = false;  //画面外に出て消えた時にはエフェクト出ないように
     Enemy(float _x, float _y, int _HP){
         super(_x, _y, _HP);
         size = 16;
@@ -8,6 +9,13 @@ class Enemy extends Machine{
 
     void updateMe(){
         super.updateMe();
+        if(pos.x < 0 - size || pos.x > width + size || pos.y < 0 - size || pos.y > height + size){
+            isOutOfScreen = true;
+            isDead = true;
+        }
+        if(HP <= 0){
+            isDead = true;
+        }
     }
 
     void drawMe(){

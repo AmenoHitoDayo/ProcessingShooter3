@@ -17,9 +17,9 @@ class Jiki extends Machine{
     col = color(255, 255, 255, 255);
     size = 4;
     HP = 10;
-    RedP = 1;
+    RedP = 0;
     GreenP = 0;
-    BlueP = 0;
+    BlueP = 255;
   }
 
   void updateMe(Stage stage){
@@ -147,17 +147,13 @@ class Jiki extends Machine{
       stage.jikiShots.addShot(redShot);
     }
     if(GreenP > 0){
-      GreenP = max(GreenP - 5, 0);
-      Shot greenShot = new Shot(pos.x, pos.y, 3, radians(0));
-      greenShot.size = 16;
-      greenShot.col = color(0, 255, 0);
+      GreenP = max(GreenP - 1, 0);
+      JikiBarrierShot greenShot = new JikiBarrierShot(pos.x, pos.y);
       stage.jikiShots.addShot(greenShot);
     }
     if(BlueP > 0){
       BlueP = max(BlueP - 5, 0);
-      Shot blueShot = new Shot(pos.x, pos.y, 3, radians(30));
-      blueShot.size = 16;
-      blueShot.col = color(0, 0, 255);
+      JikiBlueLaser blueShot = new JikiBlueLaser(pos.x + 10, pos.y);
       stage.jikiShots.addShot(blueShot);
     }
   }
@@ -169,8 +165,8 @@ class Jiki extends Machine{
       //被弾判定
       //collision関数はmoverのデフォであったほうがいいね多分これ・・・
       if(s.collision(this)){
-        if(s.isDeletable == true && s.isHittable){
-          it.remove();
+        if(s.isDeletable && s.isHittable){
+          s.isDeleted = true;
         }
         HPDown(1);
         continue;

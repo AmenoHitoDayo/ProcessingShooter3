@@ -10,7 +10,7 @@ class Shots{
         while(it.hasNext()){
             Shot s = it.next();
             s.updateMe();
-            if(s.pos.x < 0 - s.size || s.pos.x > width + s.size || s.pos.y < 0 - s.size || s.pos.y > height + s.size){
+            if(s.isDeleted == true){
                 it.remove();
             }
         }
@@ -39,14 +39,11 @@ class Enemys{
             e.updateMe();
             e.shot(stage);
             hit(stage, e);
-            if(e.pos.x < 0 - e.size || e.pos.x > width + e.size || e.pos.y < 0 - e.size || e.pos.y > height + e.size){
-                e.isDead = true;
-                it.remove();
-            }
-            if(e.HP <= 0){
-                e.isDead = true;
-                rectParticle r = new rectParticle(e.pos.x, e.pos.y, e.col);
-                stage.particles.addParticle(r);
+            if(e.isDead){
+                if(e.isOutOfScreen == false){
+                    rectParticle r = new rectParticle(e.pos.x, e.pos.y, e.col);
+                    stage.particles.addParticle(r);
+                }
                 it.remove();
             }
         }
@@ -57,7 +54,10 @@ class Enemys{
         while(it.hasNext()){
             Shot s = it.next();
             if(s.collision(enemy) == true){
-                it.remove();
+                if(s.isDeletable && s.isHittable){
+                    s.isDeleted = true;
+                }
+                //it.remove();
                 enemy.HP--;
             }
         }
