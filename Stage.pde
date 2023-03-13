@@ -78,5 +78,8 @@ class Stage01 extends Stage{
             aim01_1.setHue(205);
             enemys.addEnemy(aim01_1);
         }
+        if(count == 360){
+            enemys.addEnemy(new Circle01(width, height / 2));
+        }
     }
 }

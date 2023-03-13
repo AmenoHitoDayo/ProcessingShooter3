@@ -100,6 +100,7 @@ class ShotMoveCue{
 }
 
 class RectShot extends Shot{
+    float lineWeight;
     RectShot(float _x, float _y){
         super(_x, _y);
     }
@@ -112,8 +113,13 @@ class RectShot extends Shot{
         super(_x, _y, speed, angle);
     }
 
+    void updateMe(){
+        culcLineWeight();
+        super.updateMe();
+    }
+
     void shotDraw(){
-        strokeWeight(2);
+        strokeWeight(lineWeight);
         stroke(col);
         noFill();
         push();
@@ -129,13 +135,17 @@ class RectShot extends Shot{
             translate(pos.x, pos.y);
             rotate(vel.heading() + TWO_PI / 4);
             for(int i = 0; i < 4; i++){
-                strokeWeight(2 + 1 * i);
+                strokeWeight(lineWeight + lineWeight / 2 * i);
                 stroke(col, 255 / 4);
                 noFill();
                 float delaysize = map(delay - count, 0, delay, size, size * 2);
                 rect(0, 0, delaysize * 2, delaysize * 2, delaysize / 4);
             }
         pop();
+    }
+
+    void culcLineWeight(){
+        lineWeight = size / 3;
     }
 }
 

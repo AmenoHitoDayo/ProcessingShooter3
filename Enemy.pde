@@ -142,16 +142,53 @@ class Aim01 extends Enemy{
 class Circle01 extends Enemy{
     Circle01(float _x, float _y){
         super(_x, _y, 10);
-        HP = 7;
-        vel = new PVector(-0.07, -1);
-        col = HSVtoRGB(140, 255, 255);
+        HP = 15;
+        size = 20;
+        vel = new PVector(-1, 0);
+        col = HSVtoRGB(0, 255, 255);
     }
+    int shotCount = 0;
 
     void updateMe(){
+        super.updateMe();
 
+        if(count == 0){
+            vel = new PVector(-1, 0);
+        }
+        if(count == 60){
+            vel = new PVector(0, 0);
+        }
+        if(count == 180){
+            vel = new PVector(1, 0);
+        }
     }
 
     void shot(Stage s){
-
+        if(count >= 60 && count <= 180 && count % 30 == 0){
+            PVector dirToJiki = new PVector(s.jiki.pos.x - pos.x, s.jiki.pos.y - pos.y);
+            float angle = dirToJiki.heading();
+            float hue = shotCount * 10;
+            if(shotCount % 2 == 0){
+                for(int i = 0; i < 13; i++){
+                    Shot shot = new Shot(pos.x, pos.y, 15);
+                    shot.setVelocity(3, angle + TWO_PI / 13 * i);
+                    shot.size = 8;
+                    shot.col = HSVtoRGB(hue, 255, 255);
+                    s.enemyShots.addShot(shot);
+                    hue += 360 / 13;
+                }
+            }else{
+                angle += TWO_PI / 14 / 2;
+                for(int i = 0; i < 14; i++){
+                    Shot shot = new Shot(pos.x, pos.y, 15);
+                    shot.setVelocity(3, angle + TWO_PI / 14 * i);
+                    shot.size = 6;
+                    shot.col = HSVtoRGB(hue, 255, 255);
+                    s.enemyShots.addShot(shot);
+                    hue += 360 / 14;
+                }
+            }
+            shotCount++;
+        }
     }
 }
