@@ -17,9 +17,9 @@ class Jiki extends Machine{
     col = color(255, 255, 255, 255);
     size = 4;
     HP = 10;
-    RedP = 127;
-    GreenP = 127;
-    BlueP = 127;
+    RedP = 0;
+    GreenP = 0;
+    BlueP = 0;
   }
 
   void updateMe(Stage stage){
@@ -124,37 +124,25 @@ class Jiki extends Machine{
   //緑：自機周りのバリア、確率で弾消し
   void releaseShot(Stage stage){
     if(RedP > 0){
-      RedP = max(RedP - 10, 0);
-      JikiRockOnShot redShot = new JikiRockOnShot(pos.x, pos.y);
-      redShot.size = 10;
-      
-      //追尾する敵を設定
-      Enemy t = null;
-      float distant = 10000;
-      Iterator<Enemy> it = stage.enemys.getArray().iterator();
-      while(it.hasNext()){
-        Enemy e = it.next();
-        float d = dist(pos.x, pos.y, e.pos.x, e.pos.y);
-        if(d < distant){
-          distant = d;
-          t = e;
-        }
-      }
-      if(t != null){
-        redShot.setTarget(t);
-      }
+      if(count % 5 == 0){
+        RedP = max(RedP - 10, 0);
+        JikiRockOnShot redShot = new JikiRockOnShot(pos.x, pos.y);
+        redShot.size = 10;
 
-      stage.jikiShots.addShot(redShot);
+        stage.jikiShots.addShot(redShot);
+      }
     }
     if(GreenP > 0){
-      GreenP = max(GreenP - 1, 0);
+      GreenP = max(GreenP - 5, 0);
       JikiBarrierShot greenShot = new JikiBarrierShot(pos.x, pos.y);
       stage.jikiShots.addShot(greenShot);
     }
     if(BlueP > 0){
-      BlueP = max(BlueP - 2.5, 0);
-      JikiBlueLaser blueShot = new JikiBlueLaser(pos.x + 10, pos.y);
-      stage.jikiShots.addShot(blueShot);
+      if(count % 3 == 0){
+        BlueP = max(BlueP - 20, 0);
+        JikiBlueLaser blueShot = new JikiBlueLaser(pos.x + 10, pos.y);
+        stage.jikiShots.addShot(blueShot);
+      }
     }
   }
 
@@ -165,10 +153,18 @@ class Jiki extends Machine{
       //被弾判定
       //collision関数はmoverのデフォであったほうがいいね多分これ・・・
       if(s.collision(this)){
-        if(s.isDeletable && s.isHittable){
-          rectParticle r = new rectParticle(s.pos.x, s.pos.y, s.col);
-          stage.particles.addParticle(r);
-          s.isDeleted = true;
+        if(s.isHittable){
+
+          if(s.isDeletable){
+            //被弾エフェクト
+            rectParticle r1 = new rectParticle(s.pos.x, s.pos.y, s.col);
+            stage.particles.addParticle(r1);
+            s.isDeleted = true;
+          }else{
+            //被弾エフェクト
+            rectParticle r1 = new rectParticle(pos.x, pos.y, s.col);
+            stage.particles.addParticle(r1);
+          }
         }
         HPDown(1);
         continue;
@@ -191,8 +187,14 @@ class Jiki extends Machine{
     while(it2.hasNext()){
       Enemy e = it2.next();
       if(e.collision(this)){
-          //e.HP--;
+        if(!isInvincible()){
+          e.HP--;
           HPDown(1);
+
+          //被弾エフェクト
+          rectParticle r1 = new rectParticle(e.pos.x, e.pos.y, e.col);
+          stage.particles.addParticle(r1);
+        }
       }
     }
 

@@ -20,6 +20,10 @@ class Shots{
         shots.add(s);
     }
 
+    void removeShot(Shot s){
+        shots.remove(s);
+    }
+
     ArrayList<Shot> getShots(){
         return shots;
     }
@@ -53,12 +57,18 @@ class Enemys{
         Iterator<Shot> it = stage.jikiShots.getShots().iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            if(s.collision(enemy) == true){
-                if(s.isDeletable && s.isHittable){
-                    s.isDeleted = true;
+            if(s.collision(enemy)){
+                if(s.isHittable){
+                    //被弾エフェクト
+                    rectParticle r1 = new rectParticle(enemy.pos.x, enemy.pos.y, s.col);
+                    stage.particles.addParticle(r1);
+
+                    if(s.isDeletable){
+                        s.isDeleted = true;
+                    }
+                    enemy.HP--;
                 }
-                //it.remove();
-                enemy.HP--;
+                continue;
             }
         }
     }
@@ -120,5 +130,9 @@ class Particles{
         
     void addParticle(Particle p){
         particles.add(p);
+    }
+        
+    void removeParticle(Particle p){
+        particles.remove(p);
     }
 }

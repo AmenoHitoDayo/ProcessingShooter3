@@ -6,6 +6,7 @@ class Stage{
     Particles particles;
     Jiki jiki;
     int count = 0;
+    boolean isCountUP = true;
 
     Stage(){
         enemyShots = new Shots();
@@ -18,13 +19,16 @@ class Stage{
     }
 
     void updateMe(){
+        if(jiki.HP <= 0) return;
         particles.updateMe();
         enemys.updateMe(this);
         jiki.updateMe(this);
         items.updateMe(this);
         jikiShots.updateMe();
         enemyShots.updateMe();
-        count++;
+        if(isCountUP){
+            count++;
+        }
         enemySpawn();
     }
 
@@ -59,8 +63,10 @@ class SampleStage extends Stage{
 }
 
 class Stage01 extends Stage{
+    boolean isMidBossAppeared = false;
     Stage01(){
         super();
+        count = 0;
     }
 
     void enemySpawn(){
@@ -78,12 +84,35 @@ class Stage01 extends Stage{
             aim01_1.setHue(205);
             enemys.addEnemy(aim01_1);
         }
-        if(count == 360){
-            enemys.addEnemy(new Circle01(width, height / 2));
+        if(count == 400){
+            enemys.addEnemy(new Red01(width, height / 2));
         }
         if(count == 500){
-            enemys.addEnemy(new ShotGun01(width, 120, 180 - 30));
-            enemys.addEnemy(new ShotGun01(width, height - 120, 180 + 30));
+            enemys.addEnemy(new Green01(width, height / 2 - height / 3));
+        }
+        if(count == 600){
+            enemys.addEnemy(new Blue01(width, height / 2 + height / 3));
+        }
+        if(count == 660){
+            if(isCountUP == true){
+                isCountUP = false;
+            }
+            if(isCountUP == false && getEnemyCount() == 0){
+                if(!isMidBossAppeared){
+                    enemys.addEnemy(new MidBoss01(width, height / 2));
+                    isMidBossAppeared = true;
+                }else{
+                    println("countRestart");
+                    isCountUP = true;
+                }
+            }
+        }
+        if(count == 700){
+            enemys.addEnemy(new Circle01(width, height / 2));
+        }
+        if(count == 760){
+            enemys.addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
+            enemys.addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
         }
     }
 }

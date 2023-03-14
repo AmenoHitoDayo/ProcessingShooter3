@@ -236,20 +236,29 @@ class LaserShot extends Shot{
 
 class JikiRockOnShot extends Shot{
     Enemy target = null;
-    float maxAngle = radians(30);
-    float accelValue = 0.25;
+    float maxAngle = radians(120);
+    float accelValue = 0.5;
+    int targetSelectCount = 0;
 
     JikiRockOnShot(float _x, float _y){
         super(_x, _y);
         vel = new PVector(0, 0);
         accel = new PVector(0.1, 0);
         col = color(255, 0, 0);
+        searchTarget();
     }
 
     void updateMe(){
         super.updateMe();
         if(target != null && !target.isDead){
             homing();
+        }else if(targetSelectCount < 5){
+            vel = new PVector(0, 0);
+            accel = new PVector(0, 0);
+            searchTarget();
+            targetSelectCount++;
+        }else{
+            accel = new PVector(0.1, 0);
         }
     }
     
@@ -283,6 +292,25 @@ class JikiRockOnShot extends Shot{
 
     void setTarget(Enemy e){
         target = e;
+    }
+
+    void searchTarget(){
+        println("search:" + this.targetSelectCount);
+        Stage stage = playingStage;
+        Enemy t = null;
+        float distant = 10000;
+        Iterator<Enemy> it = stage.enemys.getArray().iterator();
+        while(it.hasNext()){
+            Enemy e = it.next();
+            float d = dist(pos.x, pos.y, e.pos.x, e.pos.y);
+            if(d < distant){
+            distant = d;
+            t = e;
+            }
+        }
+        if(t != null){
+            setTarget(t);
+        }
     }
 }
 
@@ -319,6 +347,9 @@ class JikiBarrierShot extends Shot{
             if(s.collision(this) == true){
                 float ransu = random(100);
                 if(s.isDeletable && ransu < 1){ //1%の確率でバリアに当たった弾がきえる
+                    rectParticle r = new rectParticle(s.pos.x, s.pos.y, s.col);
+                    r.baseAngle = s.vel.heading();
+                    stage.particles.addParticle(r);
                     println("deleteshot");
                     s.isDeleted = true;
                 }
@@ -328,18 +359,20 @@ class JikiBarrierShot extends Shot{
 }
 
 //見た目はできたんだけどなぜか当たり判定がぬえ
-class JikiBlueLaser extends LaserShot{
+class JikiBlueLaser extends Shot{
     JikiBlueLaser(float _x, float _y){
-        super(_x, _y, width, 16);
+        super(_x, _y, 64);
         vel = new PVector(10, 0);
         accel = new PVector(0.1, 0);
-        col = color(64, 64, 255, 64);
+        col = color(64, 64, 255, 127);
         delay = 0;
+        isHittable = true;
+        isDeletable = false;
     }
 
     void updateMe(){
         super.updateMe();
-        wid += 64 / (width / 10) * 2;
+        size += 64 / (width / 10) * 2;
         if(count > width / 10){
             isDeleted = true;
         }
@@ -360,6 +393,9 @@ class JikiBlueLaser extends LaserShot{
             Shot s = it.next();
             if(this.collision(s) == true){
                 if(s.isDeletable){
+                    rectParticle r = new rectParticle(s.pos.x, s.pos.y, s.col);
+                    r.baseAngle = s.vel.heading();
+                    stage.particles.addParticle(r);
                     println("deleteshot");
                     s.isDeleted = true;
                 }
