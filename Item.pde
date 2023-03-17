@@ -8,32 +8,35 @@ class Item extends Mover{
         size = 8;
     }
 
-    void drawMe(){
+    void drawMe(PGraphics pg){
+        pg.beginDraw();
+
         //print("drawme");
-        noStroke();
+        pg.noStroke();
         
-        push();
-            blendMode(ADD);
+        pg.push();
+            pg.blendMode(ADD);
             
-            noStroke();
-            fill(255, 0, 0, RP);
-            ellipse(pos.x + 3 * cos(radians(count)), pos.y + 3 * sin(radians(count)), size, size);
+            pg.noStroke();
+            pg.fill(255, 0, 0, RP);
+            pg.ellipse(pos.x + 3 * cos(radians(count)), pos.y + 3 * sin(radians(count)), size, size);
 
-            noStroke();
-            fill(0, 255, 0, GP);
-            ellipse(pos.x + 3 * cos(radians(count + 120)), pos.y + 3 * sin(radians(count + 120)), size, size);
+            pg.noStroke();
+            pg.fill(0, 255, 0, GP);
+            pg.ellipse(pos.x + 3 * cos(radians(count + 120)), pos.y + 3 * sin(radians(count + 120)), size, size);
 
-            noStroke();
-            fill(0, 0, 255, BP);
-            ellipse(pos.x + 3 * cos(radians(count + 240)), pos.y + 3 * sin(radians(count + 240)), size, size);
+            pg.noStroke();
+            pg.fill(0, 0, 255, BP);
+            pg.ellipse(pos.x + 3 * cos(radians(count + 240)), pos.y + 3 * sin(radians(count + 240)), size, size);
 
-            noStroke();
-            fill(255);
-            ellipse(pos.x, pos.y, 6, 6);
+            pg.noStroke();
+            pg.fill(255);
+            pg.ellipse(pos.x, pos.y, 6, 6);
 
 
-        pop();
+        pg.pop();
         
+        pg.endDraw();
     }
 
     void updateMe(Stage stage){

@@ -41,30 +41,36 @@ class Shot extends Mover{
         }
     }
 
-    void drawMe(){
+    void drawMe(PGraphics pg){
         if(count < delay){
-            delayDraw();
+            delayDraw(pg);
         }else{
-            shotDraw();
+            shotDraw(pg);
         }
     }
 
-    void shotDraw(){
-        noStroke();
-        fill(col);
-        ellipse(pos.x, pos.y, size * 2, size * 2);
+    void shotDraw(PGraphics pg){
+        pg.beginDraw();
+            pg.noStroke();
+            pg.fill(col);
+            pg.ellipse(pos.x, pos.y, size * 2, size * 2);
+        pg.endDraw();
     }
 
-    void delayDraw(){
-        push();
-            blendMode(ADD);
+    void delayDraw(PGraphics pg){
+        pg.beginDraw();
+
+        pg.push();
+            pg.blendMode(ADD);
             for(int i = 0; i < 4; i++){
-                noStroke();
-                fill(col, map(delay - count, 0, delay, 255, 0) / 1.5);
+                pg.noStroke();
+                pg.fill(col, map(delay - count, 0, delay, 255, 0) / 1.5);
                 float delaysize = map(delay - count, 0, delay, size, size * 4);
-                ellipse(pos.x, pos.y, delaysize * 2 * 0.25 * i, delaysize * 2 * 0.25 * i);
+                pg.ellipse(pos.x, pos.y, delaysize * 2 * 0.25 * i, delaysize * 2 * 0.25 * i);
             }
-        pop();
+        pg.pop();
+
+        pg.endDraw();
     }
 
     void setVelocity(float speed, float angle){
@@ -123,30 +129,38 @@ class RectShot extends Shot{
         super.updateMe();
     }
 
-    void shotDraw(){
-        strokeWeight(lineWeight);
-        stroke(col);
-        noFill();
-        push();
-            translate(pos.x, pos.y);
-            rotate(vel.heading() + TWO_PI / 4);
-            rect(0, 0, size * 2, size * 2, size / 4);
-        pop();
+    void shotDraw(PGraphics pg){
+        pg.beginDraw();
+
+        pg.strokeWeight(lineWeight);
+        pg.stroke(col);
+        pg.noFill();
+        pg.push();
+            pg.translate(pos.x, pos.y);
+            pg.rotate(vel.heading() + TWO_PI / 4);
+            pg.rect(0, 0, size * 2, size * 2, size / 4);
+        pg.pop();
+
+        pg.endDraw();
     }
 
-    void delayDraw(){
-        push();
-            blendMode(ADD);
-            translate(pos.x, pos.y);
-            rotate(vel.heading() + TWO_PI / 4);
+    void delayDraw(PGraphics pg){
+        pg.beginDraw();
+
+        pg.push();
+            pg.blendMode(ADD);
+            pg.translate(pos.x, pos.y);
+            pg.rotate(vel.heading() + TWO_PI / 4);
             for(int i = 0; i < 4; i++){
-                strokeWeight(lineWeight + lineWeight / 2 * i);
-                stroke(col, 255 / 4);
-                noFill();
+                pg.strokeWeight(lineWeight + lineWeight / 2 * i);
+                pg.stroke(col, 255 / 4);
+                pg.noFill();
                 float delaysize = map(delay - count, 0, delay, size, size * 2);
-                rect(0, 0, delaysize * 2, delaysize * 2, delaysize / 4);
+                pg.rect(0, 0, delaysize * 2, delaysize * 2, delaysize / 4);
             }
-        pop();
+        pg.pop();
+
+        pg.endDraw();
     }
 
     void culcLineWeight(){
@@ -178,34 +192,37 @@ class LaserShot extends Shot{
         apex = PVector.add(pos, PVector.mult(vel.normalize(null), leng));
     }
 
-    void shotDraw(){
-        /*
-        strokeWeight(wid);
-        stroke(col);
-        line(apex.x, apex.y, pos.x, pos.y);
-        */
-        push();
+    void shotDraw(PGraphics pg){
+        pg.beginDraw();
+
+        pg.push();
             //blendMode(ADD);
-            noStroke();
-            fill(col);
+            pg.noStroke();
+            pg.fill(col);
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
-            translate(center.x, center.y);
-            rotate(vel.heading());
-            rect(0, 0, leng, wid * 2, wid / 2);
-        pop();
+            pg.translate(center.x, center.y);
+            pg.rotate(vel.heading());
+            pg.rect(0, 0, leng, wid * 2, wid / 2);
+        pg.pop();
+
+        pg.endDraw();
     }
 
-    void delayDraw(){
-        push();
+    void delayDraw(PGraphics pg){
+        pg.beginDraw();
+
+        pg.push();
             //blendMode(ADD);
-            noStroke();
-            fill(col, map(delay - count, 0, delay, 255, 0));
+            pg.noStroke();
+            pg.fill(col, map(delay - count, 0, delay, 255, 0));
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
-            translate(center.x, center.y);
-            rotate(vel.heading());
+            pg.translate(center.x, center.y);
+            pg.rotate(vel.heading());
             float delaysize = map(delay - count, 0, delay, wid, 0);
-            rect(0, 0, leng, delaysize * 2, delaysize / 2);
-        pop();
+            pg.rect(0, 0, leng, delaysize * 2, delaysize / 2);
+        pg.pop();
+
+        pg.endDraw();
     }
 
     boolean collision(Mover m){
@@ -262,14 +279,18 @@ class JikiRockOnShot extends Shot{
         }
     }
     
-    void shotDraw(){
-        push();
+    void shotDraw(PGraphics pg){
+        pg.beginDraw();
+
+        pg.push();
             //blendMode(ADD);
-            strokeWeight(2);
-            stroke(255);
-            fill(col);
-            ellipse(pos.x, pos.y, size * 2, size * 2);
-        pop();
+            pg.strokeWeight(2);
+            pg.stroke(255);
+            pg.fill(col);
+            pg.ellipse(pos.x, pos.y, size * 2, size * 2);
+        pg.pop();
+
+        pg.endDraw();
     }
 
     void homing(){
@@ -332,11 +353,15 @@ class JikiBarrierShot extends Shot{
         deleteShot();
     }
 
-    void drawMe(){
-        strokeWeight(2);
-        stroke(255);
-        fill(col, 32);
-        ellipse(pos.x, pos.y, size * 2, size * 2);
+    void drawMe(PGraphics pg){
+        pg.beginDraw();
+
+        pg.strokeWeight(2);
+        pg.stroke(255);
+        pg.fill(col, 32);
+        pg.ellipse(pos.x, pos.y, size * 2, size * 2);
+
+        pg.endDraw();
     }
 
     void deleteShot(){
@@ -379,11 +404,15 @@ class JikiBlueLaser extends Shot{
         deleteShot();
     }
 
-    void drawMe(){
-        push();
-            blendMode(ADD);
-            super.drawMe();
-        pop();
+    void drawMe(PGraphics pg){
+        pg.beginDraw();
+
+        pg.push();
+            pg.blendMode(ADD);
+            super.drawMe(pg);
+        pg.pop();
+
+        pg.endDraw();
     }
 
     void deleteShot(){

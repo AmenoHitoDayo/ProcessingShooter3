@@ -18,8 +18,8 @@ class Enemy extends Machine{
         }
     }
 
-    void drawMe(){
-        super.drawMe();
+    void drawMe(PGraphics pg){
+        super.drawMe(pg);
     }
 
     void shot(Stage s){
@@ -230,10 +230,14 @@ class ShotGun01 extends Enemy{
         }
     }
 
-    void drawMe(){
-        fill(col);
-        stroke(col);
-        easyTriangle(pos, currentAngle, size);
+    void drawMe(PGraphics pg){
+        pg.beginDraw();
+
+        pg.fill(col);
+        pg.stroke(col);
+        easyTriangle(pg, pos, currentAngle, size);
+
+        pg.endDraw();
     }
 
     void shot(Stage s){

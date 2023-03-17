@@ -12,18 +12,24 @@ PVector VectorDown(){
 }
 
 //大きさと角度を入れて正三角形ができる
-void easyTriangle(PVector pos, float angle, float size){
-    pushMatrix();
-        translate(pos.x, pos.y);
-        triangle(cos(angle) * size, sin(angle) * size,
+void easyTriangle(PGraphics pg, PVector pos, float angle, float size){
+    //これbeginDrawとendDraw消えてるのめっきもなんだけどいいのこれ
+
+    pg.beginDraw();
+
+    pg.pushMatrix();
+        pg.translate(pos.x, pos.y);
+        pg.triangle(cos(angle) * size, sin(angle) * size,
                 cos(angle + radians(120)) * size, sin(angle + radians(120)) * size,
                 cos(angle + radians(240)) * size, sin(angle + radians(240)) * size);
-    popMatrix();
+    pg.popMatrix();
+
+    pg.endDraw();
 }
 
-void easyTriangle(float x, float y, float angle, float size){
+void easyTriangle(PGraphics pg, float x, float y, float angle, float size){
     PVector v = new PVector(x, y);
-    easyTriangle(v, angle, size);
+    easyTriangle(pg, v, angle, size);
 }
 
 color HSVtoRGB(float h, float s, float v){

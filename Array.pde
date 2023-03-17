@@ -16,6 +16,12 @@ class Shots{
         }
     }
 
+    void drawMe(PGraphics pg){
+        for(int i = 0; i < shots.size(); i++){
+            shots.get(i).drawMe(pg);
+        }
+    }
+
     void addShot(Shot s){
         shots.add(s);
     }
@@ -50,6 +56,12 @@ class Enemys{
                 }
                 it.remove();
             }
+        }
+    }
+
+    void drawMe(PGraphics pg){
+        for(int i = 0; i < enemys.size(); i++){
+            enemys.get(i).drawMe(pg);
         }
     }
 
@@ -101,6 +113,12 @@ class Items{
         }
     }
 
+    void drawMe(PGraphics pg){
+        for(int i = 0; i < items.size(); i++){
+            items.get(i).drawMe(pg);
+        }
+    }
+
     void addItem(Item i){
         items.add(i);
     }
@@ -118,15 +136,22 @@ class Particles{
     }
     
     void updateMe(){
-            Iterator<Particle> it = particles.iterator();
-            while(it.hasNext()){
-                Particle p = it.next();
-                p.updateMe();
-                if(p.count > p.lifeTime){
-                    it.remove();
-                }
+        Iterator<Particle> it = particles.iterator();
+        while(it.hasNext()){
+            Particle p = it.next();
+            p.updateMe();
+            if(p.count > p.lifeTime){
+                it.remove();
             }
         }
+    }
+        
+
+    void drawMe(PGraphics pg){
+        for(int i = 0; i < particles.size(); i++){
+            particles.get(i).drawMe(pg);
+        }
+    }
         
     void addParticle(Particle p){
         particles.add(p);

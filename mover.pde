@@ -13,14 +13,15 @@ class Mover{
 
   void updateMe(){
     count++;
-    drawMe();
     vel.add(accel);
     pos.add(vel);
   }
 
-  void drawMe(){
-    fill(255);
-    ellipse(pos.x, pos.y, 10, 10);
+  void drawMe(PGraphics pg){
+    pg.beginDraw();
+      pg.fill(255);
+      pg.ellipse(pos.x, pos.y, 10, 10);
+    pg.endDraw();
   }
 
     boolean collision(Mover m){
@@ -47,10 +48,12 @@ class Machine extends Mover{
     super.updateMe();
   }
 
-  void drawMe(){
-    fill(col);
-    stroke(col);
-    easyTriangle(pos, radians(180), size);
+  void drawMe(PGraphics pg){
+    pg.beginDraw();
+      pg.fill(col);
+      pg.stroke(col);
+      easyTriangle(pg, pos, radians(180), size);
+    pg.endDraw();
     /*
     triangle(pos.x + cos(radians(180)) * size, pos.y + sin(radians(180)) * size,
              pos.x + cos(radians(300)) * size, pos.y + sin(radians(300)) * size,

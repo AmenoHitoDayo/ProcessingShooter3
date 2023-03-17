@@ -14,16 +14,21 @@ class rectParticle extends Particle{
         size = 16;
     }
     
-    void drawMe(){
+    void drawMe(PGraphics pg){
+        pg.beginDraw();
+
         size += 32 / lifeTime;
-        push();
-            blendMode(ADD);
-            noFill();
-            strokeWeight(5);
-            stroke(col, 255 - (190 / lifeTime) * count);
-            translate(pos.x, pos.y);
-            rotate(baseAngle + radians(count * 2 + 45));
-            rect(0, 0, size + count, size + count);
-        pop();
+
+        pg.push();
+            pg.blendMode(ADD);
+            pg.noFill();
+            pg.strokeWeight(5);
+            pg.stroke(col, 255 - (190 / lifeTime) * count);
+            pg.translate(pos.x, pos.y);
+            pg.rotate(baseAngle + radians(count * 2 + 45));
+            pg.rect(0, 0, size + count, size + count);
+        pg.pop();
+
+        pg.endDraw();
     }
 }

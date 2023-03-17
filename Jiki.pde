@@ -46,55 +46,63 @@ class Jiki extends Machine{
     }
     shot(stage);
     hit(stage);
-    absorb();
+    absorb(playingStage.buffer);
     release(stage);
     super.updateMe();
     bound();
   }
 
-  void drawMe(){
-    push();
-      blendMode(ADD);
+  void drawMe(PGraphics pg){
+    pg.beginDraw();
+
+    pg.push();
+      pg.blendMode(ADD);
       if(!slow){
-        noStroke();
-        fill(255, 0, 0, RedP);
-        easyTriangle(pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
-        fill(0, 255, 0, GreenP);
-        easyTriangle(pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
-        fill(0, 0, 255, BlueP);
-        easyTriangle(pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
+        pg.noStroke();
+        pg.fill(255, 0, 0, RedP);
+        easyTriangle(pg, pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
+        pg.fill(0, 255, 0, GreenP);
+        easyTriangle(pg, pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
+        pg.fill(0, 0, 255, BlueP);
+        easyTriangle(pg, pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
       }else{
         if(isRelease){
-          noStroke();
-          fill(255, 0, 0, RedP / 2);
-          easyTriangle(pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
-          fill(0, 255, 0, GreenP / 2);
-          easyTriangle(pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
-          fill(0, 0, 255, BlueP / 2);
-          easyTriangle(pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
+          pg.noStroke();
+          pg.fill(255, 0, 0, RedP / 2);
+          easyTriangle(pg, pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
+          pg.fill(0, 255, 0, GreenP / 2);
+          easyTriangle(pg, pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
+          pg.fill(0, 0, 255, BlueP / 2);
+          easyTriangle(pg, pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
         }
       }
       if((isInvincible() && count % 2 == 0) || isRelease == true){
-        fill(0);
+        pg.fill(0);
       }else if(slow){
-        fill(col, 127);
+        pg.fill(col, 127);
       }else{
-        fill(col);
+        pg.fill(col);
       }
-      strokeWeight(1.5);
-      stroke(col);
-      easyTriangle(pos, 0, 16);
-    pop();
-    noStroke();
+      pg.strokeWeight(1.5);
+      pg.stroke(col);
+      easyTriangle(pg, pos, 0, 16);
+    pg.pop();
+
+    pg.endDraw();
+    pg.beginDraw();
+
+    pg.noStroke();
     if(isRelease){
-      stroke(0);
-      strokeWeight(1);
-      fill(255);
+      pg.stroke(0);
+      pg.strokeWeight(1);
+      pg.fill(255);
     }else{
-      noStroke();
-      fill(0);
+      pg.noStroke();
+      pg.fill(0);
     }
-    ellipse(pos.x, pos.y, size * 2, size * 2);
+    pg.ellipse(pos.x, pos.y, size * 2, size * 2);
+
+    pg.endDraw();
   }
 
   void bound(){
@@ -208,13 +216,15 @@ class Jiki extends Machine{
     }
   }
 
-  void absorb(){
+  void absorb(PGraphics pg){
     if(isAbsorbing()){
       absorbArea += absorbMaxArea / absorbFrame;
-      stroke(255);
-      strokeWeight(1);
-      fill(255, 180 / absorbFrame * (absorbCount - count));
-      ellipse(pos.x, pos.y, absorbArea * 2, absorbArea * 2);
+      pg.beginDraw();
+      pg.stroke(255);
+      pg.strokeWeight(1);
+      pg.fill(255, 180 / absorbFrame * (absorbCount - count));
+      pg.ellipse(pos.x, pos.y, absorbArea * 2, absorbArea * 2);
+      pg.endDraw();
     }else{
       if(!isInvincible() && !isRelease && c){
         if(absorbArea > 0){

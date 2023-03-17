@@ -8,6 +8,8 @@ class Stage{
     int count = 0;
     boolean isCountUP = true;
 
+    PGraphics buffer;
+
     Stage(){
         enemyShots = new Shots();
         enemys = new Enemys();
@@ -16,6 +18,8 @@ class Stage{
         particles = new Particles();
         jikiShots = new Shots();
         count = 0;
+
+        buffer = createGraphics(width, height);
     }
 
     void updateMe(){
@@ -30,6 +34,23 @@ class Stage{
             count++;
         }
         enemySpawn();
+    }
+
+    void drawMe(){
+        image(buffer, 0, 0);
+
+        buffer.beginDraw();
+        buffer.background(0);
+        buffer.rectMode(CENTER);
+
+        particles.drawMe(buffer);
+        enemys.drawMe(buffer);
+        jiki.drawMe(buffer);
+        items.drawMe(buffer);
+        jikiShots.drawMe(buffer);
+        enemyShots.drawMe(buffer);
+        
+        buffer.endDraw();
     }
 
     void enemySpawn(){

@@ -9,7 +9,7 @@ void setup() {
     size(640, 480);
     background(0);
     //smooth();
-    rectMode(CENTER);
+    
     playingStage = new Stage01();
     ui = new UI();
 }
@@ -17,6 +17,7 @@ void setup() {
 void draw() {
     background(0);
     playingStage.updateMe();
+    playingStage.drawMe();
     ui.drawMe();
 }
 
