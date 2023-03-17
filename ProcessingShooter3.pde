@@ -1,3 +1,6 @@
+//なんでええええええええええええええええええ
+
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,7 +12,7 @@ void setup() {
     size(640, 480);
     background(0);
     //smooth();
-    
+
     playingStage = new Stage01();
     ui = new UI();
 }
