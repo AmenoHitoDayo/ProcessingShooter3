@@ -131,7 +131,13 @@ class Stage01 extends Stage{
         if(count == 700){
             enemys.addEnemy(new Circle01(width, height / 2));
         }
-        if(count == 760){
+        if(count == 730 || count == 760 || count == 790){
+            enemys.addEnemy(new Laser01(width, height / 2 - 180));
+        }
+        if(count == 745 || count == 775 || count == 805){
+            enemys.addEnemy(new Laser01(width, height / 2 + 180));
+        }
+        if(count == 860){
             enemys.addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
             enemys.addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
         }

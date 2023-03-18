@@ -508,3 +508,23 @@ class MidBoss01 extends Enemy{
         }
     }
 }
+
+class Laser01 extends Enemy{
+    Laser01(float _x, float _y){
+        super(_x, _y, 10);
+        col = HSVtoRGB(175, 255, 255);
+        size = 16;
+        vel = new PVector(-1, 0);
+    }
+
+    void shot(Stage s){
+        if(count > 30 && count % 90 == 0){
+            for(int i = 0; i < 4; i++){
+                Shot shot = new LaserShot(pos.x, pos.y, 36, 3);
+                shot.col = col;
+                shot.setVelocity(3, TWO_PI / 8 + i * TWO_PI / 4);
+                s.enemyShots.addShot(shot);
+            }
+        }
+    }
+}

@@ -133,7 +133,7 @@ class Jiki extends Machine{
   void releaseShot(Stage stage){
     if(RedP > 0){
       if(count % 5 == 0){
-        RedP = max(RedP - 10, 0);
+        RedP = max(RedP - 30, 0);
         JikiRockOnShot redShot = new JikiRockOnShot(pos.x, pos.y);
         redShot.size = 10;
 
@@ -146,7 +146,7 @@ class Jiki extends Machine{
       stage.jikiShots.addShot(greenShot);
     }
     if(BlueP > 0){
-      if(count % 3 == 0){
+      if(count % 2 == 0){
         BlueP = max(BlueP - 20, 0);
         JikiBlueLaser blueShot = new JikiBlueLaser(pos.x + 10, pos.y);
         stage.jikiShots.addShot(blueShot);

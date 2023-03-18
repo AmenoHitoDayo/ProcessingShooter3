@@ -254,13 +254,13 @@ class LaserShot extends Shot{
 class JikiRockOnShot extends Shot{
     Enemy target = null;
     float maxAngle = radians(120);
-    float accelValue = 0.5;
+    float velValue = 10;
     int targetSelectCount = 0;
 
     JikiRockOnShot(float _x, float _y){
         super(_x, _y);
-        vel = new PVector(0, 0);
-        accel = new PVector(0.1, 0);
+        vel = new PVector(velValue, 0);
+        accel = new PVector(0, 0);
         col = color(255, 0, 0);
         searchTarget();
     }
@@ -275,7 +275,7 @@ class JikiRockOnShot extends Shot{
             searchTarget();
             targetSelectCount++;
         }else{
-            accel = new PVector(0.1, 0);
+            vel = new PVector(velValue, 0);
         }
     }
     
@@ -283,10 +283,11 @@ class JikiRockOnShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            //blendMode(ADD);
-            pg.strokeWeight(2);
-            pg.stroke(255);
-            pg.fill(col);
+            blendMode(ADD);
+            pg.noStroke();
+            pg.fill(
+                lerpColor(color(255), col, count / 20.0), 127
+            );
             pg.ellipse(pos.x, pos.y, size * 2, size * 2);
         pg.pop();
 
@@ -302,12 +303,12 @@ class JikiRockOnShot extends Shot{
         }
         if(abs(angle) > maxAngle){
             if(angle > 0){
-                accel = new PVector(accelValue * cos(maxAngle), accelValue * sin(maxAngle));
+                vel = new PVector(velValue * cos(maxAngle), velValue * sin(maxAngle));
             }else{
-                accel = new PVector(accelValue * cos(-maxAngle), accelValue * sin(-maxAngle));
+                vel = new PVector(velValue * cos(-maxAngle), velValue * sin(-maxAngle));
             }
         }else{
-            accel = new PVector(accelValue * cos(angle), accelValue * sin(angle));
+            vel = new PVector(velValue * cos(angle), velValue * sin(angle));
         }
     }
 
@@ -409,7 +410,11 @@ class JikiBlueLaser extends Shot{
 
         pg.push();
             pg.blendMode(ADD);
-            super.drawMe(pg);
+            pg.noStroke();
+            pg.fill(
+                lerpColor(color(255), col, count / 10.0)
+            );
+            pg.ellipse(pos.x, pos.y, size * 2, size * 2);
         pg.pop();
 
         pg.endDraw();
