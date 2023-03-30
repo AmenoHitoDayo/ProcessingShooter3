@@ -1,5 +1,5 @@
 class Shots{
-    ArrayList<Shot> shots;
+    private ArrayList<Shot> shots;
 
     Shots(){
         shots = new ArrayList<Shot>();
@@ -36,7 +36,7 @@ class Shots{
 }
 
 class Enemys{
-    ArrayList<Enemy> enemys;
+    private ArrayList<Enemy> enemys;
 
     Enemys(){
         enemys = new ArrayList<Enemy>();
@@ -51,7 +51,7 @@ class Enemys{
             hit(stage, e);
             if(e.isDead){
                 if(e.isOutOfScreen == false){
-                    rectParticle r = new rectParticle(e.pos.x, e.pos.y, e.col);
+                    rectParticle r = new rectParticle(e.getPos().x, e.getPos().y, e.getColor());
                     stage.particles.addParticle(r);
                 }
                 it.remove();
@@ -72,20 +72,20 @@ class Enemys{
             if(s.collision(enemy)){
                 if(s.isHittable){
                     //被弾エフェクト
-                    rectParticle r1 = new rectParticle(enemy.pos.x, enemy.pos.y, s.col);
+                    rectParticle r1 = new rectParticle(enemy.getPos().x, enemy.getPos().y, s.col);
                     stage.particles.addParticle(r1);
 
                     if(s.isDeletable){
                         s.isDeleted = true;
                     }
-                    enemy.HP--;
+                    enemy.HPDown(1);
                 }
                 continue;
             }
         }
     }
 
-    void addEnemy(Enemy e){
+    public void addEnemy(Enemy e){
         print("addenemy");
         enemys.add(e);
     }
@@ -96,7 +96,7 @@ class Enemys{
 }
 
 class Items{
-    ArrayList<Item> items;
+    private ArrayList<Item> items;
 
     Items(){
         items = new ArrayList<Item>();
@@ -107,7 +107,7 @@ class Items{
         while(it.hasNext()){
             Item i = it.next();
             i.updateMe(stage);
-            if(i.pos.x < 0 - i.size || i.pos.x > width + i.size || i.pos.y < 0 - i.size || i.pos.y > height + i.size){
+            if(i.getPos().x < 0 - i.getSize() || i.getPos().x > width + i.getSize() || i.getPos().y < 0 - i.getSize() || i.getPos().y > height + i.getSize()){
                 it.remove();
             }
         }
@@ -129,7 +129,7 @@ class Items{
 }
 
 class Particles{
-    ArrayList<Particle> particles;
+    private ArrayList<Particle> particles;
     
     Particles(){
         particles = new ArrayList<Particle>();
@@ -140,7 +140,7 @@ class Particles{
         while(it.hasNext()){
             Particle p = it.next();
             p.updateMe();
-            if(p.count > p.lifeTime){
+            if(p.getCount() > p.lifeTime){
                 it.remove();
             }
         }

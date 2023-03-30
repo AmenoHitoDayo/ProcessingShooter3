@@ -1,28 +1,28 @@
 class Shot extends Mover{
-    color col = color(255);
-    int delay = 0;
-    ArrayList<ShotMoveCue> cues;
-    boolean isDeletable = true;
-    boolean isHittable = true;
-    boolean isDeleted = false;
+    private color col = color(255);
+    private int delay = 0;
+    private ArrayList<ShotMoveCue> cues;
+    private boolean isDeletable = true;
+    private boolean isHittable = true;
+    private boolean isDeleted = false;
 
     Shot(float _x, float _y){
         super(_x, _y);
-        vel = new PVector(0, 0);
+        setVel(new PVector(0, 0));
         delay = 0;
         cues = new ArrayList<ShotMoveCue>();
     }
 
     Shot(float _x, float _y, int _delay){
         super(_x, _y);
-        vel = new PVector(0, 0);
+        setVel(new PVector(0, 0));
         delay = _delay;
         cues = new ArrayList<ShotMoveCue>();
     }
 
     Shot(float _x, float _y, float speed, float angle){
         super(_x, _y);
-        vel = new PVector(speed * cos(angle), speed * sin(angle));
+        setVel(new PVector(speed * cos(angle), speed * sin(angle)));
         delay = 0;
         cues = new ArrayList<ShotMoveCue>();
     }
@@ -30,19 +30,19 @@ class Shot extends Mover{
     void updateMe(){
         super.updateMe();
         executeCue();
-        if(count < delay){
+        if(getCount() < delay){
             isHittable = false;
         }else{
             isHittable = true;
         }
 
-        if(pos.x < 0 - size || pos.x > width + size || pos.y < 0 - size || pos.y > height + size){
+        if(getX() < 0 - getSize() || getX() > width + getSize() || getY() < 0 - getSize() || getY() > height + getSize()){
             isDeleted = true;
         }
     }
 
     void drawMe(PGraphics pg){
-        if(count < delay){
+        if(getCount() < delay){
             delayDraw(pg);
         }else{
             shotDraw(pg);
@@ -53,7 +53,7 @@ class Shot extends Mover{
         pg.beginDraw();
             pg.noStroke();
             pg.fill(col);
-            pg.ellipse(pos.x, pos.y, size * 2, size * 2);
+            pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
         pg.endDraw();
     }
 
@@ -64,27 +64,27 @@ class Shot extends Mover{
             pg.blendMode(ADD);
             for(int i = 0; i < 4; i++){
                 pg.noStroke();
-                pg.fill(col, map(delay - count, 0, delay, 255, 0) / 1.5);
-                float delaysize = map(delay - count, 0, delay, size, size * 4);
-                pg.ellipse(pos.x, pos.y, delaysize * 2 * 0.25 * i, delaysize * 2 * 0.25 * i);
+                pg.fill(col, map(delay - getCount(), 0, delay, 255, 0) / 1.5);
+                float delaysize = map(delay - getCount(), 0, delay, getSize(), getSize() * 4);
+                pg.ellipse(getX(), getY(), delaysize * 2 * 0.25 * i, delaysize * 2 * 0.25 * i);
             }
         pg.pop();
 
         pg.endDraw();
     }
 
-    void setVelocity(float speed, float angle){
-        vel = new PVector(speed * cos(angle), speed * sin(angle));
+    void setVelocityFromSpeedAngle(float speed, float angle){
+        setVel(new PVector(speed * cos(angle), speed * sin(angle)));
     }
 
     void executeCue(){
         if(cues.size() > 0){
             for(int i = 0; i < cues.size(); i++){
                 ShotMoveCue cue = cues.get(i);
-                if(cue.count == this.count){
-                    this.vel = cue.vel;
-                    this.accel = cue.accel;
-                    this.col = cue.col;
+                if(cue.getCount() == this.getCount()){
+                    this.setVel(cue.getVel());
+                    this.setAccel(cue.getAccel());
+                    this.setColor(cue.getColor());
                 }
             }
         }
@@ -93,13 +93,33 @@ class Shot extends Mover{
     void addCue(ShotMoveCue cue){
         cues.add(cue);
     }
+
+    public color getColor(){
+        return col;
+    }
+
+    public int getDelay(){
+        return delay;
+    }
+
+    public void setColor(color _c){
+        col = _c;
+    }
+
+    public void setDeletable(boolean _d){
+        isDeletable = _d;
+    }
+
+    public void deleteShot(){
+        isDeleted = true;
+    }
 }
 
 class ShotMoveCue{
-    int count;
-    PVector vel;
-    PVector accel;
-    color col;
+    private int count;
+    private PVector vel;
+    private PVector accel;
+    private color col;
 
     
     ShotMoveCue(int _c, PVector _v, PVector _a, int _col){
@@ -107,6 +127,22 @@ class ShotMoveCue{
         vel = _v;
         accel = _a;
         col = _col;
+    }
+
+    public int getCount(){
+        return count;
+    }
+
+    public PVector getVel(){
+        return vel;
+    }
+
+    public PVector getAccel(){
+        return accel;
+    }
+
+    public color getColor(){
+        return col;
     }
 }
 
@@ -133,12 +169,12 @@ class RectShot extends Shot{
         pg.beginDraw();
 
         pg.strokeWeight(lineWeight);
-        pg.stroke(col);
+        pg.stroke(getColor());
         pg.noFill();
         pg.push();
-            pg.translate(pos.x, pos.y);
-            pg.rotate(vel.heading() + TWO_PI / 4);
-            pg.rect(0, 0, size * 2, size * 2, size / 4);
+            pg.translate(getX(), getY());
+            pg.rotate(getVel().heading() + TWO_PI / 4);
+            pg.rect(0, 0, getSize() * 2, getSize() * 2, getSize() / 4);
         pg.pop();
 
         pg.endDraw();
@@ -149,13 +185,13 @@ class RectShot extends Shot{
 
         pg.push();
             pg.blendMode(ADD);
-            pg.translate(pos.x, pos.y);
-            pg.rotate(vel.heading() + TWO_PI / 4);
+            pg.translate(getX(), getY());
+            pg.rotate(getVel().heading() + TWO_PI / 4);
             for(int i = 0; i < 4; i++){
                 pg.strokeWeight(lineWeight + lineWeight / 2 * i);
-                pg.stroke(col, 255 / 4);
+                pg.stroke(getColor(), 255 / 4);
                 pg.noFill();
-                float delaysize = map(delay - count, 0, delay, size, size * 2);
+                float delaysize = map(getDelay() - getCount(), 0, getDelay(), getSize(), getSize() * 2);
                 pg.rect(0, 0, delaysize * 2, delaysize * 2, delaysize / 4);
             }
         pg.pop();
@@ -164,7 +200,7 @@ class RectShot extends Shot{
     }
 
     void culcLineWeight(){
-        lineWeight = size / 3;
+        lineWeight = getSize() / 3;
     }
 }
 
@@ -180,16 +216,16 @@ class LaserShot extends Shot{
         apex = new PVector(_x, _y);
         mxLeng = _l;
         wid = _w;
-        isDeletable = false;
+        setDeletable(false);
     }
 
     void updateMe(){
         super.updateMe();
         if(leng < mxLeng){
-            leng = min(leng + vel.mag(), mxLeng);
-            pos = defPos;
+            leng = min(leng + getVel().mag(), mxLeng);
+            setPos(defPos);
         }
-        apex = PVector.add(pos, PVector.mult(vel.normalize(null), leng));
+        apex = PVector.add(getPos(), PVector.mult(getVel().normalize(null), leng));
     }
 
     void shotDraw(PGraphics pg){
@@ -198,10 +234,10 @@ class LaserShot extends Shot{
         pg.push();
             //blendMode(ADD);
             pg.noStroke();
-            pg.fill(col);
-            PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
+            pg.fill(getColor());
+            PVector center = new PVector((apex.x + getX()) / 2, (apex.y + getY()) / 2);
             pg.translate(center.x, center.y);
-            pg.rotate(vel.heading());
+            pg.rotate(getVel().heading());
             pg.rect(0, 0, leng, wid * 2, wid / 2);
         pg.pop();
 
@@ -214,11 +250,11 @@ class LaserShot extends Shot{
         pg.push();
             //blendMode(ADD);
             pg.noStroke();
-            pg.fill(col, map(delay - count, 0, delay, 255, 0));
-            PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
+            pg.fill(getColor(), map(getDelay() - getCount(), 0, getDelay(), 255, 0));
+            PVector center = new PVector((apex.x + getX()) / 2, (apex.y + getY()) / 2);
             pg.translate(center.x, center.y);
-            pg.rotate(vel.heading());
-            float delaysize = map(delay - count, 0, delay, wid, 0);
+            pg.rotate(getVel().heading());
+            float delaysize = map(getDelay() - getCount(), 0, getDelay(), wid, 0);
             pg.rect(0, 0, leng, delaysize * 2, delaysize / 2);
         pg.pop();
 
@@ -227,21 +263,21 @@ class LaserShot extends Shot{
 
     boolean collision(Mover m){
         //if(lineCollision(m, apex, pos)){return true;}
-        if(lineCollision2(m.pos.x, m.pos.y, m.size, apex.x, apex.y, pos.x, pos.y)){print("hit");return true;}
+        if(lineCollision2(m.getX(), m.getY(), m.getSize(), apex.x, apex.y, getX(), getY())){print("hit");return true;}
 
         
-        for(int i = 0; i <= m.size; i++){
+        for(int i = 0; i <= m.getSize(); i++){
             
-            PVector posMinusI = new PVector(apex.x + i * cos(vel.heading()), apex.y + i * sin(vel.heading()));
-            PVector posPlusI = new PVector(apex.x + i * cos(vel.heading() + PI), apex.y + i * sin(vel.heading() + PI));
-            PVector baseMinusI = new PVector(pos.x + i * cos(vel.heading()), pos.y + i * sin(vel.heading()));
-            PVector basePlusI = new PVector(pos.x + i * cos(vel.heading() + PI), pos.y + i * sin(vel.heading() + PI));
+            PVector posMinusI = new PVector(apex.x + i * cos(getVel().heading()), apex.y + i * sin(getVel().heading()));
+            PVector posPlusI = new PVector(apex.x + i * cos(getVel().heading() + PI), apex.y + i * sin(getVel().heading() + PI));
+            PVector baseMinusI = new PVector(getX() + i * cos(getVel().heading()), getY() + i * sin(getVel().heading()));
+            PVector basePlusI = new PVector(getX() + i * cos(getVel().heading() + PI), getY() + i * sin(getVel().heading() + PI));
             
             //if(lineCollision(m, posMinusI, baseMinusI)){return true;}
             //if(lineCollision(m, posPlusI, basePlusI)){return true;}
             
-            if(lineCollision2(m.pos.x, m.pos.y, m.size, posMinusI.x, posMinusI.y, baseMinusI.x, baseMinusI.y)){print("hit");return true;}
-            if(lineCollision2(m.pos.x, m.pos.y, m.size, posPlusI.x, posPlusI.y, basePlusI.x, basePlusI.y)){print("hit");return true;}
+            if(lineCollision2(m.getX(), m.getY(), m.getSize(), posMinusI.x, posMinusI.y, baseMinusI.x, baseMinusI.y)){print("hit");return true;}
+            if(lineCollision2(m.getX(), m.getY(), m.getSize(), posPlusI.x, posPlusI.y, basePlusI.x, basePlusI.y)){print("hit");return true;}
             
         }
         
@@ -259,9 +295,9 @@ class JikiRockOnShot extends Shot{
 
     JikiRockOnShot(float _x, float _y){
         super(_x, _y);
-        vel = new PVector(0, 0);
-        accel = new PVector(0.1, 0);
-        col = color(255, 0, 0);
+        setVel(new PVector(0, 0));
+        setAccel(new PVector(0.1, 0));
+        setColor(color(255, 0, 0));
         searchTarget();
     }
 
@@ -270,12 +306,12 @@ class JikiRockOnShot extends Shot{
         if(target != null && !target.isDead){
             homing();
         }else if(targetSelectCount < 5){
-            vel = new PVector(0, 0);
-            accel = new PVector(0, 0);
+            setVel(new PVector(0, 0));
+            setAccel(new PVector(0, 0));
             searchTarget();
             targetSelectCount++;
         }else{
-            accel = new PVector(0.1, 0);
+            setAccel(new PVector(0.1, 0));
         }
     }
     
@@ -286,8 +322,8 @@ class JikiRockOnShot extends Shot{
             //blendMode(ADD);
             pg.strokeWeight(2);
             pg.stroke(255);
-            pg.fill(col);
-            pg.ellipse(pos.x, pos.y, size * 2, size * 2);
+            pg.fill(getColor());
+            pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
         pg.pop();
 
         pg.endDraw();
@@ -296,18 +332,18 @@ class JikiRockOnShot extends Shot{
     void homing(){
         //ターゲットが死んでると暴走するっぽい(解決)
         //追尾が弱くて撃ち損な感じがあるので、追尾対象がなくなったら追尾対象探し直しとかするべきかと　
-        float angle = new PVector(target.pos.x - pos.x, target.pos.y - pos.y).heading();
+        float angle = new PVector(target.getX() - getX(), target.getY() - getY()).heading();
         if(angle > PI){
             angle = map(angle, PI, TWO_PI, -PI, 0);
         }
         if(abs(angle) > maxAngle){
             if(angle > 0){
-                accel = new PVector(accelValue * cos(maxAngle), accelValue * sin(maxAngle));
+                setAccel(new PVector(accelValue * cos(maxAngle), accelValue * sin(maxAngle)));
             }else{
-                accel = new PVector(accelValue * cos(-maxAngle), accelValue * sin(-maxAngle));
+                setAccel(new PVector(accelValue * cos(-maxAngle), accelValue * sin(-maxAngle)));
             }
         }else{
-            accel = new PVector(accelValue * cos(angle), accelValue * sin(angle));
+            setAccel(new PVector(accelValue * cos(angle), accelValue * sin(angle)));
         }
     }
 
@@ -323,7 +359,7 @@ class JikiRockOnShot extends Shot{
         Iterator<Enemy> it = stage.enemys.getArray().iterator();
         while(it.hasNext()){
             Enemy e = it.next();
-            float d = dist(pos.x, pos.y, e.pos.x, e.pos.y);
+            float d = dist(getX(), getY(), e.getX(), e.getY());
             if(d < distant){
             distant = d;
             t = e;
@@ -339,16 +375,16 @@ class JikiRockOnShot extends Shot{
 class JikiBarrierShot extends Shot{
     JikiBarrierShot(float _x, float _y){
         super(_x, _y);
-        vel = new PVector(0, 0);
-        accel = new PVector(0, 0);
-        col = color(0, 255, 0);
-        size = 64;
+        setVel(new PVector(0, 0));
+        setAccel(new PVector(0, 0));
+        setColor(color(0, 255, 0));
+        setSize(64);
     }
 
     void updateMe(){
         super.updateMe();
-        if(count > 1){
-            isDeleted = true;
+        if(getCount() > 1){
+            deleteShot();
         }
         deleteShot();
     }
@@ -358,8 +394,8 @@ class JikiBarrierShot extends Shot{
 
         pg.strokeWeight(2);
         pg.stroke(255);
-        pg.fill(col, 32);
-        pg.ellipse(pos.x, pos.y, size * 2, size * 2);
+        pg.fill(getColor(), 32);
+        pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
 
         pg.endDraw();
     }
@@ -372,8 +408,8 @@ class JikiBarrierShot extends Shot{
             if(s.collision(this) == true){
                 float ransu = random(100);
                 if(s.isDeletable && ransu < 1){ //1%の確率でバリアに当たった弾がきえる
-                    rectParticle r = new rectParticle(s.pos.x, s.pos.y, s.col);
-                    r.baseAngle = s.vel.heading();
+                    rectParticle r = new rectParticle(s.getX(), s.getY(), s.col);
+                    r.baseAngle = s.getVel().heading();
                     stage.particles.addParticle(r);
                     println("deleteshot");
                     s.isDeleted = true;
@@ -387,19 +423,18 @@ class JikiBarrierShot extends Shot{
 class JikiBlueLaser extends Shot{
     JikiBlueLaser(float _x, float _y){
         super(_x, _y, 64);
-        vel = new PVector(10, 0);
-        accel = new PVector(0.1, 0);
-        col = color(64, 64, 255, 127);
-        delay = 0;
+        setVel(new PVector(10, 0));
+        setAccel(new PVector(0.1, 0));
+        setColor(color(64, 64, 255, 127));
+        setDeletable(false);
         isHittable = true;
-        isDeletable = false;
     }
 
     void updateMe(){
         super.updateMe();
-        size += 64 / (width / 10) * 2;
-        if(count > width / 10){
-            isDeleted = true;
+        setSize(64 / (width / 10) * 2);
+        if(getCount() > width / 10){
+            deleteShot();
         }
         deleteShot();
     }
@@ -422,8 +457,8 @@ class JikiBlueLaser extends Shot{
             Shot s = it.next();
             if(this.collision(s) == true){
                 if(s.isDeletable){
-                    rectParticle r = new rectParticle(s.pos.x, s.pos.y, s.col);
-                    r.baseAngle = s.vel.heading();
+                    rectParticle r = new rectParticle(s.getX(), s.getY(), s.col);
+                    r.baseAngle = s.getVel().heading();
                     stage.particles.addParticle(r);
                     println("deleteshot");
                     s.isDeleted = true;

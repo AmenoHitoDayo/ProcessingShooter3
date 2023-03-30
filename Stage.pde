@@ -1,12 +1,13 @@
 class Stage{
-    Shots jikiShots;
-    Shots enemyShots;
-    Enemys enemys;
-    Items items;
-    Particles particles;
-    Jiki jiki;
-    int count = 0;
-    boolean isCountUP = true;
+    private Shots jikiShots;
+    private Shots enemyShots;
+    private Enemys enemys;
+    private Items items;
+    private Particles particles;
+    private Jiki jiki;
+    private Particles particles_zenkei;
+    private int count = 0;
+    private boolean isCountUP = true;
 
     PGraphics buffer;
 
@@ -16,6 +17,7 @@ class Stage{
         items = new Items();
         jiki = new Jiki();
         particles = new Particles();
+        particles_zenkei = new Particles();
         jikiShots = new Shots();
         count = 0;
 
@@ -23,13 +25,14 @@ class Stage{
     }
 
     void updateMe(){
-        if(jiki.HP <= 0) return;
+        if(jiki.getHP() <= 0) return;
         particles.updateMe();
         enemys.updateMe(this);
         jiki.updateMe(this);
         items.updateMe(this);
         jikiShots.updateMe();
         enemyShots.updateMe();
+        particles_zenkei.updateMe();
         if(isCountUP){
             count++;
         }
@@ -49,16 +52,33 @@ class Stage{
         items.drawMe(buffer);
         jikiShots.drawMe(buffer);
         enemyShots.drawMe(buffer);
+        particles_zenkei.drawMe(buffer);
         
         buffer.endDraw();
     }
 
     void enemySpawn(){
 
+    }
+
+    void addEnemy(Enemy e){
+        enemys.addEnemy(e);
     };
 
-    Jiki getJiki(){
+    public int getCount(){
+        return count;
+    }
+
+    public Jiki getJiki(){
         return jiki;
+    }
+
+    public boolean getCountUP(){
+        return isCountUP;
+    }
+
+    public void setCountUP(boolean _b){
+        isCountUP = _b;
     }
 
     int getEnemyCount(){
@@ -77,8 +97,8 @@ class SampleStage extends Stage{
     }
 
     void enemySpawn(){
-        if(count % 10 == 0 && getEnemyCount() <= 0){
-            enemys.addEnemy(new SampleEnemy());
+        if(getCount() % 10 == 0 && getEnemyCount() <= 0){
+            addEnemy(new SampleEnemy());
         }
     }
 }
@@ -87,53 +107,52 @@ class Stage01 extends Stage{
     boolean isMidBossAppeared = false;
     Stage01(){
         super();
-        count = 0;
     }
 
     void enemySpawn(){
-        if(count == 30 || count == 60 || count == 90){
-            enemys.addEnemy(new March01(width - 120, 0));
+        if(getCount() == 30 || getCount() == 60 || getCount() == 90){
+            addEnemy(new March01(width - 120, 0));
         }
-        if(count == 60 || count == 90 || count == 120){
-            enemys.addEnemy(new March02(width - 180, height));
+        if(getCount() == 60 || getCount() == 90 || getCount() == 120){
+            addEnemy(new March02(width - 180, height));
         }
-        if(count == 180){
-            enemys.addEnemy(new Aim01(width, 120));
+        if(getCount() == 180){
+            addEnemy(new Aim01(width, 120));
         }
-        if(count == 300){
+        if(getCount() == 300){
             Aim01 aim01_1 = new Aim01(width, height - 120);
             aim01_1.setHue(205);
-            enemys.addEnemy(aim01_1);
+            addEnemy(aim01_1);
         }
-        if(count == 400){
-            enemys.addEnemy(new Red01(width, height / 2));
+        if(getCount() == 400){
+            addEnemy(new Red01(width, height / 2));
         }
-        if(count == 500){
-            enemys.addEnemy(new Green01(width, height / 2 - height / 3));
+        if(getCount() == 500){
+            addEnemy(new Green01(width, height / 2 - height / 3));
         }
-        if(count == 600){
-            enemys.addEnemy(new Blue01(width, height / 2 + height / 3));
+        if(getCount() == 600){
+            addEnemy(new Blue01(width, height / 2 + height / 3));
         }
-        if(count == 660){
-            if(isCountUP == true){
-                isCountUP = false;
+        if(getCount() == 660){
+            if(getCountUP() == true){
+                setCountUP(false);
             }
-            if(isCountUP == false && getEnemyCount() == 0){
+            if(getCountUP() == false && getEnemyCount() == 0){
                 if(!isMidBossAppeared){
-                    enemys.addEnemy(new MidBoss01(width, height / 2));
+                    addEnemy(new MidBoss01(width, height / 2));
                     isMidBossAppeared = true;
                 }else{
-                    println("countRestart");
-                    isCountUP = true;
+                    println("CountRestart");
+                    setCountUP(true);
                 }
             }
         }
-        if(count == 700){
-            enemys.addEnemy(new Circle01(width, height / 2));
+        if(getCount() == 700){
+            addEnemy(new Circle01(width, height / 2));
         }
-        if(count == 760){
-            enemys.addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
-            enemys.addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
+        if(getCount() == 760){
+            addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
+            addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
         }
     }
 }

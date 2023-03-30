@@ -1,5 +1,5 @@
 class UI{
-    Stage stage;
+    private Stage stage;
     
     UI(){
         stage = playingStage;
@@ -16,17 +16,17 @@ class UI{
     }
 
     void drawHP(){
-        if(stage.jiki.pos.x < 32 && stage.jiki.pos.y < 32){
+        if(stage.jiki.getX() < 32 && stage.jiki.getY() < 32){
             fill(255, 127);
         }else{
             fill(255);
         }
         textSize(16);
-        text("HP : " + stage.jiki.HP, 0, 16);
+        text("HP : " + stage.jiki.getHP(), 0, 16);
     }
 
     void drawColorPoint(){
-        if(stage.jiki.pos.x < 64 && stage.jiki.pos.y > height - 16 * 2){
+        if(stage.jiki.getX() < 64 && stage.jiki.getY() > height - 16 * 2){
             fill(255, 127);
         }else{
             fill(255);
@@ -38,12 +38,12 @@ class UI{
     }
 
     void drawReleaseWaitGauge(){
-        if(stage.jiki.releaseWaitCount > stage.jiki.count){
-            float length = map(stage.jiki.releaseWaitCount - stage.jiki.count, 0, stage.jiki.releaseWaitFrame, 0, 32);
+        if(stage.jiki.releaseWaitCount > stage.jiki.getCount()){
+            float length = map(stage.jiki.releaseWaitCount - stage.jiki.getCount(), 0, stage.jiki.releaseWaitFrame, 0, 32);
             noFill();
             stroke(255);
             strokeWeight(3);
-            line(stage.jiki.pos.x - 16, stage.jiki.pos.y - 16 - 8, stage.jiki.pos.x - 16 + length, stage.jiki.pos.y - 16 - 8);
+            line(stage.jiki.getX() - 16, stage.jiki.getY() - 16 - 8, stage.jiki.getX() - 16 + length, stage.jiki.getY() - 16 - 8);
         }
     }
 
