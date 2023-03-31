@@ -102,6 +102,10 @@ class Shot extends Mover{
         return delay;
     }
 
+    public boolean getHittable(){
+        return isHittable;
+    }
+
     public void setColor(color _c){
         col = _c;
     }
@@ -110,7 +114,11 @@ class Shot extends Mover{
         isDeletable = _d;
     }
 
-    public void deleteShot(){
+    public void setHittable(boolean _b){
+        isHittable = _b;
+    }
+
+    public void shotDelete(){
         isDeleted = true;
     }
 }
@@ -384,7 +392,7 @@ class JikiBarrierShot extends Shot{
     void updateMe(){
         super.updateMe();
         if(getCount() > 1){
-            deleteShot();
+            shotDelete();
         }
         deleteShot();
     }
@@ -427,7 +435,7 @@ class JikiBlueLaser extends Shot{
         setAccel(new PVector(0.1, 0));
         setColor(color(64, 64, 255, 127));
         setDeletable(false);
-        isHittable = true;
+        setHittable(true);
     }
 
     void updateMe(){
