@@ -25,7 +25,7 @@ class rectParticle extends Particle{
     void drawMe(PGraphics pg){
         pg.beginDraw();
 
-        this.setSize(32 / getLifeTime());
+        this.setSize(getSize() + 32 / getLifeTime());
 
         pg.push();
             pg.blendMode(ADD);

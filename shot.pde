@@ -433,26 +433,30 @@ class JikiBlueLaser extends Shot{
         super(_x, _y, 64);
         setVel(new PVector(10, 0));
         setAccel(new PVector(0.1, 0));
-        setColor(color(64, 64, 255, 127));
+        setColor(color(64, 64, 255));
         setDeletable(false);
         setHittable(true);
     }
 
     void updateMe(){
+        println("blueShot");
         super.updateMe();
-        setSize(64 / (width / 10) * 2);
+        setSize(getSize() + 64 / (width / 10) * 2);
         if(getCount() > width / 10){
-            deleteShot();
+            shotDelete();
         }
         deleteShot();
+        
     }
 
     void drawMe(PGraphics pg){
+        println("blueShotDraw");
         pg.beginDraw();
 
         pg.push();
             pg.blendMode(ADD);
             super.drawMe(pg);
+            pg.ellipse(getX(), getY(), 100, 100);
         pg.pop();
 
         pg.endDraw();
