@@ -4,11 +4,13 @@ class Mover{
   private PVector accel;
   private int count;  //タイマー　寿命計算とかに使う
   private float size = 4; //当たり判定の半径
+  private color col;
 
   Mover(float _x, float _y){
     pos = new PVector(_x, _y);
     vel = new PVector(0, 0);
     accel = new PVector(0, 0);
+    col = color(255);
   }
 
   void updateMe(){
@@ -19,9 +21,14 @@ class Mover{
 
   void drawMe(PGraphics pg){
     pg.beginDraw();
-      pg.fill(255);
+      pg.fill(col);
+      pg.stroke(col);
       pg.ellipse(pos.x, pos.y, 10, 10);
     pg.endDraw();
+  }
+
+  void death(){
+
   }
 
   boolean collision(Mover m){
@@ -31,6 +38,14 @@ class Mover{
       }else{
           return false;
       }
+  }
+
+  public boolean isOutOfScreen(){
+    if(getX() < 0 - getSize() || getX() > width + getSize() || getY() < 0 - getSize() || getY() > height + getSize()){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   public PVector getPos(){
@@ -59,6 +74,14 @@ class Mover{
 
   public int getCount(){
     return count;
+  }
+
+  public color getColor(){
+    return col;
+  }
+
+  public void setColor(color _c){
+    col = _c;
   }
 
   public void setPos(PVector _p){
@@ -93,7 +116,6 @@ class Mover{
 
 class Machine extends Mover{
   private int HP;
-  private color col;
   
   Machine(float _x, float _y, int _HP){
     super(_x, _y);
@@ -106,8 +128,8 @@ class Machine extends Mover{
 
   void drawMe(PGraphics pg){
     pg.beginDraw();
-      pg.fill(col);
-      pg.stroke(col);
+      pg.fill(getColor());
+      pg.stroke(getColor());
       easyTriangle(pg, getPos(), radians(180), getSize());
     pg.endDraw();
     /*
@@ -119,14 +141,6 @@ class Machine extends Mover{
 
   public int getHP(){
     return HP;
-  }
-
-  public color getColor(){
-    return col;
-  }
-
-  public void setColor(color _c){
-    col = _c;
   }
 
   void HPDown(int down){

@@ -1,6 +1,6 @@
 class Enemy extends Machine{
-    boolean isDead = false;
-    boolean isOutOfScreen = false;  //画面外に出て消えた時にはエフェクト出ないように
+    private boolean isDead = false;
+    private boolean isOutOfScreen = false;  //画面外に出て消えた時にはエフェクト出ないように
     Enemy(float _x, float _y, int _HP){
         super(_x, _y, _HP);
         setSize(16);
@@ -27,6 +27,11 @@ class Enemy extends Machine{
     }
     
     void death(){
+        Enemys enemys = playingStage.enemys;
+        enemys.removeEnemy(this);
+        if(!isOutOfScreen()){
+
+        }
     }
 }
 
@@ -342,7 +347,7 @@ class Green01 extends Enemy{
 }
 
 class Blue01 extends Enemy{
-    float angle = radians(90);
+    private float angle = radians(90);
     Blue01(float _x, float _y){
         super(_x, _y, 10);
         setSize(16);
@@ -385,6 +390,14 @@ class Blue01 extends Enemy{
                 angle += radians(7);
             }
         }
+    }
+}
+
+class MarchLaser01 extends Enemy{
+    MarchLaser01(float _x, float _y){
+        super(_x, _y, 100);
+        setSize(16);
+        //setColor(HSVtoRGB(165, 100 100));
     }
 }
 

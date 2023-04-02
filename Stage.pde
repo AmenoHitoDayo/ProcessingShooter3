@@ -9,7 +9,7 @@ class Stage{
     private int count = 0;
     private boolean isCountUP = true;
 
-    PGraphics buffer;
+    private PGraphics buffer;
 
     Stage(){
         enemyShots = new Shots();

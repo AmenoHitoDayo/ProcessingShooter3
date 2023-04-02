@@ -1,17 +1,12 @@
 class Particle extends Mover{
     private int lifeTime = 10;
-    private color col;
     Particle(float _x, float _y, color _c){
         super(_x, _y);
-        col = _c;
+        setColor(_c);
     }
 
     public float getLifeTime(){
         return lifeTime;
-    }
-
-    public color getColor(){
-        return col;
     }
 }
 

@@ -1,3 +1,33 @@
+class Movers{
+    private ArrayList<Mover> movers;
+
+    Movers(){
+        movers = new ArrayList<Mover>();
+    }
+
+    void updateMe(){
+        Iterator<Mover> it = movers.iterator();
+        while(it.hasNext()){
+            Mover m = it.next();
+            m.updateMe();
+        }
+    }
+
+    void drawMe(PGraphics pg){
+        for(int i = 0; i < movers.size(); i++){
+            movers.get(i).drawMe(pg);
+        }
+    }
+
+    void addMover(Mover m){
+        movers.add(m);
+    }
+
+    void removeMover(Mover m){
+        movers.remove(m);
+    }
+}
+
 class Shots{
     private ArrayList<Shot> shots;
 
@@ -88,6 +118,10 @@ class Enemys{
     public void addEnemy(Enemy e){
         print("addenemy");
         enemys.add(e);
+    }
+
+    public void removeEnemy(Enemy e){
+        enemys.remove(e);
     }
 
     ArrayList<Enemy> getArray(){

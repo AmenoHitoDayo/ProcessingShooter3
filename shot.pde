@@ -394,7 +394,7 @@ class JikiBarrierShot extends Shot{
         if(getCount() > 1){
             shotDelete();
         }
-        deleteShot();
+        tamaKeshi();
     }
 
     void drawMe(PGraphics pg){
@@ -408,7 +408,7 @@ class JikiBarrierShot extends Shot{
         pg.endDraw();
     }
 
-    void deleteShot(){
+    void tamaKeshi(){
         Stage stage = playingStage;
         Iterator<Shot> it = stage.enemyShots.getShots().iterator();
         while(it.hasNext()){
@@ -445,7 +445,7 @@ class JikiBlueLaser extends Shot{
         if(getCount() > width / 10){
             shotDelete();
         }
-        deleteShot();
+        tamaKeshi();
         
     }
 
@@ -456,13 +456,12 @@ class JikiBlueLaser extends Shot{
         pg.push();
             pg.blendMode(ADD);
             super.drawMe(pg);
-            pg.ellipse(getX(), getY(), 100, 100);
         pg.pop();
 
         pg.endDraw();
     }
 
-    void deleteShot(){
+    void tamaKeshi(){
         Stage stage = playingStage;
         Iterator<Shot> it = stage.enemyShots.getShots().iterator();
         while(it.hasNext()){
