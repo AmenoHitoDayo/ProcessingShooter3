@@ -33,15 +33,13 @@ class Item extends Mover{
             pg.fill(255);
             pg.ellipse(getX(), getY(), 6, 6);
 
-
         pg.pop();
         
         pg.endDraw();
     }
 
     void updateMe(Stage stage){
-        super.updateMe();
-        //drawMe();
+        super.updateMe(stage);
         setVel(PVector.sub(stage.jiki.getPos(), this.getPos()).normalize().mult(5));
     }
 }

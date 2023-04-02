@@ -36,9 +36,26 @@ class rectParticle extends Particle{
     }
 }
 
-class splash01 extends Particle{
-    splash01(float _x, float _y, color _c){
-    super(_x, _y, _c);
-    setSize(8);
+class circleParticle extends Particle{
+    private float baseAngle = 0;
+    circleParticle(float _x, float _y, color _c){
+        super(_x, _y, _c);
+        setSize(16);
+    }
+    
+    void drawMe(PGraphics pg){
+        pg.beginDraw();
+
+        this.setSize(getSize() + 32 / getLifeTime());
+
+        pg.push();
+            pg.blendMode(ADD);
+            pg.noFill();
+            pg.strokeWeight(5);
+            pg.stroke(getColor(), 255 - (190 / getLifeTime()) * getCount());
+            pg.ellipse(getX(), getY(), getSize() + getCount(), getSize() + getCount());
+        pg.pop();
+
+        pg.endDraw();
     }
 }

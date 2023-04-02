@@ -5,11 +5,14 @@ class Movers{
         movers = new ArrayList<Mover>();
     }
 
-    void updateMe(){
+    void updateMe(Stage stage){
         Iterator<Mover> it = movers.iterator();
         while(it.hasNext()){
             Mover m = it.next();
-            m.updateMe();
+            m.updateMe(stage);
+            if(m.areYouDead()){
+                it.remove();
+            }
         }
     }
 
@@ -35,12 +38,12 @@ class Shots{
         shots = new ArrayList<Shot>();
     }
 
-    void updateMe(){
+    void updateMe(Stage stage){
         Iterator<Shot> it = shots.iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            s.updateMe();
-            if(s.isDeleted == true){
+            s.updateMe(stage);
+            if(s.areYouDead() == true){
                 it.remove();
             }
         }
@@ -76,11 +79,11 @@ class Enemys{
         Iterator<Enemy> it = enemys.iterator();
         while(it.hasNext()){
             Enemy e = it.next();
-            e.updateMe();
+            e.updateMe(stage);
             e.shot(stage);
             hit(stage, e);
-            if(e.isDead){
-                if(e.isOutOfScreen == false){
+            if(e.areYouDead()){
+                if(e.isOutOfScreen() == false){
                     rectParticle r = new rectParticle(e.getPos().x, e.getPos().y, e.getColor());
                     stage.particles.addParticle(r);
                 }
@@ -106,7 +109,7 @@ class Enemys{
                     stage.particles.addParticle(r1);
 
                     if(s.isDeletable){
-                        s.isDeleted = true;
+                        s.kill();
                     }
                     enemy.HPDown(1);
                 }
@@ -169,11 +172,11 @@ class Particles{
         particles = new ArrayList<Particle>();
     }
     
-    void updateMe(){
+    void updateMe(Stage stage){
         Iterator<Particle> it = particles.iterator();
         while(it.hasNext()){
             Particle p = it.next();
-            p.updateMe();
+            p.updateMe(stage);
             if(p.getCount() > p.lifeTime){
                 it.remove();
             }

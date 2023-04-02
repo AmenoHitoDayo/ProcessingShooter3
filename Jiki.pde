@@ -47,7 +47,7 @@ class Jiki extends Machine{
     hit(stage);
     absorb(playingStage.buffer);
     release(stage);
-    super.updateMe();
+    super.updateMe(stage);
     bound();
   }
 
@@ -160,12 +160,11 @@ class Jiki extends Machine{
       //collision関数はmoverのデフォであったほうがいいね多分これ・・・
       if(s.collision(this)){
         if(s.isHittable){
-
           if(s.isDeletable){
             //被弾エフェクト
             rectParticle r1 = new rectParticle(s.getX(), s.getY(), s.col);
             stage.particles.addParticle(r1);
-            s.isDeleted = true;
+            s.kill();
           }else{
             //被弾エフェクト
             rectParticle r1 = new rectParticle(getX(), getY(), s.col);
@@ -204,6 +203,7 @@ class Jiki extends Machine{
       }
     }
 
+    //アイテム取得判定
     Iterator<Item> it3 = stage.items.getArray().iterator();
     while(it3.hasNext()){
       Item i = it3.next();

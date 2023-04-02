@@ -26,13 +26,13 @@ class Stage{
 
     void updateMe(){
         if(jiki.getHP() <= 0) return;
-        particles.updateMe();
+        particles.updateMe(this);
         enemys.updateMe(this);
         jiki.updateMe(this);
         items.updateMe(this);
-        jikiShots.updateMe();
-        enemyShots.updateMe();
-        particles_zenkei.updateMe();
+        jikiShots.updateMe(this);
+        enemyShots.updateMe(this);
+        particles_zenkei.updateMe(this);
         if(isCountUP){
             count++;
         }
@@ -85,9 +85,9 @@ class Stage{
         return enemys.getArray().size();
     }
 
-    void startNewStage(Stage s){
-        s.jiki = this.jiki;
-        playingStage = s;
+    void startNewStage(Stage stage){
+        stage.jiki = this.jiki;
+        playingStage = stage;
     }
 }
 

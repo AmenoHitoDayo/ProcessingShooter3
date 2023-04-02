@@ -4,7 +4,6 @@ class Shot extends Mover{
     private ArrayList<ShotMoveCue> cues;
     private boolean isDeletable = true;
     private boolean isHittable = true;
-    private boolean isDeleted = false;
 
     Shot(float _x, float _y){
         super(_x, _y);
@@ -27,17 +26,13 @@ class Shot extends Mover{
         cues = new ArrayList<ShotMoveCue>();
     }
 
-    void updateMe(){
-        super.updateMe();
+    void updateMe(Stage stage){
+        super.updateMe(stage);
         executeCue();
         if(getCount() < delay){
             isHittable = false;
         }else{
             isHittable = true;
-        }
-
-        if(getX() < 0 - getSize() || getX() > width + getSize() || getY() < 0 - getSize() || getY() > height + getSize()){
-            isDeleted = true;
         }
     }
 
@@ -117,10 +112,6 @@ class Shot extends Mover{
     public void setHittable(boolean _b){
         isHittable = _b;
     }
-
-    public void shotDelete(){
-        isDeleted = true;
-    }
 }
 
 class ShotMoveCue{
@@ -168,9 +159,9 @@ class RectShot extends Shot{
         super(_x, _y, speed, angle);
     }
 
-    void updateMe(){
+    void updateMe(Stage stage){
         culcLineWeight();
-        super.updateMe();
+        super.updateMe(stage);
     }
 
     void shotDraw(PGraphics pg){
@@ -227,8 +218,8 @@ class LaserShot extends Shot{
         setDeletable(false);
     }
 
-    void updateMe(){
-        super.updateMe();
+    void updateMe(Stage stage){
+        super.updateMe(stage);
         if(leng < mxLeng){
             leng = min(leng + getVel().mag(), mxLeng);
             setPos(defPos);
@@ -309,9 +300,9 @@ class JikiRockOnShot extends Shot{
         searchTarget();
     }
 
-    void updateMe(){
-        super.updateMe();
-        if(target != null && !target.isDead){
+    void updateMe(Stage stage){
+        super.updateMe(stage);
+        if(target != null && !target.areYouDead()){
             homing();
         }else if(targetSelectCount < 5){
             setVel(new PVector(0, 0));
@@ -389,10 +380,10 @@ class JikiBarrierShot extends Shot{
         setSize(64);
     }
 
-    void updateMe(){
-        super.updateMe();
+    void updateMe(Stage stage){
+        super.updateMe(stage);
         if(getCount() > 1){
-            shotDelete();
+            this.kill();
         }
         tamaKeshi();
     }
@@ -420,7 +411,7 @@ class JikiBarrierShot extends Shot{
                     r.baseAngle = s.getVel().heading();
                     stage.particles.addParticle(r);
                     println("deleteshot");
-                    s.isDeleted = true;
+                    s.kill();
                 }
             }
         }
@@ -438,12 +429,12 @@ class JikiBlueLaser extends Shot{
         setHittable(true);
     }
 
-    void updateMe(){
+    void updateMe(Stage stage){
         println("blueShot");
-        super.updateMe();
+        super.updateMe(stage);
         setSize(getSize() + 64 / (width / 10) * 2);
         if(getCount() > width / 10){
-            shotDelete();
+            this.kill();
         }
         tamaKeshi();
         
@@ -472,7 +463,7 @@ class JikiBlueLaser extends Shot{
                     r.baseAngle = s.getVel().heading();
                     stage.particles.addParticle(r);
                     println("deleteshot");
-                    s.isDeleted = true;
+                    s.kill();
                 }
             }
         }

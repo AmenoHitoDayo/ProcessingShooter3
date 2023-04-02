@@ -1,4 +1,6 @@
 class Mover{
+  private boolean isDead = false;
+
   private PVector pos;
   private PVector vel;
   private PVector accel;
@@ -13,7 +15,7 @@ class Mover{
     col = color(255);
   }
 
-  void updateMe(){
+  void updateMe(Stage stage){
     count++;
     vel.add(accel);
     pos.add(vel);
@@ -25,10 +27,6 @@ class Mover{
       pg.stroke(col);
       pg.ellipse(pos.x, pos.y, 10, 10);
     pg.endDraw();
-  }
-
-  void death(){
-
   }
 
   boolean collision(Mover m){
@@ -46,6 +44,10 @@ class Mover{
     }else{
       return false;
     }
+  }
+
+  public void kill(){
+    isDead = true;
   }
 
   public PVector getPos(){
@@ -78,6 +80,10 @@ class Mover{
 
   public color getColor(){
     return col;
+  }
+
+  public boolean areYouDead(){
+    return isDead;
   }
 
   public void setColor(color _c){
@@ -122,8 +128,8 @@ class Machine extends Mover{
     HP = _HP;
   }
   
-  void updateMe(){
-    super.updateMe();
+  void updateMe(Stage stage){
+    super.updateMe(stage);
   }
 
   void drawMe(PGraphics pg){

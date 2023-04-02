@@ -11,7 +11,7 @@ class UI{
         drawReleaseWaitGauge();
     }
     
-    void updateMe(){
+    void updateMe(Stage stage){
 
     }
 
