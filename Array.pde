@@ -32,7 +32,7 @@ class Movers{
         movers.remove(m);
     }
 
-    public ArrayList<Mover> getList(){
+    public ArrayList<Mover> getArray(){
         return movers;
     }
 }
@@ -69,7 +69,7 @@ class Shots{
         shots.remove(s);
     }
 
-    ArrayList<Shot> getShots(){
+    ArrayList<Shot> getArray(){
         return shots;
     }
 }
@@ -105,7 +105,7 @@ class Enemys{
     }
 
     void hit(Stage stage, Enemy enemy){
-        Iterator<Shot> it = stage.jikiShots.getShots().iterator();
+        Iterator<Shot> it = stage.jikiShots.getArray().iterator();
         while(it.hasNext()){
             Shot s = it.next();
             if(s.collision(enemy)){

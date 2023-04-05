@@ -34,6 +34,9 @@ class Shot extends Mover{
         }else{
             isHittable = true;
         }
+        if(isOutOfScreen()){
+            kill();
+        }
     }
 
     void drawMe(PGraphics pg){
@@ -401,7 +404,7 @@ class JikiBarrierShot extends Shot{
 
     void tamaKeshi(){
         Stage stage = playingStage;
-        Iterator<Shot> it = stage.enemyShots.getShots().iterator();
+        Iterator<Shot> it = stage.enemyShots.getArray().iterator();
         while(it.hasNext()){
             Shot s = it.next();
             if(s.collision(this) == true){
@@ -454,7 +457,7 @@ class JikiBlueLaser extends Shot{
 
     void tamaKeshi(){
         Stage stage = playingStage;
-        Iterator<Shot> it = stage.enemyShots.getShots().iterator();
+        Iterator<Shot> it = stage.enemyShots.getArray().iterator();
         while(it.hasNext()){
             Shot s = it.next();
             if(this.collision(s) == true){

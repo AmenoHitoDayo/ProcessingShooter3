@@ -8,7 +8,7 @@ class Enemy extends Machine{
 
     void updateMe(Stage stage){
         super.updateMe(stage);
-        if(getHP() <= 0){
+        if(getHP() <= 0 || isOutOfScreen()){
             kill();
         }
     }
@@ -94,7 +94,7 @@ class Aim01 extends Enemy{
     private float shotHue;
 
     Aim01(float _x, float _y){
-        super(_x, _y, 10);
+        super(_x, _y, 16);
         setVel(new PVector(-0.07, -1));
         shotHue = 75;
         setColor(HSVtoRGB(shotHue, 255, 255));

@@ -11,6 +11,8 @@ class UI{
         drawHP();
         drawColorPoint();
         drawReleaseWaitGauge();
+        drawEnemyCount();
+        drawTekidanCount();
     }
     
     void updateMe(Stage stage){
@@ -18,7 +20,7 @@ class UI{
     }
 
     void drawHP(){
-        if(stage.jiki.getX() < 32 && stage.jiki.getY() < 32){
+        if(stage.jiki.getX() < 32 && stage.jiki.getY() < 16){
             fill(255, 127);
         }else{
             fill(255);
@@ -47,6 +49,26 @@ class UI{
             strokeWeight(3);
             line(stage.jiki.getX() - 16, stage.jiki.getY() - 16 - 8, stage.jiki.getX() - 16 + length, stage.jiki.getY() - 16 - 8);
         }
+    }
+
+    void drawEnemyCount(){
+        if(stage.jiki.getX() < 32 && stage.jiki.getY() < 32){
+            fill(255, 127);
+        }else{
+            fill(255);
+        }
+        textSize(16);
+        text("Enemys : " + stage.getEnemyCount(), 0, 16 * 2);
+    }
+
+    void drawTekidanCount(){
+        if(stage.jiki.getX() < 32 && stage.jiki.getY() < 16 * 3){
+            fill(255, 127);
+        }else{
+            fill(255);
+        }
+        textSize(16);
+        text("Shots : " + stage.getShotCount(), 0, 16 * 3);
     }
 
     void getStage(){

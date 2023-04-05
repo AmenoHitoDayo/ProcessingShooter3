@@ -153,7 +153,7 @@ class Jiki extends Machine{
   }
 
   void hit(Stage stage){
-    Iterator<Shot> it = stage.enemyShots.getShots().iterator();
+    Iterator<Shot> it = stage.enemyShots.getArray().iterator();
     while(it.hasNext()){
       if(isInvincible()) break;
       Shot s = it.next();

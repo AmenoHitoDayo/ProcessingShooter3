@@ -10,6 +10,7 @@ class Stage{
     private boolean isCountUP = true;
 
     private PGraphics buffer;
+    private AudioPlayer bgm;
 
     Stage(){
         enemyShots = new Shots();
@@ -22,9 +23,13 @@ class Stage{
         count = 0;
 
         buffer = createGraphics(width, height);
+        setBGM("sol_battle047.mp3");
+        bgm.printControls();
     }
 
     void updateMe(){
+        if(!bgm.isPlaying())bgm.loop();
+
         if(jiki.getHP() <= 0) return;
         particles.updateMe(this);
         enemys.updateMe(this);
@@ -60,6 +65,10 @@ class Stage{
     //名前がわかりにくい・・・ステージの構成を書くところです（何Fで何の敵がでるか）
     void enemySpawn(){
 
+    }
+
+    public void setBGM(String bgmFileName){
+        bgm = minim.loadFile(bgmFileName);
     }
 
     public void addEnemy(Enemy e){
@@ -99,8 +108,16 @@ class Stage{
         isCountUP = _b;
     }
 
+    public AudioPlayer getBGM(){
+        return bgm;
+    }
+
     int getEnemyCount(){
         return enemys.getArray().size();
+    }
+
+    int getShotCount(){
+        return enemyShots.getArray().size();
     }
 }
 
@@ -120,6 +137,8 @@ class Stage01 extends Stage{
     boolean isMidBossAppeared = false;
     Stage01(){
         super();
+        setBGM("sol_battle047.mp3");
+        getBGM().setGain(-10f);
     }
 
     void enemySpawn(){
@@ -147,18 +166,21 @@ class Stage01 extends Stage{
             addEnemy(new Blue01(width, height / 2 + height / 3));
         }
         if(getCount() == 660){
+            
             if(getCountUP() == true){
                 setCountUP(false);
-            }
-            if(getCountUP() == false && getEnemyCount() == 0){
-                if(!isMidBossAppeared){
-                    addEnemy(new MidBoss01(width, height / 2));
-                    isMidBossAppeared = true;
-                }else{
-                    println("CountRestart");
-                    setCountUP(true);
+            }else{
+                if(getEnemyCount() == 0){
+                    if(!isMidBossAppeared){
+                        addEnemy(new MidBoss01(width, height / 2));
+                        isMidBossAppeared = true;
+                    }else{
+                        println("CountRestart");
+                        setCountUP(true);
+                    }
                 }
             }
+            
         }
         if(getCount() == 700){
             addEnemy(new Circle01(width, height / 2));

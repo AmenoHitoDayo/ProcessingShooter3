@@ -1,3 +1,10 @@
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -5,6 +12,7 @@ public Stage playingStage;
 public UI ui;
 boolean right = false, left = false, up = false, down = false, z = false, slow = false, c = false;
 public Scene scene = Scene.GameScene;
+Minim minim;
 
 public enum Scene{
     TitleScene,
@@ -18,6 +26,7 @@ void setup() {
     background(0);
     //smooth();
 
+    minim = new Minim(this);
     playingStage = new Stage01();
     ui = new UI();
 }
