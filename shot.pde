@@ -71,7 +71,7 @@ class Shot extends Mover{
         pg.endDraw();
     }
 
-    void setVelocityFromSpeedAngle(float speed, float angle){
+    public void setVelocityFromSpeedAngle(float speed, float angle){
         setVel(new PVector(speed * cos(angle), speed * sin(angle)));
     }
 
@@ -291,8 +291,8 @@ class LaserShot extends Shot{
 
 class JikiRockOnShot extends Shot{
     Enemy target = null;
-    float maxAngle = radians(120);
-    float accelValue = 0.5;
+    float maxAngle = radians(60);
+    //float accelValue = 0.5;
     int targetSelectCount = 0;
 
     JikiRockOnShot(float _x, float _y){
@@ -340,12 +340,12 @@ class JikiRockOnShot extends Shot{
         }
         if(abs(angle) > maxAngle){
             if(angle > 0){
-                setAccel(new PVector(accelValue * cos(maxAngle), accelValue * sin(maxAngle)));
+                setVelocityFromSpeedAngle(10, maxAngle);
             }else{
-                setAccel(new PVector(accelValue * cos(-maxAngle), accelValue * sin(-maxAngle)));
+                setVelocityFromSpeedAngle(10, -maxAngle);
             }
         }else{
-            setAccel(new PVector(accelValue * cos(angle), accelValue * sin(angle)));
+                setVelocityFromSpeedAngle(10, angle);
         }
     }
 

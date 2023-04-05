@@ -11,9 +11,10 @@ class Enemy extends Machine{
         deadSound = minim.loadFile("魔王魂  戦闘18.mp3");
         deadSound.setGain(-10f);
         hitSound = minim.loadFile("魔王魂  戦闘07.mp3");
-        hitSound.setGain(-20f);
+        hitSound.setGain(-10f);
     }
 
+    //移動とかのショット以外の挙動はここに書く
     void updateMe(Stage stage){
         super.updateMe(stage);
         if(getHP() <= 0 || isOutOfScreen()){
@@ -21,10 +22,12 @@ class Enemy extends Machine{
         }
     }
 
+    //敵機体の描画をここに書く
     void drawMe(PGraphics pg){
         super.drawMe(pg);
     }
 
+    //ショットの発射処理はここに書く
     void shot(Stage stage){
 
     }

@@ -30,7 +30,7 @@ class Stage{
     }
 
     void updateMe(){
-        if(!bgm.isPlaying())bgm.loop();
+        if(!bgm.isPlaying() && jiki.getHP() > 0)bgm.loop();
 
         if(jiki.getHP() <= 0) return;
         particles.updateMe(this);
@@ -44,7 +44,7 @@ class Stage{
             count++;
         }
         ui.updateMe(this);
-        enemySpawn();
+        stageStructure();
     }
 
     void drawMe(){
@@ -66,19 +66,24 @@ class Stage{
         buffer.endDraw();
 
         if(jiki.getHP() <= 0){
-            bgm.mute();
+            bgm.pause();
+
             buffer.beginDraw();
-            fill(0, 127);
-            rect(0, 0, width, height);
-            fill(255);
-            textSize(16);
-            text("Game Over", width / 2 - 8 * 4.5, height / 2 - 16);
+
+                buffer.noStroke();
+                buffer.fill(0, 127);
+                buffer.rect(width / 2, height / 2, width, height);
+                buffer.fill(255);
+                
+                buffer.textSize(16);
+                buffer.text("Game Over", width / 2 - 8 * 4.5, height / 2 - 16);
+
             buffer.endDraw();
         }
     }
 
     //名前がわかりにくい・・・ステージの構成を書くところです（何Fで何の敵がでるか）
-    void enemySpawn(){
+    void stageStructure(){
 
     }
 
@@ -154,13 +159,17 @@ class SampleStage extends Stage{
 
 class Stage01 extends Stage{
     boolean isMidBossAppeared = false;
+
+    private String stageBGM = "sol_battle047.mp3";
+    private String bossBGM = "sol_battle046.mp3";
+
     Stage01(){
         super();
-        setBGM("sol_battle047.mp3");
+        setBGM(stageBGM);
         getBGM().setGain(-10f);
     }
 
-    void enemySpawn(){
+    void stageStructure(){
         if(getCount() == 30 || getCount() == 60 || getCount() == 90){
             addEnemy(new March01(width - 120, 0));
         }
