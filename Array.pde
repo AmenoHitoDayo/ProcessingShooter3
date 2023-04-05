@@ -22,12 +22,18 @@ class Movers{
         }
     }
 
-    void addMover(Mover m){
+    //弾とかを追加
+    public void addMover(Mover m){
         movers.add(m);
     }
 
-    void removeMover(Mover m){
+    //弾とかを削除
+    public void removeMover(Mover m){
         movers.remove(m);
+    }
+
+    public ArrayList<Mover> getList(){
+        return movers;
     }
 }
 

@@ -1,5 +1,7 @@
 class UI{
     private Stage stage;
+    private boolean isGaugeUsing = false;
+    private HPGauge gauge;
     
     UI(){
         stage = playingStage;
@@ -49,5 +51,35 @@ class UI{
 
     void getStage(){
         stage = playingStage;
+    }
+}
+
+class HPGauge{
+    private Enemy baseEnemy;
+    private float maxHP = 0f;
+    private float currentHP = 0f;
+
+    HPGauge(Enemy _e){
+        baseEnemy = _e;
+        maxHP = baseEnemy.getHP();
+        currentHP = maxHP;
+    }
+
+    void updateMe(){
+        currentHP = baseEnemy.getHP();
+    }
+
+    void drawMe(){
+        float maxLength = width - 60;
+        float rectLength = maxLength * (currentHP / maxHP);
+
+        stroke(255);
+        strokeWeight(3);
+        noFill();
+        rect(30, 10, width - 30, 50);
+        stroke(0);
+        strokeWeight(2);
+        fill(255);
+        rect(30, 10, 30 + rectLength, 50);
     }
 }

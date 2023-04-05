@@ -16,11 +16,15 @@ class Mover{
   }
 
   void updateMe(Stage stage){
+    //制動用のカウンター
     count++;
+
+    //移動
     vel.add(accel);
     pos.add(vel);
   }
 
+  //PGraphicsつかう
   void drawMe(PGraphics pg){
     pg.beginDraw();
       pg.fill(col);
@@ -29,6 +33,7 @@ class Mover{
     pg.endDraw();
   }
 
+  //衝突判定
   boolean collision(Mover m){
       float d = dist(pos.x, pos.y, m.pos.x, m.pos.y);
       if(d < (size + m.size)){
@@ -38,6 +43,7 @@ class Mover{
       }
   }
 
+  //画面外判定
   public boolean isOutOfScreen(){
     if(getX() < 0 - getSize() || getX() > width + getSize() || getY() < 0 - getSize() || getY() > height + getSize()){
       return true;
@@ -46,6 +52,7 @@ class Mover{
     }
   }
 
+  //ステージから削除（できるようにする）
   public void kill(){
     isDead = true;
   }
@@ -138,11 +145,6 @@ class Machine extends Mover{
       pg.stroke(getColor());
       easyTriangle(pg, getPos(), radians(180), getSize());
     pg.endDraw();
-    /*
-    triangle(pos.x + cos(radians(180)) * size, pos.y + sin(radians(180)) * size,
-             pos.x + cos(radians(300)) * size, pos.y + sin(radians(300)) * size,
-             pos.x + cos(radians(60)) * size, pos.y + sin(radians(60)) * size);
-    */
   }
 
   public int getHP(){

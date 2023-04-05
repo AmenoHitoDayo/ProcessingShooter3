@@ -19,7 +19,7 @@ class Stage{
         particles = new Particles();
         particles_zenkei = new Particles();
         jikiShots = new Shots();
-        count = 0;
+        count = 700;
 
         buffer = createGraphics(width, height);
     }
@@ -57,13 +57,31 @@ class Stage{
         buffer.endDraw();
     }
 
+    //名前がわかりにくい・・・ステージの構成を書くところです（何Fで何の敵がでるか）
     void enemySpawn(){
 
     }
 
-    void addEnemy(Enemy e){
+    public void addEnemy(Enemy e){
         enemys.addEnemy(e);
-    };
+    }
+
+    public void addEnemyShot(Shot s){
+        enemyShots.addShot(s);
+    }
+
+    public void addJikiShot(Shot s){
+        jikiShots.addShot(s);
+    }
+
+    public void addParticle(Particle p){
+        particles.addParticle(p);
+    }
+
+    void startNewStage(Stage stage){
+        stage.jiki = this.jiki;
+        playingStage = stage;
+    }
 
     public int getCount(){
         return count;
@@ -83,11 +101,6 @@ class Stage{
 
     int getEnemyCount(){
         return enemys.getArray().size();
-    }
-
-    void startNewStage(Stage stage){
-        stage.jiki = this.jiki;
-        playingStage = stage;
     }
 }
 
@@ -153,6 +166,12 @@ class Stage01 extends Stage{
         if(getCount() == 760){
             addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
             addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
+        }
+        if(getCount() == 820 || getCount() == 850 || getCount() == 880){
+            addEnemy(new MarchLaser01(width, height - 100));
+        }
+        if(getCount() == 840 || getCount() == 870 || getCount() == 900){
+            addEnemy(new MarchLaser01(width, 100));
         }
     }
 }

@@ -119,7 +119,7 @@ class Jiki extends Machine{
           shot.setSize(6);
           shot.setColor(color(255, 180));
           shot.setAccel(new PVector(0.25 * cos(radians(-kakudo + kakudo * 0.75 * i)), 0.25 * sin(radians(-kakudo + kakudo * 0.75 * i))));
-          stage.jikiShots.addShot(shot);
+          stage.addJikiShot(shot);
         }
       }
     }
@@ -135,19 +135,19 @@ class Jiki extends Machine{
         JikiRockOnShot redShot = new JikiRockOnShot(getX(), getY());
         redShot.setSize(10);
 
-        stage.jikiShots.addShot(redShot);
+        stage.addJikiShot(redShot);
       }
     }
     if(GreenP > 0){
       GreenP = max(GreenP - 5, 0);
       JikiBarrierShot greenShot = new JikiBarrierShot(getX(), getY());
-      stage.jikiShots.addShot(greenShot);
+      stage.addJikiShot(greenShot);
     }
     if(BlueP > 0){
       if(getCount() % 3 == 0){
         BlueP = max(BlueP - 16, 0);
         JikiBlueLaser blueShot = new JikiBlueLaser(getX() + 10, getY());
-        stage.jikiShots.addShot(blueShot);
+        stage.addJikiShot(blueShot);
       }
     }
   }
@@ -155,6 +155,7 @@ class Jiki extends Machine{
   void hit(Stage stage){
     Iterator<Shot> it = stage.enemyShots.getShots().iterator();
     while(it.hasNext()){
+      if(isInvincible()) break;
       Shot s = it.next();
       //被弾判定
       //collision関数はmoverのデフォであったほうがいいね多分これ・・・

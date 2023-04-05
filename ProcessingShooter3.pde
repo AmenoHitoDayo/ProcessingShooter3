@@ -4,6 +4,14 @@ import java.util.Iterator;
 public Stage playingStage;
 public UI ui;
 boolean right = false, left = false, up = false, down = false, z = false, slow = false, c = false;
+public Scene scene = Scene.GameScene;
+
+public enum Scene{
+    TitleScene,
+    GameScene,
+    GameOverScene,
+    GameClearScene
+}
 
 void setup() {
     size(640, 480);
