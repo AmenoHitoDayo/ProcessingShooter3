@@ -19,7 +19,7 @@ class Stage{
         particles = new Particles();
         particles_zenkei = new Particles();
         jikiShots = new Shots();
-        count = 700;
+        count = 0;
 
         buffer = createGraphics(width, height);
     }
