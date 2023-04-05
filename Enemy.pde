@@ -1,9 +1,17 @@
 class Enemy extends Machine{
-    private boolean isOutOfScreen = false;  //画面外に出て消えた時にはエフェクト出ないように
+
+    private AudioPlayer deadSound;
+    private AudioPlayer hitSound;
+
     Enemy(float _x, float _y, int _HP){
         super(_x, _y, _HP);
         setSize(16);
         setColor(color(255));
+
+        deadSound = minim.loadFile("魔王魂  戦闘18.mp3");
+        deadSound.setGain(-10f);
+        hitSound = minim.loadFile("魔王魂  戦闘07.mp3");
+        hitSound.setGain(-20f);
     }
 
     void updateMe(Stage stage){
@@ -19,6 +27,14 @@ class Enemy extends Machine{
 
     void shot(Stage stage){
 
+    }
+
+    public void playHitSound(){
+        hitSound.play(0);
+    }
+
+    public void playDeadSound(){
+        deadSound.play(0);
     }
 }
 

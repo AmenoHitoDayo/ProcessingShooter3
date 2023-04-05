@@ -64,6 +64,17 @@ class Stage{
         ui.drawMe(buffer);
         
         buffer.endDraw();
+
+        if(jiki.getHP() <= 0){
+            bgm.mute();
+            buffer.beginDraw();
+            fill(0, 127);
+            rect(0, 0, width, height);
+            fill(255);
+            textSize(16);
+            text("Game Over", width / 2 - 8 * 4.5, height / 2 - 16);
+            buffer.endDraw();
+        }
     }
 
     //名前がわかりにくい・・・ステージの構成を書くところです（何Fで何の敵がでるか）
@@ -114,6 +125,10 @@ class Stage{
 
     public AudioPlayer getBGM(){
         return bgm;
+    }
+
+    public UI getUI(){
+        return ui;
     }
 
     int getEnemyCount(){
@@ -176,7 +191,9 @@ class Stage01 extends Stage{
             }else{
                 if(getEnemyCount() == 0){
                     if(!isMidBossAppeared){
-                        addEnemy(new MidBoss01(width, height / 2));
+                        Enemy e = new MidBoss01(width, height / 2);
+                        addEnemy(e);
+                        getUI().makeGauge(e);
                         isMidBossAppeared = true;
                     }else{
                         println("CountRestart");

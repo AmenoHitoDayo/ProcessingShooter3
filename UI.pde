@@ -6,6 +6,7 @@ class UI{
     
     UI(){
         stage = playingStage;
+        gauge = new HPGauge();
     }
 
     void drawMe(PGraphics _pg){
@@ -15,10 +16,18 @@ class UI{
         drawReleaseWaitGauge();
         drawEnemyCount();
         drawTekidanCount();
+        if(isGaugeUsing == true && gauge.getBaseEnemy() != null){
+            gauge.drawMe(_pg);
+        }
     }
     
     void updateMe(Stage s){
         stage = s;
+        if(isGaugeUsing){
+            if(gauge.getBaseEnemy().areYouDead() || gauge.getBaseEnemy() == null){
+                isGaugeUsing = false;
+            }
+        }
     }
 
     void drawHP(){
@@ -83,6 +92,11 @@ class UI{
         pg.endDraw();
     }
 
+    public void makeGauge(Enemy _e){
+        isGaugeUsing = true;
+        gauge.makeGauge(_e);
+    }
+
     void getStage(){
         stage = playingStage;
     }
@@ -93,27 +107,43 @@ class HPGauge{
     private float maxHP = 0f;
     private float currentHP = 0f;
 
-    HPGauge(Enemy _e){
+    private float gaugeOutMargin = 80;
+
+    HPGauge(){
+        baseEnemy = null;
+    }
+
+    void drawMe(PGraphics pg){
+        currentHP = baseEnemy.getHP();
+        float maxLength = width - gaugeOutMargin * 2;
+        float rectLength = (maxLength) * (currentHP / maxHP);
+
+        pg.beginDraw();
+            pg.push();
+
+            pg.rectMode(CORNERS);
+            pg.stroke(255);
+            pg.strokeWeight(1);
+            pg.noFill();
+            pg.rect(gaugeOutMargin, 20, gaugeOutMargin + maxLength, 30);
+
+            pg.noStroke();
+            pg.fill(255);
+            pg.rect(gaugeOutMargin, 20 , gaugeOutMargin + rectLength, 30 );
+
+            pg.pop();
+
+        pg.endDraw();
+    }
+
+    public void makeGauge(Enemy _e){
         baseEnemy = _e;
         maxHP = baseEnemy.getHP();
         currentHP = maxHP;
     }
 
-    void updateMe(){
-        currentHP = baseEnemy.getHP();
-    }
-
-    void drawMe(){
-        float maxLength = width - 60;
-        float rectLength = maxLength * (currentHP / maxHP);
-
-        stroke(255);
-        strokeWeight(3);
-        noFill();
-        rect(30, 10, width - 30, 50);
-        stroke(0);
-        strokeWeight(2);
-        fill(255);
-        rect(30, 10, 30 + rectLength, 50);
+    //ゲージの元となる敵を作成（敵が死んだかどうかの判定につかう）
+    public Enemy getBaseEnemy(){
+        return baseEnemy;
     }
 }

@@ -90,8 +90,9 @@ class Enemys{
             hit(stage, e);
             if(e.areYouDead()){
                 if(e.isOutOfScreen() == false){
-                    rectParticle r = new rectParticle(e.getPos().x, e.getPos().y, e.getColor());
-                    stage.particles.addParticle(r);
+                    e.playDeadSound();
+                    circleParticle r = new circleParticle(e.getPos().x, e.getPos().y, e.getColor());
+                    stage.addParticle(r);
                 }
                 it.remove();
             }
@@ -111,8 +112,9 @@ class Enemys{
             if(s.collision(enemy)){
                 if(s.isHittable){
                     //被弾エフェクト
-                    rectParticle r1 = new rectParticle(enemy.getPos().x, enemy.getPos().y, s.col);
-                    stage.particles.addParticle(r1);
+                    enemy.playHitSound();
+                    rectParticle r1 = new rectParticle(s.getX(), s.getY(), s.col);
+                    stage.addParticle(r1);
 
                     if(s.isDeletable){
                         s.kill();

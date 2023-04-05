@@ -12,6 +12,7 @@ public Stage playingStage;
 boolean right = false, left = false, up = false, down = false, z = false, slow = false, c = false;
 public Scene scene = Scene.GameScene;
 Minim minim;
+public int defaultHP = 10;
 
 public enum Scene{
     TitleScene,

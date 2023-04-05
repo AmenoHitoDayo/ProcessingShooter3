@@ -412,7 +412,7 @@ class JikiBarrierShot extends Shot{
                 if(s.isDeletable && ransu < 1){ //1%の確率でバリアに当たった弾がきえる
                     rectParticle r = new rectParticle(s.getX(), s.getY(), s.col);
                     r.baseAngle = s.getVel().heading();
-                    stage.particles.addParticle(r);
+                    stage.addParticle(r);
                     println("deleteshot");
                     s.kill();
                 }
@@ -427,7 +427,7 @@ class JikiBlueLaser extends Shot{
         super(_x, _y, 64);
         setVel(new PVector(10, 0));
         setAccel(new PVector(0.1, 0));
-        setColor(color(64, 64, 255));
+        setColor(color(64, 64, 128));
         setDeletable(false);
         setHittable(true);
     }
@@ -464,7 +464,7 @@ class JikiBlueLaser extends Shot{
                 if(s.isDeletable){
                     rectParticle r = new rectParticle(s.getX(), s.getY(), s.col);
                     r.baseAngle = s.getVel().heading();
-                    stage.particles.addParticle(r);
+                    stage.addParticle(r);
                     println("deleteshot");
                     s.kill();
                 }

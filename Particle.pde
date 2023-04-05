@@ -14,13 +14,13 @@ class rectParticle extends Particle{
     private float baseAngle = 0;
     rectParticle(float _x, float _y, color _c){
         super(_x, _y, _c);
-        setSize(16);
+        setSize(12);
     }
     
     void drawMe(PGraphics pg){
         pg.beginDraw();
 
-        this.setSize(getSize() + 32 / getLifeTime());
+        this.setSize(getSize() + 12 / getLifeTime());
 
         pg.push();
             pg.blendMode(ADD);
@@ -40,7 +40,7 @@ class circleParticle extends Particle{
     private float baseAngle = 0;
     circleParticle(float _x, float _y, color _c){
         super(_x, _y, _c);
-        setSize(16);
+        setSize(24);
     }
     
     void drawMe(PGraphics pg){

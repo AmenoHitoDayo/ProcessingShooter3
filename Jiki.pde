@@ -12,13 +12,27 @@ class Jiki extends Machine{
   private float RedP, GreenP, BlueP;
   private boolean isRelease = false;  //開放しているかどうか
 
+  private AudioPlayer shotSound;
+  private AudioPlayer hitSound;
+  private AudioPlayer absorbSound;
+  private AudioPlayer itemSound;
+
   Jiki(){
-    super(width / 2, height / 2, 10);
+    super(width / 2, height / 2, defaultHP);
     setColor(color(255, 255, 255, 255));
     setSize(4);
     RedP = 0;
     GreenP = 0;
     BlueP = 0;
+
+    shotSound = minim.loadFile("maou_se_battle11.mp3");
+    shotSound.setGain(-30f);
+    hitSound = minim.loadFile("魔王魂 効果音 システム09.mp3");
+    hitSound.setGain(-10f);
+    absorbSound = minim.loadFile("魔王魂  マジカル15.mp3");
+    absorbSound.setGain(-10f);
+    itemSound = minim.loadFile("魔王魂 効果音 ジッポ-開ける音.mp3");
+    itemSound.setGain(-10f);
   }
 
   void updateMe(Stage stage){
@@ -111,6 +125,7 @@ class Jiki extends Machine{
   void shot(Stage stage){
     if(z){
       if(getCount() % 8 == 0){
+        shotSound.play(0);
         print("z");
         float kakudo = 15;
         float kyori = 4;
@@ -163,13 +178,14 @@ class Jiki extends Machine{
         if(s.isHittable){
           if(s.isDeletable){
             //被弾エフェクト
-            rectParticle r1 = new rectParticle(s.getX(), s.getY(), s.col);
-            stage.particles.addParticle(r1);
+            hitSound.play(0);
+            circleParticle r1 = new circleParticle(s.getX(), s.getY(), s.col);
+            stage.addParticle(r1);
             s.kill();
           }else{
             //被弾エフェクト
-            rectParticle r1 = new rectParticle(getX(), getY(), s.col);
-            stage.particles.addParticle(r1);
+            circleParticle r1 = new circleParticle(getX(), getY(), s.col);
+            stage.addParticle(r1);
           }
         }
         HPDown(1);
@@ -198,8 +214,9 @@ class Jiki extends Machine{
           HPDown(1);
 
           //被弾エフェクト
-          rectParticle r1 = new rectParticle(e.getX(), e.getY(), e.getColor());
-          stage.particles.addParticle(r1);
+          hitSound.play(0);
+          circleParticle r1 = new circleParticle(e.getX(), e.getY(), e.getColor());
+          stage.addParticle(r1);
         }
       }
     }
@@ -209,6 +226,7 @@ class Jiki extends Machine{
     while(it3.hasNext()){
       Item i = it3.next();
       if(i.collision(this)){
+        itemSound.play(0);
         getColorP(i.RP / 30, i.GP / 30, i.BP / 30);
         it3.remove();
       }
@@ -229,6 +247,9 @@ class Jiki extends Machine{
         if(absorbArea > 0){
           absorbArea = 0;
         }
+
+        //ここ吸収ボタンおしたときの処理
+        absorbSound.play(0);
         absorbCount = getCount() + absorbFrame;
         print("c");
       }
