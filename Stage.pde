@@ -8,6 +8,7 @@ class Stage{
     private Particles particles_zenkei;
     private int count = 0;
     private boolean isCountUP = true;
+    private UI ui;
 
     private PGraphics buffer;
     private AudioPlayer bgm;
@@ -21,6 +22,7 @@ class Stage{
         particles_zenkei = new Particles();
         jikiShots = new Shots();
         count = 0;
+        ui = new UI();
 
         buffer = createGraphics(width, height);
         setBGM("sol_battle047.mp3");
@@ -41,6 +43,7 @@ class Stage{
         if(isCountUP){
             count++;
         }
+        ui.updateMe(this);
         enemySpawn();
     }
 
@@ -58,6 +61,7 @@ class Stage{
         jikiShots.drawMe(buffer);
         enemyShots.drawMe(buffer);
         particles_zenkei.drawMe(buffer);
+        ui.drawMe(buffer);
         
         buffer.endDraw();
     }

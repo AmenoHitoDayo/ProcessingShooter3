@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public Stage playingStage;
-public UI ui;
 boolean right = false, left = false, up = false, down = false, z = false, slow = false, c = false;
 public Scene scene = Scene.GameScene;
 Minim minim;
@@ -28,14 +27,12 @@ void setup() {
 
     minim = new Minim(this);
     playingStage = new Stage01();
-    ui = new UI();
 }
 
 void draw() {
     background(0);
     playingStage.updateMe();
     playingStage.drawMe();
-    ui.drawMe();
 }
 
 void keyPressed(){
