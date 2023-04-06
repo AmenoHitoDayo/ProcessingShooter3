@@ -2,7 +2,11 @@ class Particle extends Mover{
     protected int lifeTime = 10;
     Particle(float _x, float _y, color _c){
         super(_x, _y);
-        setColor(_c);
+        col =(_c);
+    }
+    
+    public int getLifeTime(){
+      return lifeTime;
     }
 }
 
@@ -10,13 +14,13 @@ class rectParticle extends Particle{
     private float baseAngle = 0;
     rectParticle(float _x, float _y, color _c){
         super(_x, _y, _c);
-        setSize(12);
+        size =(12);
     }
     
     void drawMe(PGraphics pg){
         pg.beginDraw();
 
-        this.setSize(size + 32 / lifeTime);
+        this.size =(size + 32 / lifeTime);
 
         pg.push();
             pg.blendMode(ADD);
@@ -36,13 +40,13 @@ class circleParticle extends Particle{
     private float baseAngle = 0;
     circleParticle(float _x, float _y, color _c){
         super(_x, _y, _c);
-        setSize(24);
+        size =(24);
     }
     
     void drawMe(PGraphics pg){
         pg.beginDraw();
 
-        this.setSize(size + 32 / lifeTime);
+        this.size =(size + 32 / lifeTime);
 
         pg.push();
             pg.blendMode(ADD);

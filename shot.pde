@@ -7,21 +7,21 @@ class Shot extends Mover{
 
     Shot(float _x, float _y){
         super(_x, _y);
-        setVel(new PVector(0, 0));
+        vel = (new PVector(0, 0));
         delay = 0;
         cues = new ArrayList<ShotMoveCue>();
     }
 
     Shot(float _x, float _y, int _delay){
         super(_x, _y);
-        setVel(new PVector(0, 0));
+        vel = (new PVector(0, 0));
         delay = _delay;
         cues = new ArrayList<ShotMoveCue>();
     }
 
     Shot(float _x, float _y, float speed, float angle){
         super(_x, _y);
-        setVel(new PVector(speed * cos(angle), speed * sin(angle)));
+        vel = (new PVector(speed * cos(angle), speed * sin(angle)));
         delay = 0;
         cues = new ArrayList<ShotMoveCue>();
     }
@@ -75,7 +75,7 @@ class Shot extends Mover{
     }
 
     public void setVelocityFromSpeedAngle(float speed, float angle){
-        setVel(new PVector(speed * cos(angle), speed * sin(angle)));
+        vel = (new PVector(speed * cos(angle), speed * sin(angle)));
     }
 
     void executeCue(){
@@ -83,9 +83,9 @@ class Shot extends Mover{
             for(int i = 0; i < cues.size(); i++){
                 ShotMoveCue cue = cues.get(i);
                 if(cue.getCount() == this.count){
-                    this.setVel(cue.getVel());
-                    this.setAccel(cue.getAccel());
-                    this.setColor(cue.getColor());
+                    this.vel = (cue.getVel());
+                    this.accel = (cue.getAccel());
+                    this.col = (cue.getColor());
                 }
             }
         }
@@ -105,10 +105,6 @@ class Shot extends Mover{
 
     public boolean getHittable(){
         return isHittable;
-    }
-
-    public void setColor(color _c){
-        col = _c;
     }
 
     public void setDeletable(boolean _d){
@@ -233,7 +229,7 @@ class LaserShot extends Shot{
         super.updateMe(stage);
         if(leng < mxLeng){
             leng = min(leng + vel.mag(), mxLeng);
-            setPos(defPos);
+            pos = (defPos);
         }
         apex = PVector.add(pos, PVector.mult(vel.normalize(null), leng));
     }
@@ -305,9 +301,9 @@ class JikiRockOnShot extends Shot{
 
     JikiRockOnShot(float _x, float _y){
         super(_x, _y);
-        setVel(new PVector(0, 0));
-        setAccel(new PVector(0.1, 0));
-        setColor(color(255, 0, 0));
+        vel = (new PVector(0, 0));
+        accel = (new PVector(0.1, 0));
+        col = (color(255, 0, 0));
         searchTarget();
     }
 
@@ -316,12 +312,12 @@ class JikiRockOnShot extends Shot{
         if(target != null && !target.areYouDead()){
             homing();
         }else if(targetSelectCount < 5){
-            setVel(new PVector(0, 0));
-            setAccel(new PVector(0, 0));
+            vel = (new PVector(0, 0));
+            accel = (new PVector(0, 0));
             searchTarget();
             targetSelectCount++;
         }else{
-            setAccel(new PVector(0.1, 0));
+            accel = (new PVector(0.1, 0));
         }
     }
     
@@ -385,9 +381,9 @@ class JikiRockOnShot extends Shot{
 class JikiBarrierShot extends Shot{
     JikiBarrierShot(float _x, float _y){
         super(_x, _y);
-        setVel(new PVector(0, 0));
-        setAccel(new PVector(0, 0));
-        setColor(color(0, 255, 0));
+        vel = (new PVector(0, 0));
+        accel = (new PVector(0, 0));
+        col = (color(0, 255, 0));
         setSize(64);
         setBlendStyle(ADD);
     }
@@ -437,9 +433,9 @@ class JikiBarrierShot extends Shot{
 class JikiBlueLaser extends Shot{
     JikiBlueLaser(float _x, float _y){
         super(_x, _y, 64);
-        setVel(new PVector(10, 0));
-        setAccel(new PVector(0.1, 0));
-        setColor(color(64, 64, 128));
+        vel = (new PVector(10, 0));
+        accel = (new PVector(0.1, 0));
+        col = (color(64, 64, 128));
         setDeletable(false);
         setHittable(true);
         setBlendStyle(ADD);

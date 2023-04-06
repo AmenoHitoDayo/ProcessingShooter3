@@ -5,7 +5,7 @@ class Item extends Mover{
         RP = R;
         GP = G;
         BP = B;
-        setSize(8);
+        size = 8;
     }
 
     void drawMe(PGraphics pg){
@@ -40,6 +40,6 @@ class Item extends Mover{
 
     void updateMe(Stage stage){
         super.updateMe(stage);
-        setVel(PVector.sub(stage.jiki.getPos(), pos).normalize().mult(5));
+        vel = (PVector.sub(stage.getJiki().getPos(), pos).normalize().mult(5));
     }
 }

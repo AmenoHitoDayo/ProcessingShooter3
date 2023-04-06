@@ -5,8 +5,8 @@ class Enemy extends Machine{
 
     Enemy(float _x, float _y, int _HP){
         super(_x, _y, _HP);
-        setSize(16);
-        setColor(color(255));
+        size = 16;
+        col = color(255);
 
         deadSound = minim.loadFile("魔王魂  戦闘18.mp3");
         deadSound.setGain(-10f);
@@ -49,10 +49,10 @@ class SampleEnemy extends Enemy{
 
     SampleEnemy(){
         super(width, height / 2, 10);
-        setVel(new PVector(-1, 0));
-        setSize(16);
+        vel = new PVector(-1, 0);
+        size = 16;
         hue = random(360);
-        setColor(HSVtoRGB(hue, 255, 255));
+        col = HSVtoRGB(hue, 255, 255);
     }
 
     void shot(Stage stage){
@@ -60,10 +60,10 @@ class SampleEnemy extends Enemy{
             for(int i = 0; i < way; i++){
                 LaserShot shot = new LaserShot(pos.x, pos.y, 50, 5);
                 shot.setVelocityFromSpeedAngle(2, radians(angle) + TWO_PI / way * i);
-                shot.setAccel(new PVector(0.1 * cos(shot.getVel().heading()) , 0.1 * sin(shot.getVel().heading())));
+                accel = (new PVector(0.1 * cos(shot.vel.heading()) , 0.1 * sin(shot.vel.heading())));
                 //shot.delay = 15;
                 //shot.size = 6;
-                shot.setColor(HSVtoRGB(hue, 255 - 64, 255));
+                shot.col = (HSVtoRGB(hue, 255 - 64, 255));
                 /*
                 ShotMoveCue cue = new ShotMoveCue(60, 
                     PVector.mult(shot.vel, 4),
@@ -75,11 +75,11 @@ class SampleEnemy extends Enemy{
 
                 RectShot shot2 = new RectShot(pos.x, pos.y, 30);
                 shot2.setVelocityFromSpeedAngle(2, radians(angle + 45) + TWO_PI / way * i);
-                shot.setSize(6);
-                shot2.setColor(HSVtoRGB(hue, 255 - 64, 255));
+                shot.size = 6;
+                shot2.col = (HSVtoRGB(hue, 255 - 64, 255));
                 
                 ShotMoveCue cue = new ShotMoveCue(60, 
-                    PVector.mult(shot2.getVel(), 3),
+                    PVector.mult(shot2.vel, 3),
                     new PVector(0, 0),
                     HSVtoRGB(hue, 255 - 64, 255));
                 shot2.addCue(cue);
@@ -96,16 +96,16 @@ class SampleEnemy extends Enemy{
 class March01 extends Enemy{
     March01(float _x, float _y){
         super(_x, _y, 2);
-        setVel(new PVector(-0.07, 1));
-        setColor(HSVtoRGB(100, 255, 255));
+        vel = new PVector(-0.07, 1);
+        col = HSVtoRGB(100, 255, 255);
     }
 }
 
 class March02 extends Enemy{
     March02(float _x, float _y){
         super(_x, _y, 2);
-        setVel(new PVector(-0.07, -1));
-        setColor(HSVtoRGB(100, 255, 255));
+        vel = new PVector(-0.07, -1);
+        col = HSVtoRGB(100, 255, 255);
     }
 }
 
@@ -114,21 +114,21 @@ class Aim01 extends Enemy{
 
     Aim01(float _x, float _y){
         super(_x, _y, 16);
-        setVel(new PVector(-0.07, -1));
+        vel = new PVector(-0.07, -1);
         shotHue = 75;
-        setColor(HSVtoRGB(shotHue, 255, 255));
+        col = HSVtoRGB(shotHue, 255, 255);
     }
 
     void updateMe(Stage stage){
         super.updateMe(stage);
 
         if(count < 60){
-            setVel(new PVector(-1.5, 0));
+            vel = new PVector(-1.5, 0);
         }else if(count == 60){
-            setVel(new PVector(0, 0));
+            vel = new PVector(0, 0);
         }else if(count == 180){
-            setVel(new PVector(-1, 0));
-            setAccel(new PVector(-0.1, 0));
+            vel = new PVector(-1, 0);
+            accel = new PVector(-0.1, 0);
         }
     }
 
@@ -140,8 +140,8 @@ class Aim01 extends Enemy{
                 for(int i = 0; i < 3; i++){
                     RectShot shot = new RectShot(pos.x, pos.y, 15);
                     shot.setVelocityFromSpeedAngle(3, angle + radians(-30 + 30 * i));
-                    shot.setSize(6);
-                    shot.setColor(HSVtoRGB(shotHue, 255, 255));
+                    shot.size = 6;
+                    shot.col = (HSVtoRGB(shotHue, 255, 255));
                     stage.addEnemyShot(shot);
                 }
                 shotHue -= 10;
@@ -151,16 +151,16 @@ class Aim01 extends Enemy{
 
     void setHue(float hue){
         shotHue = hue;
-        setColor(HSVtoRGB(shotHue, 255, 255));
+        col = HSVtoRGB(shotHue, 255, 255);
     }
 }
 
 class Circle01 extends Enemy{
     Circle01(float _x, float _y){
         super(_x, _y, 15);
-        setSize(20);
-        setVel(new PVector(-1, 0));
-        setColor(HSVtoRGB(0, 255, 255));
+        size = 20;
+        vel = (new PVector(-1, 0));
+        col = (HSVtoRGB(0, 255, 255));
     }
     int shotCount = 0;
 
@@ -168,13 +168,13 @@ class Circle01 extends Enemy{
         super.updateMe(stage);
 
         if(count == 0){
-            setVel(new PVector(-1, 0));
+            vel = (new PVector(-1, 0));
         }
         if(count == 60){
-            setVel(new PVector(0, 0));
+            vel = (new PVector(0, 0));
         }
         if(count == 180){
-            setVel(new PVector(1, 0));
+            vel = (new PVector(1, 0));
         }
     }
 
@@ -187,8 +187,8 @@ class Circle01 extends Enemy{
                 for(int i = 0; i < 13; i++){
                     RectShot shot = new RectShot(pos.x, pos.y, 15);
                     shot.setVelocityFromSpeedAngle(3, angle + TWO_PI / 13 * i);
-                    shot.setSize(8);
-                    shot.setColor(HSVtoRGB(hue, 255, 255));
+                    shot.size = (8);
+                    shot.col = (HSVtoRGB(hue, 255, 255));
                     stage.addEnemyShot(shot);
                     hue += 360 / 13;
                 }
@@ -197,8 +197,8 @@ class Circle01 extends Enemy{
                 for(int i = 0; i < 14; i++){
                     RectShot shot = new RectShot(pos.x, pos.y, 15);
                     shot.setVelocityFromSpeedAngle(3, angle + TWO_PI / 14 * i);
-                    shot.setSize(8);
-                    shot.setColor(HSVtoRGB(hue, 255, 255));
+                    shot.size = (8);
+                    shot.col = (HSVtoRGB(hue, 255, 255));
                     stage.addEnemyShot(shot);
                     hue += 360 / 14;
                 }
@@ -213,27 +213,27 @@ class ShotGun01 extends Enemy{
     private float bure = 15;
     ShotGun01(float _x, float _y, float _angle){
         super(_x, _y, 12);
-        setSize(16);
+        size = (16);
         shotAngle = _angle;
         currentAngle = PI;
-        setColor(HSVtoRGB(90, 255, 255));
+        col = (HSVtoRGB(90, 255, 255));
     }
 
     void updateMe(Stage stage){
         super.updateMe(stage);
         
         if(count == 1){
-            setVel(new PVector(-2, 0));
+            vel = (new PVector(-2, 0));
         }
         if(count > 30 && count <= 60){
-            setVel(new PVector(0, 0));
+            vel = (new PVector(0, 0));
             currentAngle += (shotAngle - PI) / 30;
         }
         if(count > 90 && count <= 120){
             currentAngle += (PI - shotAngle) / 30;
         }
         if(count > 120){
-            setVel(new PVector(2, 0));
+            vel = (new PVector(2, 0));
         }
     }
 
@@ -252,8 +252,8 @@ class ShotGun01 extends Enemy{
             for(int i = 0; i < 30; i++){
                 Shot shot = new Shot(getX(), pos.y, 15);
                 shot.setVelocityFromSpeedAngle(3 + random(-1, 1), shotAngle + radians(random(-bure, bure)));
-                shot.setSize(6);
-                shot.setColor(HSVtoRGB(90, 120, 255));
+                shot.size = (6);
+                shot.col = (HSVtoRGB(90, 120, 255));
                 shot.setBlendStyle(ADD);
                 stage.addEnemyShot(shot);
             }
@@ -265,19 +265,19 @@ class Red01 extends Enemy{
     float angle = radians(90);
     Red01(float _x, float _y){
         super(_x, _y, 16);
-        setSize(16);
-        setColor(HSVtoRGB(0, 255, 255));
-        setVel(new PVector(-5, 0));
+        size = (16);
+        col = (HSVtoRGB(0, 255, 255));
+        vel = (new PVector(-5, 0));
     }
 
     void updateMe(Stage stage){
         super.updateMe(stage);
 
         if(count == 30){
-            setVel(new PVector(0, 0));
+            vel = (new PVector(0, 0));
         }
         if(count == 300){
-            setVel(new PVector(2, 0));
+            vel = (new PVector(2, 0));
         }
     }
 
@@ -285,8 +285,8 @@ class Red01 extends Enemy{
         if(count >= 30 && count <= 300){
             if(count % 5 == 0){
                 Shot shot = new Shot(pos.x, pos.y, 15);
-                shot.setSize(8);
-                shot.setColor(col);
+                shot.size = (8);
+                shot.col = (col);
                 shot.setVelocityFromSpeedAngle(2, angle);
                 shot.addCue(new ShotMoveCue(
                     60,
@@ -311,19 +311,19 @@ class Green01 extends Enemy{
     float angle = radians(90);
     Green01(float _x, float _y){
         super(_x, _y, 16);
-        setSize(16);
-        setColor(HSVtoRGB(120, 255, 255));
-        setVel(new PVector(-5, 0));
+        size = (16);
+        col = (HSVtoRGB(120, 255, 255));
+        vel = (new PVector(-5, 0));
     }
 
     void updateMe(Stage stage){
         super.updateMe(stage);
 
         if(count == 30){
-            setVel(new PVector(0, 0));
+            vel = (new PVector(0, 0));
         }
         if(count == 300){
-            setVel(new PVector(2, 0));
+            vel = (new PVector(2, 0));
         }
     }
 
@@ -331,8 +331,8 @@ class Green01 extends Enemy{
         if(count >= 30 && count <= 300){
             if(count % 5 == 0){
                 Shot shot = new Shot(pos.x, pos.y, 15);
-                shot.setSize(8);
-                shot.setColor(col);
+                shot.size = (8);
+                shot.col = (col);
                 shot.setVelocityFromSpeedAngle(1, angle);
                 shot.addCue(new ShotMoveCue(
                     30,
@@ -357,19 +357,19 @@ class Blue01 extends Enemy{
     private float angle = radians(90);
     Blue01(float _x, float _y){
         super(_x, _y, 10);
-        setSize(16);
-        setColor(HSVtoRGB(240, 255, 255));
-        setVel(new PVector(-5, 0));
+        size = (16);
+        col = (HSVtoRGB(240, 255, 255));
+        vel = (new PVector(-5, 0));
     }
 
     void updateMe(Stage stage){
         super.updateMe(stage);
 
         if(count == 30){
-            setVel(new PVector(0, 0));
+            vel = (new PVector(0, 0));
         }
         if(count == 300){
-            setVel(new PVector(2, 0));
+            vel = (new PVector(2, 0));
         }
     }
 
@@ -377,8 +377,8 @@ class Blue01 extends Enemy{
         if(count >= 30 && count <= 300){
             if(count % 5 == 0){
                 Shot shot = new Shot(pos.x, pos.y, 30);
-                shot.setSize(8);
-                shot.setColor(col);
+                shot.size = (8);
+                shot.col = (col);
                 shot.setVelocityFromSpeedAngle(1, angle);
                 shot.addCue(new ShotMoveCue(
                     60,
@@ -403,9 +403,9 @@ class Blue01 extends Enemy{
 class MarchLaser01 extends Enemy{
     MarchLaser01(float _x, float _y){
         super(_x, _y, 5);
-        setSize(16);
+        size = (16);
         setVel(-2.25, 0);
-        setColor(HSVtoRGB(165, 255, 255));
+        col = (HSVtoRGB(165, 255, 255));
     }
 
 
@@ -417,7 +417,7 @@ class MarchLaser01 extends Enemy{
         if(count >= 60 && count % 90 == 0){
             for(int i = 0; i < 4; i++){
                 LaserShot laser = new LaserShot(pos.x, pos.y, 30, 3);
-                laser.setColor(col);
+                laser.col = (col);
                 laser.setVelocityFromSpeedAngle(3, radians(45) + radians(90) * i);
                 stage.addEnemyShot(laser);
             }
@@ -432,9 +432,9 @@ class Missile01 extends Enemy{
 
     Missile01(float _x, float _y){
         super(_x, _y, 2);
-        setSize(16);
-        setVel(-4, 0);
-        setColor(255, 10, 185);
+        size = (16);
+        vel = new PVector(-4, 0);
+        col = color(255, 10, 185);
     }
 
     void shot(Stage stage){
@@ -442,8 +442,8 @@ class Missile01 extends Enemy{
             for(int i = 0; i < 10; i++){
                 Shot shot = new Shot(pos.x, pos.y, 10);
                 float angle = TWO_PI / 10 * i;
-                shot.setSize(8);
-                shot.setColor(col);
+                shot.size = (8);
+                shot.col = (col);
                 shot.setVel(0, 0);
                 shot.setAccel(0.05 * cos(angle), 0.05 * sin(angle));
                 stage.addEnemyShot(shot);
@@ -457,8 +457,8 @@ class Missile01 extends Enemy{
         for(int i = 0; i < 10; i++){
             Shot shot = new Shot(pos.x, pos.y, 10);
             float angle = TWO_PI / 10 * i;
-            shot.setSize(8);
-            shot.setColor(col);
+            shot.size = (8);
+            shot.col = (col);
             shot.setVel(0, 0);
             shot.setAccel(0.05 * cos(angle), 0.05 * sin(angle));
             stage.addEnemyShot(shot);
@@ -474,16 +474,16 @@ class MidBoss01 extends Enemy{
 
     MidBoss01(float _x, float _y){
         super(_x, _y, 100);
-        setSize(32);
-        setColor(color(255, 255, 255));
-        setVel(new PVector(-5, 0));
+        size = (32);
+        col = (color(255, 255, 255));
+        vel = (new PVector(-5, 0));
     }
 
     void updateMe(Stage stage){
         super.updateMe(stage);
         if(count > 1){
             for(int i = 0; i < 5; i++){
-                bits[i].setPos(new PVector(pos.x + bitRadius * cos(radians(count + 360 / 5 * i)), pos.y + bitRadius * sin(radians(count + 360 / 5 * i))));
+                bits[i].setPos(pos.x + bitRadius * cos(radians(count + 360 / 5 * i)), pos.y + bitRadius * sin(radians(count + 360 / 5 * i)));
             }
         }
         if(count > 30 && count < 60){
@@ -491,7 +491,7 @@ class MidBoss01 extends Enemy{
         }
 
         if(count == 30){
-            setVel(new PVector(0, 0));
+            vel = (new PVector(0, 0));
         }
     }
 
@@ -501,8 +501,8 @@ class MidBoss01 extends Enemy{
                 Shot shot = new Shot(pos.x + bitRadius * cos(radians(count + 360 / 5 * i)), pos.y + bitRadius * sin(radians(count + 360 / 5 * i)), 30);
                 bits[i] = shot;
                 shot.setDeletable(false);
-                shot.setSize(12);
-                shot.setColor(HSVtoRGB(0 + 360 / 5 * i, 255, 255));
+                shot.size = (12);
+                shot.col = (HSVtoRGB(0 + 360 / 5 * i, 255, 255));
                 stage.addEnemyShot(shot);
             }
         }
@@ -515,9 +515,9 @@ class MidBoss01 extends Enemy{
                     for(int i = 0; i < 3; i++){
                         for(int j = 0; j < 5; j++){
                             RectShot shot = new RectShot(bits[0].getX(), bits[0].getY(), 10);
-                            shot.setSize(6);
+                            shot.size = (6);
                             shot.setVelocityFromSpeedAngle(1.5 + j * 0.5, TWO_PI / 3 * i + radians(7.5) * j);
-                            shot.setColor(HSVtoRGB(0 + j * 10, 255, 255));
+                            shot.col = (HSVtoRGB(0 + j * 10, 255, 255));
                             stage.addEnemyShot(shot);
                         }
                     }
@@ -530,7 +530,7 @@ class MidBoss01 extends Enemy{
                         LaserShot shot = new LaserShot(bits[1].getX(), bits[1].getY(), 48, 5);
                         shot.setVelocityFromSpeedAngle(3, a1 + TWO_PI / 5 * i);
                         //shot.delay = 0;
-                        shot.setColor(bits[1].getColor());
+                        shot.col = (bits[1].getColor());
                         stage.addEnemyShot(shot);
                     }
                     break;
@@ -540,8 +540,8 @@ class MidBoss01 extends Enemy{
                     for(int i = 0; i < 30; i++){
                         Shot shot = new Shot(bits[2].getX(), bits[2].getY(), 30);
                         shot.setVelocityFromSpeedAngle(0, a2);
-                        shot.setSize(5);
-                        shot.setColor(HSVtoRGB(360 / 5 * 2 + i * 2, 255, 255));
+                        shot.size = (5);
+                        shot.col = (HSVtoRGB(360 / 5 * 2 + i * 2, 255, 255));
                         shot.addCue(new ShotMoveCue(
                             i + 1,
                             new PVector(3 * cos(a2), 3 * sin(a2)),
@@ -558,11 +558,11 @@ class MidBoss01 extends Enemy{
                     for(int i = 0; i < 6; i++){
                         for(int j = 0; j < 3; j++){
                             RectShot shot = new RectShot(bits[3].getX() + cos(a3) * j * 30, bits[3].getY() + sin(a3) * j * 30, 10);
-                            shot.setSize(8);
+                            shot.size = (8);
                             shot.setVelocityFromSpeedAngle(2, a3);
                             float a3_3 = radians(random(-10, 10));
-                            shot.setAccel(new PVector(0.05 * cos(a3 + a3_3), 0.05 * sin(a3 + a3_3)));
-                            shot.setColor(HSVtoRGB(360 / 5 * 3 + j * 7.737, 200, 255));
+                            shot.accel = (new PVector(0.05 * cos(a3 + a3_3), 0.05 * sin(a3 + a3_3)));
+                            shot.col = (HSVtoRGB(360 / 5 * 3 + j * 7.737, 200, 255));
                             stage.addEnemyShot(shot);
                         }
                         a3 += TWO_PI / 6;
@@ -573,9 +573,9 @@ class MidBoss01 extends Enemy{
                     float a4 = new PVector(stage.getJiki().getX() - bits[4].getX(), stage.getJiki().getY() - bits[4].getY()).heading();
                     for(int i = 0; i < 5; i++){
                         Shot shot = new Shot(bits[4].getX(), bits[4].getY(), 10);
-                        shot.setSize(8);
+                        shot.size = (8);
                         shot.setVelocityFromSpeedAngle(3, a4 + radians(-60 + 30 * i));
-                        shot.setColor(bits[4].getColor());
+                        shot.col = (bits[4].getColor());
                         stage.addEnemyShot(shot);
                     }
                     break;

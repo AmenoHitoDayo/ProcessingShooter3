@@ -91,7 +91,7 @@ class Enemys{
             if(e.areYouDead()){
                 if(e.isOutOfScreen() == false){
                     e.playDeadSound();
-                    circleParticle r = new circleParticle(e.getPos().x, e.getPos().y, e.getColor());
+                    circleParticle r = new circleParticle(e.getX(), e.getY(), e.getColor());
                     stage.addParticle(r);
                 }
                 it.remove();
@@ -151,7 +151,7 @@ class Items{
         while(it.hasNext()){
             Item i = it.next();
             i.updateMe(stage);
-            if(i.getPos().x < 0 - i.getSize() || i.getPos().x > width + i.getSize() || i.getPos().y < 0 - i.getSize() || i.getPos().y > height + i.getSize()){
+            if(i.isOutOfScreen()){
                 it.remove();
             }
         }
@@ -184,7 +184,7 @@ class Particles{
         while(it.hasNext()){
             Particle p = it.next();
             p.updateMe(stage);
-            if(p.getCount() > p.lifeTime){
+            if(p.getCount() > p.getLifeTime()){
                 it.remove();
             }
         }

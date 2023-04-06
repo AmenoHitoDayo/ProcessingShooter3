@@ -20,8 +20,8 @@ class Jiki extends Machine{
 
   Jiki(){
     super(width / 2, height / 2, defaultHP);
-    setColor(color(255, 255, 255, 255));
-    setSize(4);
+    col = (color(255, 255, 255, 255));
+    size =(4);
     RedP = 0;
     GreenP = 0;
     BlueP = 0;
@@ -37,7 +37,7 @@ class Jiki extends Machine{
   }
 
   void updateMe(Stage stage){
-    setVel(new PVector(0, 0));
+    vel = (new PVector(0, 0));
     if(keyPressed){
       if(up){
           vel.add(VectorUP());
@@ -137,7 +137,7 @@ class Jiki extends Machine{
   }
 
   void bound(){
-    setPos(min(max(pos.x, 0), width), min(max(pos.y, 0), height));
+    pos = new PVector(min(max(pos.x, 0), width), min(max(pos.y, 0), height));
   }
 
   void shot(Stage stage){
@@ -149,9 +149,9 @@ class Jiki extends Machine{
         float kyori = 2;
         for(int i = 0; i < 4; i++){
           Shot shot = new Shot(pos.x + 24, pos.y - kyori + i * kyori * 0.75, 0, 0);
-          shot.setSize(4);
-          shot.setColor(color(255, 180));
-          shot.setAccel(new PVector(0.25 * cos(radians(-kakudo + kakudo * 0.75 * i)), 0.25 * sin(radians(-kakudo + kakudo * 0.75 * i))));
+          shot.size =(4);
+          shot.col = (color(255, 180));
+          shot.accel =(new PVector(0.25 * cos(radians(-kakudo + kakudo * 0.75 * i)), 0.25 * sin(radians(-kakudo + kakudo * 0.75 * i))));
           shot.setBlendStyle(ADD);
           stage.addJikiShot(shot);
         }
