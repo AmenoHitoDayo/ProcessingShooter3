@@ -13,7 +13,6 @@ PVector VectorDown(){
 
 //大きさと角度を入れて正三角形ができる
 void easyTriangle(PGraphics pg, PVector pos, float angle, float size){
-    //これbeginDrawとendDraw消えてるのめっきもなんだけどいいのこれ
 
     pg.beginDraw();
 
@@ -32,6 +31,7 @@ void easyTriangle(PGraphics pg, float x, float y, float angle, float size){
     easyTriangle(pg, v, angle, size);
 }
 
+//HSV(360,255,255)をRGB(255, 255, 255)変換
 color HSVtoRGB(float h, float s, float v){
     float r = 0, g = 0, b = 0;
     float max = v;

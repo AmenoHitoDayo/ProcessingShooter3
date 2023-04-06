@@ -45,7 +45,7 @@ class Mover{
 
   //画面外判定
   public boolean isOutOfScreen(){
-    if(pos.x < 0 - getSize() || pos.x > width + getSize() || pos.y < 0 - getSize() || pos.y > height + getSize()){
+    if(pos.x < 0 - size || pos.x > width + size || pos.y < 0 - size || pos.y > height + size){
       return true;
     }else{
       return false;
@@ -54,6 +54,7 @@ class Mover{
 
   //ステージから削除（できるようにする）
   public void kill(){
+    print("killed");
     isDead = true;
   }
 
@@ -99,6 +100,10 @@ class Mover{
     col = _c;
   }
 
+  public void setColor(float r, float g, float b){
+    col = color(r, g, b);
+  }
+
   public void setPos(PVector _p){
     pos = _p;
   }
@@ -122,7 +127,6 @@ class Mover{
   public void setAccel(float _x, float _y){
     accel = new PVector(_x, _y);
   }
-
 
   public void setSize(float _s){
     size = _s;
@@ -155,6 +159,6 @@ class Machine extends Mover{
 
   void HPDown(int down){
     HP -= down;
-    if(HP <= 0){isDead = true;}
+    if(HP <= 0){kill();}
   }
 }

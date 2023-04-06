@@ -11,6 +11,7 @@ class Jiki extends Machine{
   private int releaseWaitCount = 0;
   private float RedP, GreenP, BlueP;
   private boolean isRelease = false;  //開放しているかどうか
+  private float absorbPower = 0;  //吸収は連打できるようにしない。時間で吸収用のパワが増える
 
   private AudioPlayer shotSound;
   private AudioPlayer hitSound;
@@ -71,6 +72,7 @@ class Jiki extends Machine{
     pg.push();
       pg.blendMode(ADD);
       if(!slow){
+        //通常時のエフェクト
         pg.noStroke();
         pg.fill(255, 0, 0, RedP);
         easyTriangle(pg, getX() + cos(radians(0 + getCount())) * 8, getY() + sin(radians(0 + getCount())) * 8, 0, 16);
@@ -80,6 +82,7 @@ class Jiki extends Machine{
         easyTriangle(pg, getX() + cos(radians(240 + getCount())) * 8, getY() + sin(radians(240 + getCount())) * 8, 0, 16);
       }else{
         if(isRelease){
+          //開放中のエフェクト
           pg.noStroke();
           pg.fill(255, 0, 0, RedP / 2);
           easyTriangle(pg, getX() + cos(radians(0 + getCount())) * 8, getY() + sin(radians(0 + getCount())) * 8, 0, 16);
@@ -88,6 +91,7 @@ class Jiki extends Machine{
           pg.fill(0, 0, 255, BlueP / 2);
           easyTriangle(pg, getX() + cos(radians(240 + getCount())) * 8, getY() + sin(radians(240 + getCount())) * 8, 0, 16);
         }else{
+          //低速移動の時のエフェクト
           pg.noFill();
           pg.strokeWeight(1.5);
           pg.stroke(255, 0, 0, RedP);
@@ -99,10 +103,13 @@ class Jiki extends Machine{
         }
       }
       if((isInvincible() && getCount() % 2 == 0) || isRelease == true){
+        //無敵時間さん！？の機体点滅
         pg.fill(0);
       }else if(slow){
+        //低速移動の時は機体の色薄くする
         pg.fill(getColor(), 127);
       }else{
+        //通常時の機体色
         pg.fill(getColor());
       }
       pg.strokeWeight(1.5);
@@ -122,6 +129,8 @@ class Jiki extends Machine{
       pg.noStroke();
       pg.fill(0);
     }
+
+    //当たり判定部分
     pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
 
     pg.endDraw();

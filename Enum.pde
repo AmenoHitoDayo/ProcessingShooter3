@@ -12,3 +12,14 @@ public enum ShotStyle{
     Rect,
     Glow
 }
+
+public enum JikiState{
+    normal,
+    slow,
+    absorbing,
+    absorbingSlow,
+    releasing,
+    releasingSlow,
+    invincible,
+    invincibleSlow
+}

@@ -17,7 +17,7 @@ class Enemy extends Machine{
     //移動とかのショット以外の挙動はここに書く
     void updateMe(Stage stage){
         super.updateMe(stage);
-        if(isDead || isOutOfScreen()){
+        if(isOutOfScreen()){
             kill();
         }
     }
@@ -58,7 +58,7 @@ class SampleEnemy extends Enemy{
     void shot(Stage stage){
         if(getCount() % 6 == 1){
             for(int i = 0; i < way; i++){
-                LaserShot shot = new LaserShot(pos.x, pos.y, 50, 5);
+                LaserShot shot = new LaserShot(this.getX(), this.getY(), 50, 5);
                 shot.setVelocityFromSpeedAngle(2, radians(angle) + TWO_PI / way * i);
                 shot.setAccel(new PVector(0.1 * cos(shot.getVel().heading()) , 0.1 * sin(shot.getVel().heading())));
                 //shot.delay = 15;
@@ -135,7 +135,7 @@ class Aim01 extends Enemy{
     void shot(Stage stage){
         if(getCount() > 60 && getCount() <= 180){
             if(getCount() % 15 == 0){
-                PVector dirToJiki = new PVector(stage.jiki.getX() - this.getX(), stage.jiki.getY() - this.getY());
+                PVector dirToJiki = new PVector(stage.getJiki().getX() - this.getX(), stage.getJiki().getY() - this.getY());
                 float angle = dirToJiki.heading();
                 for(int i = 0; i < 3; i++){
                     RectShot shot = new RectShot(this.getX(), this.getY(), 15);
@@ -180,7 +180,7 @@ class Circle01 extends Enemy{
 
     void shot(Stage stage){
         if(getCount() >= 60 && getCount() <= 180 && getCount() % 30 == 0){
-            PVector dirToJiki = new PVector(stage.jiki.getX() - getX(), stage.jiki.getY() - getY());
+            PVector dirToJiki = new PVector(stage.getJiki().getX() - getX(), stage.getJiki().getY() - getY());
             float angle = dirToJiki.heading();
             float hue = shotCount * 10;
             if(shotCount % 2 == 0){
@@ -425,6 +425,49 @@ class MarchLaser01 extends Enemy{
     }
 }
 
+//撃破か画面左端到達で自爆弾
+class Missile01 extends Enemy{
+    //自爆弾が1回しか出ないように
+    private boolean shotFinish = false;
+
+    Missile01(float _x, float _y){
+        super(_x, _y, 2);
+        setSize(16);
+        setVel(-4, 0);
+        setColor(255, 10, 185);
+    }
+
+    void shot(Stage stage){
+        if(getX() < 0 && !shotFinish){
+            for(int i = 0; i < 10; i++){
+                Shot shot = new Shot(getX(), getY(), 10);
+                float angle = TWO_PI / 10 * i;
+                shot.setSize(8);
+                shot.setColor(getColor());
+                shot.setVel(0, 0);
+                shot.setAccel(0.05 * cos(angle), 0.05 * sin(angle));
+                stage.addEnemyShot(shot);
+            }
+            shotFinish = true;
+        }
+    }
+
+    public void kill(){
+        Stage stage = playingStage;
+        for(int i = 0; i < 10; i++){
+            Shot shot = new Shot(getX(), getY(), 10);
+            float angle = TWO_PI / 10 * i;
+            shot.setSize(8);
+            shot.setColor(getColor());
+            shot.setVel(0, 0);
+            shot.setAccel(0.05 * cos(angle), 0.05 * sin(angle));
+            stage.addEnemyShot(shot);
+        }
+        super.kill();
+    }
+}
+
+//撃破時にビットが居残りすることがある
 class MidBoss01 extends Enemy{
     float bitRadius = 0;
     Shot[] bits = new Shot[5];
@@ -467,6 +510,7 @@ class MidBoss01 extends Enemy{
         if(getCount() > 60 && getHP() > 1){
             switch(getCount() % 60){
                 case 0:
+                    //赤ビット
                     float a0 = random(TWO_PI);
                     for(int i = 0; i < 3; i++){
                         for(int j = 0; j < 5; j++){
@@ -479,7 +523,8 @@ class MidBoss01 extends Enemy{
                     }
                     break;
                 case 60 / 5 * 1:
-                    float a1 = new PVector(stage.jiki.getX() - bits[1].getX(), stage.jiki.getY() - bits[1].getY()).heading();
+                    //黄色ビット
+                    float a1 = new PVector(stage.getJiki().getX() - bits[1].getX(), stage.getJiki().getY() - bits[1].getY()).heading();
                     a1 += TWO_PI / 10;
                     for(int i = 0; i < 5; i++){
                         LaserShot shot = new LaserShot(bits[1].getX(), bits[1].getY(), 48, 5);
@@ -490,6 +535,7 @@ class MidBoss01 extends Enemy{
                     }
                     break;
                 case 60 / 5 * 2:
+                    //みどりビット
                     float a2 = 0;
                     for(int i = 0; i < 30; i++){
                         Shot shot = new Shot(bits[2].getX(), bits[2].getY(), 30);
@@ -507,7 +553,8 @@ class MidBoss01 extends Enemy{
                     }
                     break;
                 case 60 / 5 * 3:
-                    float a3 = new PVector(stage.jiki.getX() - bits[3].getX(), stage.jiki.getY() - bits[3].getY()).heading();
+                    //青ビット
+                    float a3 = new PVector(stage.getJiki().getX() - bits[3].getX(), stage.getJiki().getY() - bits[3].getY()).heading();
                     for(int i = 0; i < 6; i++){
                         for(int j = 0; j < 3; j++){
                             RectShot shot = new RectShot(bits[3].getX() + cos(a3) * j * 30, bits[3].getY() + sin(a3) * j * 30, 10);
@@ -522,7 +569,8 @@ class MidBoss01 extends Enemy{
                     }
                     break;
                 case 60 / 5 * 4:
-                    float a4 = new PVector(stage.jiki.getX() - bits[4].getX(), stage.jiki.getY() - bits[4].getY()).heading();
+                    //むらさきビット
+                    float a4 = new PVector(stage.getJiki().getX() - bits[4].getX(), stage.getJiki().getY() - bits[4].getY()).heading();
                     for(int i = 0; i < 5; i++){
                         Shot shot = new Shot(bits[4].getX(), bits[4].getY(), 10);
                         shot.setSize(8);

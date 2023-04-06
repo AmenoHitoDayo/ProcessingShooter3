@@ -225,5 +225,17 @@ class Stage01 extends Stage{
         if(getCount() == 840 || getCount() == 870 || getCount() == 900){
             addEnemy(new MarchLaser01(width, 100));
         }
+        if(getCount() == 930){
+            addEnemy(new Missile01(width, height / 7));
+        }
+        if(getCount() == 940){
+            addEnemy(new Missile01(width, height / 7 * 2));
+        }
+        if(getCount() == 950){
+            addEnemy(new Missile01(width, height / 7 * 3));
+        }
+        if(getCount() == 960){
+            addEnemy(new Missile01(width, height / 7 * 4));
+        }
     }
 }

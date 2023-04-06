@@ -115,7 +115,6 @@ class Enemys{
                     enemy.playHitSound();
                     rectParticle r1 = new rectParticle(s.getX(), s.getY(), s.col);
                     stage.addParticle(r1);
-
                     if(s.isDeletable){
                         s.kill();
                     }
