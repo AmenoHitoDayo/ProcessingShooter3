@@ -17,7 +17,7 @@ class Enemy extends Machine{
     //移動とかのショット以外の挙動はここに書く
     void updateMe(Stage stage){
         super.updateMe(stage);
-        if(getHP() <= 0 || isOutOfScreen()){
+        if(isDead || isOutOfScreen()){
             kill();
         }
     }
@@ -58,7 +58,7 @@ class SampleEnemy extends Enemy{
     void shot(Stage stage){
         if(getCount() % 6 == 1){
             for(int i = 0; i < way; i++){
-                LaserShot shot = new LaserShot(this.getX(), this.getY(), 50, 5);
+                LaserShot shot = new LaserShot(pos.x, pos.y, 50, 5);
                 shot.setVelocityFromSpeedAngle(2, radians(angle) + TWO_PI / way * i);
                 shot.setAccel(new PVector(0.1 * cos(shot.getVel().heading()) , 0.1 * sin(shot.getVel().heading())));
                 //shot.delay = 15;
@@ -209,8 +209,8 @@ class Circle01 extends Enemy{
 }
 
 class ShotGun01 extends Enemy{
-    float shotAngle = 0, currentAngle = 0;
-    float bure = 15;
+    private float shotAngle = 0, currentAngle = 0;
+    private float bure = 15;
     ShotGun01(float _x, float _y, float _angle){
         super(_x, _y, 12);
         setSize(16);
@@ -254,6 +254,7 @@ class ShotGun01 extends Enemy{
                 shot.setVelocityFromSpeedAngle(3 + random(-1, 1), shotAngle + radians(random(-bure, bure)));
                 shot.setSize(6);
                 shot.setColor(HSVtoRGB(90, 120, 255));
+                shot.setBlendStyle(ADD);
                 stage.addEnemyShot(shot);
             }
         }

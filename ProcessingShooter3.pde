@@ -14,17 +14,13 @@ public Scene scene = Scene.GameScene;
 Minim minim;
 public int defaultHP = 10;
 
-public enum Scene{
-    TitleScene,
-    GameScene,
-    GameOverScene,
-    GameClearScene
-}
+public PFont kinkakuji;
 
 void setup() {
     size(640, 480);
     background(0);
     //smooth();
+    kinkakuji = loadFont("Kinkakuji-Normal-48.vlw");
 
     minim = new Minim(this);
     playingStage = new Stage01();

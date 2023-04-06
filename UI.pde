@@ -32,13 +32,17 @@ class UI{
 
     void drawHP(){
         pg.beginDraw();
+            pg.noStroke();
             if(stage.getJiki().getX() < 32 && stage.getJiki().getY() < 16){
                 pg.fill(255, 127);
             }else{
                 pg.fill(255);
             }
-            pg.textSize(16);
-            pg.text("HP : " + stage.jiki.getHP(), 0, 16);
+            pg.textFont(kinkakuji, 16);
+            pg.text("HP : ", 0, 16);
+            for(int i = 0; i < stage.getJiki().getHP(); i++){
+                easyTriangle(pg, 6 * 5 + 8 + 16 * i, 10, 0, 8);
+            }
         pg.endDraw();
     }
 
@@ -49,7 +53,7 @@ class UI{
             }else{
                 pg.fill(255);
             }
-            pg.textSize(16);
+            pg.textFont(kinkakuji, 16);
             pg.text("RED : " + stage.jiki.RedP, 0, height - 16 * 2);
             pg.text("GREEN : " + stage.jiki.GreenP, 0, height - 16 * 1);
             pg.text("BLUE : " + stage.jiki.BlueP, 0, height - 16 * 0);
@@ -75,7 +79,7 @@ class UI{
             }else{
                 pg.fill(255);
             }
-            pg.textSize(16);
+            pg.textFont(kinkakuji, 16);
             pg.text("Enemys : " + stage.getEnemyCount(), 0, 16 * 2);
         pg.endDraw();
     }
@@ -87,7 +91,7 @@ class UI{
             }else{
                 pg.fill(255);
             }
-            pg.textSize(16);
+            pg.textFont(kinkakuji, 16);
             pg.text("Shots : " + stage.getShotCount(), 0, 16 * 3);
         pg.endDraw();
     }

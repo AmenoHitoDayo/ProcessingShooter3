@@ -1,12 +1,12 @@
 class Mover{
-  private boolean isDead = false;
+  protected boolean isDead = false;
 
-  private PVector pos;
-  private PVector vel;
-  private PVector accel;
-  private int count;  //タイマー　寿命計算とかに使う
-  private float size = 4; //当たり判定の半径
-  private color col;
+  protected PVector pos;
+  protected PVector vel;
+  protected PVector accel;
+  protected int count;  //タイマー　寿命計算とかに使う
+  protected float size = 4; //当たり判定の半径
+  protected color col;
 
   Mover(float _x, float _y){
     pos = new PVector(_x, _y);
@@ -45,7 +45,7 @@ class Mover{
 
   //画面外判定
   public boolean isOutOfScreen(){
-    if(getX() < 0 - getSize() || getX() > width + getSize() || getY() < 0 - getSize() || getY() > height + getSize()){
+    if(pos.x < 0 - getSize() || pos.x > width + getSize() || pos.y < 0 - getSize() || pos.y > height + getSize()){
       return true;
     }else{
       return false;
@@ -57,6 +57,8 @@ class Mover{
     isDead = true;
   }
 
+  //以下ゲッター・セッター
+  //一応、継承先以外から触る際は、こっち使うってことで＞＜
   public PVector getPos(){
     return pos;
   }
@@ -117,7 +119,7 @@ class Mover{
     accel = _a;
   }
 
-  public void Accel(float _x, float _y){
+  public void setAccel(float _x, float _y){
     accel = new PVector(_x, _y);
   }
 
@@ -128,7 +130,7 @@ class Mover{
 }
 
 class Machine extends Mover{
-  private int HP;
+  protected int HP;
   
   Machine(float _x, float _y, int _HP){
     super(_x, _y);
@@ -141,9 +143,9 @@ class Machine extends Mover{
 
   void drawMe(PGraphics pg){
     pg.beginDraw();
-      pg.fill(getColor());
-      pg.stroke(getColor());
-      easyTriangle(pg, getPos(), radians(180), getSize());
+      pg.fill(col);
+      pg.stroke(col);
+      easyTriangle(pg, pos, radians(180), size);
     pg.endDraw();
   }
 
@@ -153,5 +155,6 @@ class Machine extends Mover{
 
   void HPDown(int down){
     HP -= down;
+    if(HP <= 0){isDead = true;}
   }
 }

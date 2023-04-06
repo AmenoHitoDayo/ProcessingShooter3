@@ -1,9 +1,10 @@
 class Shot extends Mover{
-    private color col = color(255);
-    private int delay = 0;
-    private ArrayList<ShotMoveCue> cues;
-    private boolean isDeletable = true;
-    private boolean isHittable = true;
+    protected color col = color(255);
+    protected int delay = 0;
+    protected ArrayList<ShotMoveCue> cues;
+    protected boolean isDeletable = true;
+    protected boolean isHittable = true;
+    protected int blendStyle = BLEND;
 
     Shot(float _x, float _y){
         super(_x, _y);
@@ -49,9 +50,12 @@ class Shot extends Mover{
 
     void shotDraw(PGraphics pg){
         pg.beginDraw();
-            pg.noStroke();
-            pg.fill(col);
-            pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
+            pg.push();
+                pg.blendMode(blendStyle);
+                pg.noStroke();
+                pg.fill(col);
+                pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
+            pg.pop();
         pg.endDraw();
     }
 
@@ -92,6 +96,12 @@ class Shot extends Mover{
         cues.add(cue);
     }
 
+    //以下ゲッターセッター
+
+    public int getBlendStyle(){
+        return blendStyle;
+    }
+
     public color getColor(){
         return col;
     }
@@ -115,8 +125,14 @@ class Shot extends Mover{
     public void setHittable(boolean _b){
         isHittable = _b;
     }
+
+    public void setBlendStyle(int _s){
+        blendStyle = _s;
+    }
 }
 
+//指定フレームになったら弾の速度・加速度・色を変えられる
+//挙動を変えたい弾にaddCueして使いまづ
 class ShotMoveCue{
     private int count;
     private PVector vel;
@@ -171,9 +187,10 @@ class RectShot extends Shot{
         pg.beginDraw();
 
         pg.strokeWeight(lineWeight);
-        pg.stroke(getColor());
+        pg.stroke(col);
         pg.noFill();
         pg.push();
+            pg.blendMode(getBlendStyle());
             pg.translate(getX(), getY());
             pg.rotate(getVel().heading() + TWO_PI / 4);
             pg.rect(0, 0, getSize() * 2, getSize() * 2, getSize() / 4);
@@ -234,7 +251,7 @@ class LaserShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            //blendMode(ADD);
+            blendMode(getBlendStyle());
             pg.noStroke();
             pg.fill(getColor());
             PVector center = new PVector((apex.x + getX()) / 2, (apex.y + getY()) / 2);
@@ -250,7 +267,7 @@ class LaserShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            //blendMode(ADD);
+            blendMode(getBlendStyle());
             pg.noStroke();
             pg.fill(getColor(), map(getDelay() - getCount(), 0, getDelay(), 255, 0));
             PVector center = new PVector((apex.x + getX()) / 2, (apex.y + getY()) / 2);
@@ -291,7 +308,7 @@ class LaserShot extends Shot{
 
 class JikiRockOnShot extends Shot{
     Enemy target = null;
-    float maxAngle = radians(60);
+    float maxAngle = radians(120);
     //float accelValue = 0.5;
     int targetSelectCount = 0;
 
@@ -321,7 +338,7 @@ class JikiRockOnShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            //blendMode(ADD);
+            blendMode(getBlendStyle());
             pg.strokeWeight(2);
             pg.stroke(255);
             pg.fill(getColor());
@@ -381,6 +398,7 @@ class JikiBarrierShot extends Shot{
         setAccel(new PVector(0, 0));
         setColor(color(0, 255, 0));
         setSize(64);
+        setBlendStyle(ADD);
     }
 
     void updateMe(Stage stage){
@@ -393,12 +411,15 @@ class JikiBarrierShot extends Shot{
 
     void drawMe(PGraphics pg){
         pg.beginDraw();
+            pg.push();
 
-        pg.strokeWeight(2);
-        pg.stroke(255);
-        pg.fill(getColor(), 32);
-        pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
+            pg.blendMode(getBlendStyle());
+            pg.strokeWeight(2);
+            pg.stroke(255);
+            pg.fill(getColor(), 32);
+            pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
 
+            pg.pop();
         pg.endDraw();
     }
 
@@ -430,6 +451,7 @@ class JikiBlueLaser extends Shot{
         setColor(color(64, 64, 128));
         setDeletable(false);
         setHittable(true);
+        setBlendStyle(ADD);
     }
 
     void updateMe(Stage stage){
@@ -448,7 +470,7 @@ class JikiBlueLaser extends Shot{
         pg.beginDraw();
 
         pg.push();
-            pg.blendMode(ADD);
+            pg.blendMode(getBlendStyle());
             super.drawMe(pg);
         pg.pop();
 

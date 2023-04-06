@@ -87,6 +87,15 @@ class Jiki extends Machine{
           easyTriangle(pg, getX() + cos(radians(120 + getCount())) * 8, getY() + sin(radians(120 + getCount())) * 8, 0, 16);
           pg.fill(0, 0, 255, BlueP / 2);
           easyTriangle(pg, getX() + cos(radians(240 + getCount())) * 8, getY() + sin(radians(240 + getCount())) * 8, 0, 16);
+        }else{
+          pg.noFill();
+          pg.strokeWeight(1.5);
+          pg.stroke(255, 0, 0, RedP);
+          easyTriangle(pg, getX() + cos(radians(0 + getCount())) * 8, getY() + sin(radians(0 + getCount())) * 8, 0, 16);
+          pg.stroke(0, 255, 0, GreenP);
+          easyTriangle(pg, getX() + cos(radians(120 + getCount())) * 8, getY() + sin(radians(120 + getCount())) * 8, 0, 16);
+          pg.stroke(0, 0, 255, BlueP);
+          easyTriangle(pg, getX() + cos(radians(240 + getCount())) * 8, getY() + sin(radians(240 + getCount())) * 8, 0, 16);
         }
       }
       if((isInvincible() && getCount() % 2 == 0) || isRelease == true){
@@ -127,13 +136,14 @@ class Jiki extends Machine{
       if(getCount() % 8 == 0){
         shotSound.play(0);
         print("z");
-        float kakudo = 15;
-        float kyori = 4;
+        float kakudo = 10;
+        float kyori = 2;
         for(int i = 0; i < 4; i++){
           Shot shot = new Shot(getX() + 24, getY() - kyori + i * kyori * 0.75, 0, 0);
-          shot.setSize(6);
+          shot.setSize(4);
           shot.setColor(color(255, 180));
           shot.setAccel(new PVector(0.25 * cos(radians(-kakudo + kakudo * 0.75 * i)), 0.25 * sin(radians(-kakudo + kakudo * 0.75 * i))));
+          shot.setBlendStyle(ADD);
           stage.addJikiShot(shot);
         }
       }

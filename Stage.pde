@@ -141,7 +141,7 @@ class Stage{
     }
 
     int getShotCount(){
-        return enemyShots.getArray().size();
+        return enemyShots.getArray().size() + jikiShots.getArray().size();
     }
 }
 
