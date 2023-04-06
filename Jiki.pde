@@ -40,23 +40,23 @@ class Jiki extends Machine{
     setVel(new PVector(0, 0));
     if(keyPressed){
       if(up){
-          getVel().add(VectorUP());
+          vel.add(VectorUP());
       }
       if(left){
-          getVel().add(VectorLeft());
+          vel.add(VectorLeft());
       }
       if(down){
-          getVel().add(VectorDown());
+          vel.add(VectorDown());
       }
       if(right){
-          getVel().add(VectorRight());
+          vel.add(VectorRight());
       }
     }
-    getVel().normalize();
+    vel.normalize();
     if(slow){
-      getVel().mult(slowSpeed);
+      vel.mult(slowSpeed);
     }else{
-      getVel().mult(speed);
+      vel.mult(speed);
     }
     shot(stage);
     hit(stage);
@@ -75,34 +75,34 @@ class Jiki extends Machine{
         //通常時のエフェクト
         pg.noStroke();
         pg.fill(255, 0, 0, RedP);
-        easyTriangle(pg, getX() + cos(radians(0 + getCount())) * 8, getY() + sin(radians(0 + getCount())) * 8, 0, 16);
+        easyTriangle(pg, pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
         pg.fill(0, 255, 0, GreenP);
-        easyTriangle(pg, getX() + cos(radians(120 + getCount())) * 8, getY() + sin(radians(120 + getCount())) * 8, 0, 16);
+        easyTriangle(pg, pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
         pg.fill(0, 0, 255, BlueP);
-        easyTriangle(pg, getX() + cos(radians(240 + getCount())) * 8, getY() + sin(radians(240 + getCount())) * 8, 0, 16);
+        easyTriangle(pg, pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
       }else{
         if(isRelease){
           //開放中のエフェクト
           pg.noStroke();
           pg.fill(255, 0, 0, RedP / 2);
-          easyTriangle(pg, getX() + cos(radians(0 + getCount())) * 8, getY() + sin(radians(0 + getCount())) * 8, 0, 16);
+          easyTriangle(pg, pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
           pg.fill(0, 255, 0, GreenP / 2);
-          easyTriangle(pg, getX() + cos(radians(120 + getCount())) * 8, getY() + sin(radians(120 + getCount())) * 8, 0, 16);
+          easyTriangle(pg, pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
           pg.fill(0, 0, 255, BlueP / 2);
-          easyTriangle(pg, getX() + cos(radians(240 + getCount())) * 8, getY() + sin(radians(240 + getCount())) * 8, 0, 16);
+          easyTriangle(pg, pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
         }else{
           //低速移動の時のエフェクト
           pg.noFill();
           pg.strokeWeight(1.5);
           pg.stroke(255, 0, 0, RedP);
-          easyTriangle(pg, getX() + cos(radians(0 + getCount())) * 8, getY() + sin(radians(0 + getCount())) * 8, 0, 16);
+          easyTriangle(pg, pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
           pg.stroke(0, 255, 0, GreenP);
-          easyTriangle(pg, getX() + cos(radians(120 + getCount())) * 8, getY() + sin(radians(120 + getCount())) * 8, 0, 16);
+          easyTriangle(pg, pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
           pg.stroke(0, 0, 255, BlueP);
-          easyTriangle(pg, getX() + cos(radians(240 + getCount())) * 8, getY() + sin(radians(240 + getCount())) * 8, 0, 16);
+          easyTriangle(pg, pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
         }
       }
-      if((isInvincible() && getCount() % 2 == 0) || isRelease == true){
+      if((isInvincible() && count % 2 == 0) || isRelease == true){
         //無敵時間さん！？の機体点滅
         pg.fill(0);
       }else if(slow){
@@ -114,7 +114,7 @@ class Jiki extends Machine{
       }
       pg.strokeWeight(1.5);
       pg.stroke(getColor());
-      easyTriangle(pg, getPos(), 0, 16);
+      easyTriangle(pg, pos, 0, 16);
     pg.pop();
 
     pg.endDraw();
@@ -131,24 +131,24 @@ class Jiki extends Machine{
     }
 
     //当たり判定部分
-    pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
+    pg.ellipse(pos.x, pos.y, size * 2, size * 2);
 
     pg.endDraw();
   }
 
   void bound(){
-    setPos(min(max(getX(), 0), width), min(max(getY(), 0), height));
+    setPos(min(max(pos.x, 0), width), min(max(pos.y, 0), height));
   }
 
   void shot(Stage stage){
     if(z){
-      if(getCount() % 8 == 0){
+      if(count % 8 == 0){
         shotSound.play(0);
         print("z");
         float kakudo = 10;
         float kyori = 2;
         for(int i = 0; i < 4; i++){
-          Shot shot = new Shot(getX() + 24, getY() - kyori + i * kyori * 0.75, 0, 0);
+          Shot shot = new Shot(pos.x + 24, pos.y - kyori + i * kyori * 0.75, 0, 0);
           shot.setSize(4);
           shot.setColor(color(255, 180));
           shot.setAccel(new PVector(0.25 * cos(radians(-kakudo + kakudo * 0.75 * i)), 0.25 * sin(radians(-kakudo + kakudo * 0.75 * i))));
@@ -164,9 +164,9 @@ class Jiki extends Machine{
   //緑：自機周りのバリア、確率で弾消し
   void releaseShot(Stage stage){
     if(RedP > 0){
-      if(getCount() % 5 == 0){
+      if(count % 5 == 0){
         RedP = max(RedP - 30, 0);
-        JikiRockOnShot redShot = new JikiRockOnShot(getX(), getY());
+        JikiRockOnShot redShot = new JikiRockOnShot(pos.x, pos.y);
         redShot.setSize(10);
 
         stage.addJikiShot(redShot);
@@ -174,13 +174,13 @@ class Jiki extends Machine{
     }
     if(GreenP > 0){
       GreenP = max(GreenP - 5, 0);
-      JikiBarrierShot greenShot = new JikiBarrierShot(getX(), getY());
+      JikiBarrierShot greenShot = new JikiBarrierShot(pos.x, pos.y);
       stage.addJikiShot(greenShot);
     }
     if(BlueP > 0){
-      if(getCount() % 3 == 0){
+      if(count % 3 == 0){
         BlueP = max(BlueP - 16, 0);
-        JikiBlueLaser blueShot = new JikiBlueLaser(getX() + 10, getY());
+        JikiBlueLaser blueShot = new JikiBlueLaser(pos.x + 10, pos.y);
         stage.addJikiShot(blueShot);
       }
     }
@@ -203,7 +203,7 @@ class Jiki extends Machine{
             s.kill();
           }else{
             //被弾エフェクト
-            circleParticle r1 = new circleParticle(getX(), getY(), s.col);
+            circleParticle r1 = new circleParticle(pos.x, pos.y, s.col);
             stage.addParticle(r1);
           }
         }
@@ -213,7 +213,7 @@ class Jiki extends Machine{
 
       //吸収システム用の判定
       if(isAbsorbing()){
-        float d = dist(getX(), getY(), s.getX(), s.getY());
+        float d = dist(pos.x, pos.y, s.getX(), s.getY());
         if(d < s.getSize() + absorbArea && s.isDeletable == true && s.isHittable){
           Item i = new Item(s.getX(), s.getY(), red(s.col), green(s.col), blue(s.col));
           it.remove();
@@ -258,8 +258,8 @@ class Jiki extends Machine{
       pg.beginDraw();
       pg.stroke(255);
       pg.strokeWeight(1);
-      pg.fill(255, 180 / absorbFrame * (absorbCount - getCount()));
-      pg.ellipse(getX(), getY(), absorbArea * 2, absorbArea * 2);
+      pg.fill(255, 180 / absorbFrame * (absorbCount - count));
+      pg.ellipse(pos.x, pos.y, absorbArea * 2, absorbArea * 2);
       pg.endDraw();
     }else{
       if(!isInvincible() && !isRelease && c){
@@ -269,7 +269,7 @@ class Jiki extends Machine{
 
         //ここ吸収ボタンおしたときの処理
         absorbSound.play(0);
-        absorbCount = getCount() + absorbFrame;
+        absorbCount = count + absorbFrame;
         print("c");
       }
     }
@@ -288,14 +288,14 @@ class Jiki extends Machine{
   void releaseKey(){
     if(key == 'x' || key == 'X'){
       if(isRelease){
-        if(getCount() > releaseWaitCount){
-          releaseWaitCount = getCount() + releaseWaitFrame;
+        if(count > releaseWaitCount){
+          releaseWaitCount = count + releaseWaitFrame;
           isRelease = false;
         }
       }else{
-        if(getCount() > releaseWaitCount){
+        if(count > releaseWaitCount){
           if(canRelease()){
-            releaseWaitCount = getCount() + releaseWaitFrame;
+            releaseWaitCount = count + releaseWaitFrame;
             isRelease = true;
           }
         }
@@ -306,7 +306,7 @@ class Jiki extends Machine{
   void HPDown(int i){
     if(!isInvincible()){
       super.HPDown(i);
-      invincibleCount = getCount() + invincibleFrame;
+      invincibleCount = count + invincibleFrame;
     }
   }
 
@@ -317,7 +317,7 @@ class Jiki extends Machine{
   }
 
   boolean isInvincible(){
-    if(invincibleCount > getCount()){
+    if(invincibleCount > count){
       return true;
     }else{
       return false;
@@ -325,7 +325,7 @@ class Jiki extends Machine{
   }
 
   boolean isAbsorbing(){
-    if(absorbCount > getCount()){
+    if(absorbCount > count){
       return true;
     }else{
       return false;

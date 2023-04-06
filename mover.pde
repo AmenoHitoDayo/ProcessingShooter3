@@ -54,12 +54,9 @@ class Mover{
 
   //ステージから削除（できるようにする）
   public void kill(){
-    print("killed");
     isDead = true;
   }
 
-  //以下ゲッター・セッター
-  //一応、継承先以外から触る際は、こっち使うってことで＞＜
   public PVector getPos(){
     return pos;
   }
@@ -128,13 +125,14 @@ class Mover{
     accel = new PVector(_x, _y);
   }
 
+
   public void setSize(float _s){
     size = _s;
   }
 }
 
 class Machine extends Mover{
-  protected int HP;
+  private int HP;
   
   Machine(float _x, float _y, int _HP){
     super(_x, _y);

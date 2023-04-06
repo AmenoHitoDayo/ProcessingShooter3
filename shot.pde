@@ -1,10 +1,9 @@
 class Shot extends Mover{
-    protected color col = color(255);
-    protected int delay = 0;
-    protected ArrayList<ShotMoveCue> cues;
-    protected boolean isDeletable = true;
-    protected boolean isHittable = true;
-    protected int blendStyle = BLEND;
+    private int delay = 0;
+    private ArrayList<ShotMoveCue> cues;
+    private boolean isDeletable = true;
+    private boolean isHittable = true;
+    private int blendStyle = BLEND;
 
     Shot(float _x, float _y){
         super(_x, _y);
@@ -30,7 +29,7 @@ class Shot extends Mover{
     void updateMe(Stage stage){
         super.updateMe(stage);
         executeCue();
-        if(getCount() < delay){
+        if(count < delay){
             isHittable = false;
         }else{
             isHittable = true;
@@ -41,7 +40,7 @@ class Shot extends Mover{
     }
 
     void drawMe(PGraphics pg){
-        if(getCount() < delay){
+        if(count < delay){
             delayDraw(pg);
         }else{
             shotDraw(pg);
@@ -54,7 +53,7 @@ class Shot extends Mover{
                 pg.blendMode(blendStyle);
                 pg.noStroke();
                 pg.fill(col);
-                pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
+                pg.ellipse(pos.x, pos.y, size * 2, size * 2);
             pg.pop();
         pg.endDraw();
     }
@@ -66,9 +65,9 @@ class Shot extends Mover{
             pg.blendMode(ADD);
             for(int i = 0; i < 4; i++){
                 pg.noStroke();
-                pg.fill(col, map(delay - getCount(), 0, delay, 255, 0) / 1.5);
-                float delaysize = map(delay - getCount(), 0, delay, getSize(), getSize() * 4);
-                pg.ellipse(getX(), getY(), delaysize * 2 * 0.25 * i, delaysize * 2 * 0.25 * i);
+                pg.fill(col, map(delay - count, 0, delay, 255, 0) / 1.5);
+                float delaysize = map(delay - count, 0, delay, size, size * 4);
+                pg.ellipse(pos.x, pos.y, delaysize * 2 * 0.25 * i, delaysize * 2 * 0.25 * i);
             }
         pg.pop();
 
@@ -83,7 +82,7 @@ class Shot extends Mover{
         if(cues.size() > 0){
             for(int i = 0; i < cues.size(); i++){
                 ShotMoveCue cue = cues.get(i);
-                if(cue.getCount() == this.getCount()){
+                if(cue.getCount() == this.count){
                     this.setVel(cue.getVel());
                     this.setAccel(cue.getAccel());
                     this.setColor(cue.getColor());
@@ -96,14 +95,8 @@ class Shot extends Mover{
         cues.add(cue);
     }
 
-    //以下ゲッターセッター
-
     public int getBlendStyle(){
         return blendStyle;
-    }
-
-    public color getColor(){
-        return col;
     }
 
     public int getDelay(){
@@ -131,8 +124,6 @@ class Shot extends Mover{
     }
 }
 
-//指定フレームになったら弾の速度・加速度・色を変えられる
-//挙動を変えたい弾にaddCueして使いまづ
 class ShotMoveCue{
     private int count;
     private PVector vel;
@@ -191,9 +182,9 @@ class RectShot extends Shot{
         pg.noFill();
         pg.push();
             pg.blendMode(getBlendStyle());
-            pg.translate(getX(), getY());
-            pg.rotate(getVel().heading() + TWO_PI / 4);
-            pg.rect(0, 0, getSize() * 2, getSize() * 2, getSize() / 4);
+            pg.translate(pos.x, pos.y);
+            pg.rotate(vel.heading() + TWO_PI / 4);
+            pg.rect(0, 0, size * 2, size * 2, size / 4);
         pg.pop();
 
         pg.endDraw();
@@ -204,13 +195,13 @@ class RectShot extends Shot{
 
         pg.push();
             pg.blendMode(ADD);
-            pg.translate(getX(), getY());
-            pg.rotate(getVel().heading() + TWO_PI / 4);
+            pg.translate(pos.x, pos.y);
+            pg.rotate(vel.heading() + TWO_PI / 4);
             for(int i = 0; i < 4; i++){
                 pg.strokeWeight(lineWeight + lineWeight / 2 * i);
-                pg.stroke(getColor(), 255 / 4);
+                pg.stroke(col, 255 / 4);
                 pg.noFill();
-                float delaysize = map(getDelay() - getCount(), 0, getDelay(), getSize(), getSize() * 2);
+                float delaysize = map(getDelay() - count, 0, getDelay(), size, size * 2);
                 pg.rect(0, 0, delaysize * 2, delaysize * 2, delaysize / 4);
             }
         pg.pop();
@@ -219,7 +210,7 @@ class RectShot extends Shot{
     }
 
     void culcLineWeight(){
-        lineWeight = getSize() / 3;
+        lineWeight = size / 3;
     }
 }
 
@@ -241,10 +232,10 @@ class LaserShot extends Shot{
     void updateMe(Stage stage){
         super.updateMe(stage);
         if(leng < mxLeng){
-            leng = min(leng + getVel().mag(), mxLeng);
+            leng = min(leng + vel.mag(), mxLeng);
             setPos(defPos);
         }
-        apex = PVector.add(getPos(), PVector.mult(getVel().normalize(null), leng));
+        apex = PVector.add(pos, PVector.mult(vel.normalize(null), leng));
     }
 
     void shotDraw(PGraphics pg){
@@ -253,10 +244,10 @@ class LaserShot extends Shot{
         pg.push();
             blendMode(getBlendStyle());
             pg.noStroke();
-            pg.fill(getColor());
-            PVector center = new PVector((apex.x + getX()) / 2, (apex.y + getY()) / 2);
+            pg.fill(col);
+            PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
             pg.translate(center.x, center.y);
-            pg.rotate(getVel().heading());
+            pg.rotate(vel.heading());
             pg.rect(0, 0, leng, wid * 2, wid / 2);
         pg.pop();
 
@@ -269,11 +260,11 @@ class LaserShot extends Shot{
         pg.push();
             blendMode(getBlendStyle());
             pg.noStroke();
-            pg.fill(getColor(), map(getDelay() - getCount(), 0, getDelay(), 255, 0));
-            PVector center = new PVector((apex.x + getX()) / 2, (apex.y + getY()) / 2);
+            pg.fill(col, map(getDelay() - count, 0, getDelay(), 255, 0));
+            PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
             pg.translate(center.x, center.y);
-            pg.rotate(getVel().heading());
-            float delaysize = map(getDelay() - getCount(), 0, getDelay(), wid, 0);
+            pg.rotate(vel.heading());
+            float delaysize = map(getDelay() - count, 0, getDelay(), wid, 0);
             pg.rect(0, 0, leng, delaysize * 2, delaysize / 2);
         pg.pop();
 
@@ -282,15 +273,15 @@ class LaserShot extends Shot{
 
     boolean collision(Mover m){
         //if(lineCollision(m, apex, pos)){return true;}
-        if(lineCollision2(m.getX(), m.getY(), m.getSize(), apex.x, apex.y, getX(), getY())){print("hit");return true;}
+        if(lineCollision2(m.pos.x, m.pos.y, m.getSize(), apex.x, apex.y, pos.x, pos.y)){print("hit");return true;}
 
         
         for(int i = 0; i <= m.getSize(); i++){
             
-            PVector posMinusI = new PVector(apex.x + i * cos(getVel().heading()), apex.y + i * sin(getVel().heading()));
-            PVector posPlusI = new PVector(apex.x + i * cos(getVel().heading() + PI), apex.y + i * sin(getVel().heading() + PI));
-            PVector baseMinusI = new PVector(getX() + i * cos(getVel().heading()), getY() + i * sin(getVel().heading()));
-            PVector basePlusI = new PVector(getX() + i * cos(getVel().heading() + PI), getY() + i * sin(getVel().heading() + PI));
+            PVector posMinusI = new PVector(apex.x + i * cos(vel.heading()), apex.y + i * sin(vel.heading()));
+            PVector posPlusI = new PVector(apex.x + i * cos(vel.heading() + PI), apex.y + i * sin(vel.heading() + PI));
+            PVector baseMinusI = new PVector(pos.x + i * cos(vel.heading()), pos.y + i * sin(vel.heading()));
+            PVector basePlusI = new PVector(pos.x + i * cos(vel.heading() + PI), pos.y + i * sin(vel.heading() + PI));
             
             //if(lineCollision(m, posMinusI, baseMinusI)){return true;}
             //if(lineCollision(m, posPlusI, basePlusI)){return true;}
@@ -308,7 +299,7 @@ class LaserShot extends Shot{
 
 class JikiRockOnShot extends Shot{
     Enemy target = null;
-    float maxAngle = radians(120);
+    float maxAngle = radians(60);
     //float accelValue = 0.5;
     int targetSelectCount = 0;
 
@@ -341,8 +332,8 @@ class JikiRockOnShot extends Shot{
             blendMode(getBlendStyle());
             pg.strokeWeight(2);
             pg.stroke(255);
-            pg.fill(getColor());
-            pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
+            pg.fill(col);
+            pg.ellipse(pos.x, pos.y, size * 2, size * 2);
         pg.pop();
 
         pg.endDraw();
@@ -351,7 +342,7 @@ class JikiRockOnShot extends Shot{
     void homing(){
         //ターゲットが死んでると暴走するっぽい(解決)
         //追尾が弱くて撃ち損な感じがあるので、追尾対象がなくなったら追尾対象探し直しとかするべきかと　
-        float angle = new PVector(target.getX() - getX(), target.getY() - getY()).heading();
+        float angle = new PVector(target.getX() - pos.x, target.getY() - pos.y).heading();
         if(angle > PI){
             angle = map(angle, PI, TWO_PI, -PI, 0);
         }
@@ -378,7 +369,7 @@ class JikiRockOnShot extends Shot{
         Iterator<Enemy> it = stage.enemys.getArray().iterator();
         while(it.hasNext()){
             Enemy e = it.next();
-            float d = dist(getX(), getY(), e.getX(), e.getY());
+            float d = dist(pos.x, pos.y, e.getX(), e.getY());
             if(d < distant){
             distant = d;
             t = e;
@@ -403,7 +394,7 @@ class JikiBarrierShot extends Shot{
 
     void updateMe(Stage stage){
         super.updateMe(stage);
-        if(getCount() > 1){
+        if(count > 1){
             this.kill();
         }
         tamaKeshi();
@@ -416,8 +407,8 @@ class JikiBarrierShot extends Shot{
             pg.blendMode(getBlendStyle());
             pg.strokeWeight(2);
             pg.stroke(255);
-            pg.fill(getColor(), 32);
-            pg.ellipse(getX(), getY(), getSize() * 2, getSize() * 2);
+            pg.fill(col, 32);
+            pg.ellipse(pos.x, pos.y, size * 2, size * 2);
 
             pg.pop();
         pg.endDraw();
@@ -457,8 +448,8 @@ class JikiBlueLaser extends Shot{
     void updateMe(Stage stage){
         println("blueShot");
         super.updateMe(stage);
-        setSize(getSize() + 64 / (width / 10) * 2);
-        if(getCount() > width / 10){
+        setSize(size + 64 / (width / 10) * 2);
+        if(count > width / 10){
             this.kill();
         }
         tamaKeshi();

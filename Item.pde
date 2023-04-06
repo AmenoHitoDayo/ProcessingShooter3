@@ -19,19 +19,19 @@ class Item extends Mover{
             
             pg.noStroke();
             pg.fill(255, 0, 0, RP);
-            pg.ellipse(getX() + 3 * cos(radians(getCount())), getY() + 3 * sin(radians(getCount())), getSize(), getSize());
+            pg.ellipse(pos.x + 3 * cos(radians(count)), pos.y + 3 * sin(radians(count)), size, size);
 
             pg.noStroke();
             pg.fill(0, 255, 0, GP);
-            pg.ellipse(getX() + 3 * cos(radians(getCount() + 120)), getY() + 3 * sin(radians(getCount() + 120)), getSize(), getSize());
+            pg.ellipse(pos.x + 3 * cos(radians(count + 120)), pos.y + 3 * sin(radians(count + 120)), size, size);
 
             pg.noStroke();
             pg.fill(0, 0, 255, BP);
-            pg.ellipse(getX() + 3 * cos(radians(getCount() + 240)), getY() + 3 * sin(radians(getCount() + 240)), getSize(), getSize());
+            pg.ellipse(pos.x + 3 * cos(radians(count + 240)), pos.y + 3 * sin(radians(count + 240)), size, size);
 
             pg.noStroke();
             pg.fill(255);
-            pg.ellipse(getX(), getY(), 6, 6);
+            pg.ellipse(pos.x, pos.y, 6, 6);
 
         pg.pop();
         
@@ -40,6 +40,6 @@ class Item extends Mover{
 
     void updateMe(Stage stage){
         super.updateMe(stage);
-        setVel(PVector.sub(stage.jiki.getPos(), this.getPos()).normalize().mult(5));
+        setVel(PVector.sub(stage.jiki.getPos(), pos).normalize().mult(5));
     }
 }

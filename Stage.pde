@@ -6,9 +6,10 @@ class Stage{
     private Particles particles;
     private Jiki jiki;
     private Particles particles_zenkei;
-    private int count = 0;
-    private boolean isCountUP = true;
     private UI ui;
+
+    protected boolean isCountUP = true;
+    protected int count = 0;
 
     private PGraphics buffer;
     private AudioPlayer bgm;
@@ -112,20 +113,8 @@ class Stage{
         playingStage = stage;
     }
 
-    public int getCount(){
-        return count;
-    }
-
     public Jiki getJiki(){
         return jiki;
-    }
-
-    public boolean getCountUP(){
-        return isCountUP;
-    }
-
-    public void setCountUP(boolean _b){
-        isCountUP = _b;
     }
 
     public AudioPlayer getBGM(){
@@ -151,7 +140,7 @@ class SampleStage extends Stage{
     }
 
     void enemySpawn(){
-        if(getCount() % 10 == 0 && getEnemyCount() <= 0){
+        if(count % 10 == 0 && getEnemyCount() <= 0){
             addEnemy(new SampleEnemy());
         }
     }
@@ -170,33 +159,33 @@ class Stage01 extends Stage{
     }
 
     void stageStructure(){
-        if(getCount() == 30 || getCount() == 60 || getCount() == 90){
+        if(count == 30 || count == 60 || count == 90){
             addEnemy(new March01(width - 120, 0));
         }
-        if(getCount() == 60 || getCount() == 90 || getCount() == 120){
+        if(count == 60 || count == 90 || count == 120){
             addEnemy(new March02(width - 180, height));
         }
-        if(getCount() == 180){
+        if(count == 180){
             addEnemy(new Aim01(width, 120));
         }
-        if(getCount() == 300){
+        if(count == 300){
             Aim01 aim01_1 = new Aim01(width, height - 120);
             aim01_1.setHue(205);
             addEnemy(aim01_1);
         }
-        if(getCount() == 400){
+        if(count == 400){
             addEnemy(new Red01(width, height / 2));
         }
-        if(getCount() == 500){
+        if(count == 500){
             addEnemy(new Green01(width, height / 2 - height / 3));
         }
-        if(getCount() == 600){
+        if(count == 600){
             addEnemy(new Blue01(width, height / 2 + height / 3));
         }
-        if(getCount() == 660){
+        if(count == 660){
             
-            if(getCountUP() == true){
-                setCountUP(false);
+            if(isCountUP){
+                isCountUP = false;
             }else{
                 if(getEnemyCount() == 0){
                     if(!isMidBossAppeared){
@@ -206,35 +195,35 @@ class Stage01 extends Stage{
                         isMidBossAppeared = true;
                     }else{
                         println("CountRestart");
-                        setCountUP(true);
+                        isCountUP = true;
                     }
                 }
             }
             
         }
-        if(getCount() == 700){
+        if(count == 700){
             addEnemy(new Circle01(width, height / 2));
         }
-        if(getCount() == 760){
+        if(count == 760){
             addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
             addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
         }
-        if(getCount() == 820 || getCount() == 850 || getCount() == 880){
+        if(count == 820 || count == 850 || count == 880){
             addEnemy(new MarchLaser01(width, height - 100));
         }
-        if(getCount() == 840 || getCount() == 870 || getCount() == 900){
+        if(count == 840 || count == 870 || count == 900){
             addEnemy(new MarchLaser01(width, 100));
         }
-        if(getCount() == 930){
+        if(count == 930){
             addEnemy(new Missile01(width, height / 7));
         }
-        if(getCount() == 940){
+        if(count == 940){
             addEnemy(new Missile01(width, height / 7 * 2));
         }
-        if(getCount() == 950){
+        if(count == 950){
             addEnemy(new Missile01(width, height / 7 * 3));
         }
-        if(getCount() == 960){
+        if(count == 960){
             addEnemy(new Missile01(width, height / 7 * 4));
         }
     }
