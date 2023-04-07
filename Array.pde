@@ -5,11 +5,11 @@ class Movers{
         movers = new ArrayList<Mover>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Mover> it = movers.iterator();
         while(it.hasNext()){
             Mover m = it.next();
-            m.updateMe(stage);
+            m.updateMe(_s);
             if(m.areYouDead()){
                 it.remove();
             }
@@ -44,11 +44,11 @@ class Shots{
         shots = new ArrayList<Shot>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Shot> it = shots.iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            s.updateMe(stage);
+            s.updateMe(_s);
             if(s.areYouDead() == true){
                 it.remove();
             }
@@ -76,18 +76,19 @@ class Shots{
 
 class Enemys{
     private ArrayList<Enemy> enemys;
+    private Stage stage;
 
     Enemys(){
         enemys = new ArrayList<Enemy>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Enemy> it = enemys.iterator();
         while(it.hasNext()){
             Enemy e = it.next();
-            e.updateMe(stage);
-            e.shot(stage);
-            hit(stage, e);
+            e.updateMe(_s);
+            e.shot();
+            hit(_s, e);
             if(e.areYouDead()){
                 if(e.isOutOfScreen() == false){
                     e.playDeadSound();
@@ -146,11 +147,11 @@ class Items{
         items = new ArrayList<Item>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Item> it = items.iterator();
         while(it.hasNext()){
             Item i = it.next();
-            i.updateMe(stage);
+            i.updateMe(_s);
             if(i.isOutOfScreen()){
                 it.remove();
             }
@@ -179,11 +180,11 @@ class Particles{
         particles = new ArrayList<Particle>();
     }
     
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Particle> it = particles.iterator();
         while(it.hasNext()){
             Particle p = it.next();
-            p.updateMe(stage);
+            p.updateMe(_s);
             if(p.getCount() > p.getLifeTime()){
                 it.remove();
             }

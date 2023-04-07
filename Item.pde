@@ -38,8 +38,8 @@ class Item extends Mover{
         pg.endDraw();
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(Stage _s){
+        super.updateMe(_s);
         vel = (PVector.sub(stage.getJiki().getPos(), pos).normalize().mult(5));
     }
 }

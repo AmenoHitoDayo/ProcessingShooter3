@@ -27,8 +27,8 @@ class Shot extends Mover{
         cues = new ArrayList<ShotMoveCue>();
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(Stage _s){
+        super.updateMe(_s);
         executeCue();
         if(count < delay){
             isHittable = false;
@@ -169,9 +169,9 @@ class RectShot extends Shot{
         super(_x, _y, speed, angle);
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         culcLineWeight();
-        super.updateMe(stage);
+        super.updateMe(_s);
     }
 
     void shotDraw(PGraphics pg){
@@ -229,8 +229,8 @@ class LaserShot extends Shot{
         setDeletable(false);
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(Stage _s){
+        super.updateMe(_s);
         if(leng < mxLeng){
             leng = min(leng + vel.mag(), mxLeng);
             pos = (defPos);
@@ -311,8 +311,8 @@ class JikiRockOnShot extends Shot{
         searchTarget();
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(Stage _s){
+        super.updateMe(_s);
         if(target != null && !target.areYouDead()){
             homing();
         }else if(targetSelectCount < 5){
@@ -392,8 +392,8 @@ class JikiBarrierShot extends Shot{
         setBlendStyle(ADD);
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(Stage _s){
+        super.updateMe(_s);
         if(count > 1){
             this.kill();
         }
@@ -445,9 +445,9 @@ class JikiBlueLaser extends Shot{
         setBlendStyle(ADD);
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         println("blueShot");
-        super.updateMe(stage);
+        super.updateMe(_s);
         size = (size + 64 / (width / 10) * 2);
         if(count > width / 10){
             this.kill();

@@ -6,7 +6,7 @@ class Particle extends Mover{
     }
     
     public int getLifeTime(){
-      return lifeTime;
+        return lifeTime;
     }
 }
 

@@ -129,6 +129,14 @@ class Stage{
         return ui;
     }
 
+    public ArrayList<Shot> getEnemyShots(){
+        return enemyShots.getArray();
+    }
+
+    public ArrayList<Enemy> getEnemys(){
+        return enemys.getArray();
+    }
+
     int getEnemyCount(){
         return enemys.getArray().size();
     }
@@ -160,7 +168,7 @@ class Stage01 extends Stage{
         super();
         setBGM(stageBGM);
         getBGM().setGain(-10f);
-        count = 0;
+        count = 600;
     }
 
     void stageStructure(){

@@ -7,6 +7,7 @@ class Mover{
   protected int count;  //タイマー　寿命計算とかに使う
   protected float size = 4; //当たり判定の半径
   protected color col;
+  protected Stage stage;
 
   Mover(float _x, float _y){
     pos = new PVector(_x, _y);
@@ -15,7 +16,9 @@ class Mover{
     col = color(255);
   }
 
-  void updateMe(Stage stage){
+  void updateMe(Stage _s){
+    stage = _s;
+
     //制動用のカウンター
     count++;
 
@@ -124,8 +127,8 @@ class Machine extends Mover{
     HP = _HP;
   }
   
-  void updateMe(Stage stage){
-    super.updateMe(stage);
+  void updateMe(Stage _s){
+    super.updateMe(_s);
   }
 
   void drawMe(PGraphics pg){
