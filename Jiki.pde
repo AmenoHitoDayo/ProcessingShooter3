@@ -36,6 +36,7 @@ class Jiki extends Machine{
     itemSound.setGain(-10f);
   }
 
+  @Override
   void updateMe(Stage _s){
     super.updateMe(_s);
     vel = (new PVector(0, 0));
@@ -66,6 +67,7 @@ class Jiki extends Machine{
     bound();
   }
 
+  @Override
   //ここ醜すぎるので後でなおす
   void drawMe(PGraphics pg){
     pg.beginDraw();
@@ -195,10 +197,7 @@ class Jiki extends Machine{
       //被弾判定
       //collision関数はmoverのデフォであったほうがいいね多分これ・・
       if(s.collision(this) && s.isHittable){
-        //被弾エフェクト
         hitSound.play(0);
-        circleParticle r1 = new circleParticle(pos.x, pos.y, s.getColor());
-        stage.addParticle(r1);
         if(s.isDeletable){s.kill();}
         HPDown(1);
         continue; //被弾した弾を吸収しないようにする（この状況は発生するんか？）
@@ -209,8 +208,8 @@ class Jiki extends Machine{
         float d = dist(pos.x, pos.y, s.getX(), s.getY());
         if(d < s.getSize() + absorbArea && s.isDeletable == true && s.isHittable){
           Item i = new Item(s.getX(), s.getY(), red(s.getColor()), green(s.getColor()), blue(s.getColor()));
-          it.remove();
-          stage.items.addItem(i);
+          s.kill();
+          stage.addItem(i);
           print("absorb");
         }
       }
@@ -224,10 +223,7 @@ class Jiki extends Machine{
         e.HPDown(1);
         HPDown(1);
 
-        //被弾エフェクト
         hitSound.play(0);
-        circleParticle r1 = new circleParticle(e.getX(), e.getY(), e.getColor());
-        stage.addParticle(r1);
 
         continue;
       }
@@ -296,6 +292,7 @@ class Jiki extends Machine{
     }
   }
 
+  @Override
   void HPDown(int i){
     if(!isInvincible()){
       super.HPDown(i);

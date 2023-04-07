@@ -8,6 +8,7 @@ class Item extends Mover{
         size = 8;
     }
 
+    @Override
     void drawMe(PGraphics pg){
         pg.beginDraw();
 
@@ -38,6 +39,7 @@ class Item extends Mover{
         pg.endDraw();
     }
 
+    @Override 
     void updateMe(Stage _s){
         super.updateMe(_s);
         vel = (PVector.sub(stage.getJiki().getPos(), pos).normalize().mult(5));

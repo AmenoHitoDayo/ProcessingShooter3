@@ -47,13 +47,13 @@ public void glowShotDraw(PGraphics pg, Shot shot){
         pg.push();
             pg.blendMode(shot.getBlendStyle());
             pg.noStroke();
-            pg.fill(255);
-            pg.ellipse(shot.getX(), shot.getY(), shot.getSize() * 2, shot.getSize() * 2);
             for(int i = 1; i <= 3; i++){
                 pg.fill(shot.getColor(), 255 / 3);
-                float glowSize = shot.getSize() * (1 + 0.25 * i);
+                float glowSize = shot.getSize() * (pow(1.25, i));
                 pg.ellipse(shot.getX(), shot.getY(), glowSize * 2, glowSize * 2);
             }
+            pg.fill(255);
+            pg.ellipse(shot.getX(), shot.getY(), shot.getSize() * 2, shot.getSize() * 2);
         pg.pop();
     pg.endDraw();
 }

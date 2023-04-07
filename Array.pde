@@ -89,11 +89,6 @@ class Enemys{
             e.shot();
             hit(_s, e);
             if(e.areYouDead()){
-                if(e.isOutOfScreen() == false){
-                    e.playDeadSound();
-                    circleParticle r = new circleParticle(e.getX(), e.getY(), e.getColor());
-                    _s.addParticle(r);
-                }
                 it.remove();
             }
         }
@@ -110,10 +105,7 @@ class Enemys{
         while(it.hasNext()){
             Shot s = it.next();
             if(s.collision(enemy) && s.isHittable){
-                //被弾エフェクト
                 enemy.playHitSound();
-                rectParticle r1 = new rectParticle(s.getX(), s.getY(), s.getColor());
-                stage.addParticle(r1);
                 if(s.isDeletable){
                     s.kill();
                 }

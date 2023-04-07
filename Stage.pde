@@ -108,6 +108,10 @@ class Stage{
         particles.addParticle(p);
     }
 
+    public void addItem(Item i){
+        items.addItem(i);
+    }
+
     public void removeEnemyShot(Shot s){
         enemyShots.removeShot(s);
     }
@@ -143,7 +147,7 @@ class Stage{
     }
 
     int getShotCount(){
-        return enemyShots.getArray().size() + jikiShots.getArray().size();
+        return enemyShots.getArray().size();
     }
 }
 
@@ -187,22 +191,22 @@ class Stage01 extends Stage{
             aim01_1.setHue(205);
             addEnemy(aim01_1);
         }
-        if(count == 400){
+        if(count == 500){
             addEnemy(new Red01(width, height / 2));
         }
-        if(count == 500){
+        if(count == 600){
             addEnemy(new Green01(width, height / 2 - height / 3));
         }
-        if(count == 600){
+        if(count == 700){
             addEnemy(new Blue01(width, height / 2 + height / 3));
         }
-        if(count == 660){
-            //660F目に来たらいったんカウンタとめる
+        if(count == 760){
+            //ここに来たらいったんカウンタとめる
             if(isCountUP){
                 isCountUP = false;
             }else{
                 //他に敵がいなくなったら中ボス出す
-                if(getEnemyCount() == 0){
+                if(getEnemyCount() == 0 && getShotCount() == 0){
                     if(!isMidBossAppeared){
                         Enemy e = new MidBoss01(width, height / 2);
                         addEnemy(e);
@@ -218,30 +222,43 @@ class Stage01 extends Stage{
             }
             
         }
-        if(count == 700){
+        if(count == 800){
             addEnemy(new Circle01(width, height / 2));
         }
+        /*
         if(count == 760){
             addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
             addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
         }
-        if(count == 820 || count == 850 || count == 880){
+        */
+        if(count == 880 || count == 910 || count == 940){
             addEnemy(new MarchLaser01(width, height - 100));
         }
-        if(count == 840 || count == 870 || count == 900){
+        if(count == 900 || count == 930 || count == 960){
             addEnemy(new MarchLaser01(width, 100));
         }
-        if(count == 930){
+        if(count == 960){
             addEnemy(new Missile01(width, height / 7));
         }
-        if(count == 940){
+        if(count == 970){
             addEnemy(new Missile01(width, height / 7 * 2));
         }
-        if(count == 950){
+        if(count == 980){
             addEnemy(new Missile01(width, height / 7 * 3));
         }
-        if(count == 960){
+        if(count == 990){
             addEnemy(new Missile01(width, height / 7 * 4));
+        }
+        //ここにミサイルウェーブもう1個
+
+        if(count == 1160){
+            addEnemy(new Fountain01(200, height));
+        }
+        if(count == 1170){
+            addEnemy(new Fountain01(300, height));
+        }
+        if(count == 1180){
+            addEnemy(new Fountain01(400, height));
         }
     }
 }

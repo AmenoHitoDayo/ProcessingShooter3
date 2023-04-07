@@ -4,6 +4,12 @@ class Particle extends Mover{
         super(_x, _y);
         col =(_c);
     }
+
+    @Override
+    void updateMe(Stage _s){
+        super.updateMe(_s);
+        if(count > lifeTime){kill();}
+    }
     
     public int getLifeTime(){
         return lifeTime;
@@ -17,6 +23,7 @@ class rectParticle extends Particle{
         size =(12);
     }
     
+    @Override 
     void drawMe(PGraphics pg){
         pg.beginDraw();
 
@@ -43,6 +50,7 @@ class circleParticle extends Particle{
         size =(24);
     }
     
+    @Override 
     void drawMe(PGraphics pg){
         pg.beginDraw();
 

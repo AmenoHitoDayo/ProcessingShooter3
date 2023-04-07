@@ -13,12 +13,14 @@ boolean right = false, left = false, up = false, down = false, z = false, slow =
 public Scene scene = Scene.GameScene;
 Minim minim;
 public int defaultHP = 10;
+public float fps = 60.0f;
 
 public PFont kinkakuji;
 
 void setup() {
     size(640, 480);
     background(0);
+    frameRate(fps);
     //smooth();
     kinkakuji = loadFont("Kinkakuji-Normal-48.vlw");
 

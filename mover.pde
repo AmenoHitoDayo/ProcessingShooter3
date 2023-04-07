@@ -4,15 +4,18 @@ class Mover{
   protected PVector pos;
   protected PVector vel;
   protected PVector accel;
+  protected float rotation;
   protected int count;  //タイマー　寿命計算とかに使う
   protected float size = 4; //当たり判定の半径
   protected color col;
+
   protected Stage stage;
 
   Mover(float _x, float _y){
     pos = new PVector(_x, _y);
     vel = new PVector(0, 0);
     accel = new PVector(0, 0);
+    rotation = 0;
     col = color(255);
     stage = playingStage;
   }
@@ -26,6 +29,7 @@ class Mover{
 
     //移動
     vel.add(accel);
+    vel.rotate(rotation);
     pos.add(vel);
   }
 
@@ -91,6 +95,10 @@ class Mover{
     return vel;
   }
 
+  public PVector getAccel(){
+    return accel;
+  }
+
   public float getSize(){
     return size;
   }
@@ -129,10 +137,12 @@ class Machine extends Mover{
     HP = _HP;
   }
   
+  @Override
   void updateMe(Stage _s){
     super.updateMe(_s);
   }
 
+  @Override
   void drawMe(PGraphics pg){
     pg.beginDraw();
       pg.fill(col);
