@@ -7,12 +7,17 @@ class Mover{
   protected int count;  //タイマー　寿命計算とかに使う
   protected float size = 4; //当たり判定の半径
   protected color col;
+  
+  protected Stage stage;
+  protected PGraphics pg;
 
   Mover(float _x, float _y){
     pos = new PVector(_x, _y);
     vel = new PVector(0, 0);
     accel = new PVector(0, 0);
     col = color(255);
+    stage = playingStage;
+    pg = stage.getBuffer();
   }
 
   void updateMe(Stage stage){

@@ -444,7 +444,7 @@ class JikiBlueLaser extends Shot{
     void updateMe(Stage stage){
         println("blueShot");
         super.updateMe(stage);
-        setSize(size + 64 / (width / 10) * 2);
+        size = (size + 64 / (width / 10) * 2);
         if(count > width / 10){
             this.kill();
         }
