@@ -20,7 +20,7 @@ class Mover{
     pg = stage.getBuffer();
   }
 
-  void updateMe(Stage stage){
+  void updateMe(){
     //制動用のカウンター
     count++;
 
@@ -30,7 +30,7 @@ class Mover{
   }
 
   //PGraphicsつかう
-  void drawMe(PGraphics pg){
+  void drawMe(){
     pg.beginDraw();
       pg.fill(col);
       pg.stroke(col);
@@ -120,11 +120,11 @@ class Machine extends Mover{
     HP = _HP;
   }
   
-  void updateMe(Stage stage){
-    super.updateMe(stage);
+  void updateMe(){
+    super.updateMe();
   }
 
-  void drawMe(PGraphics pg){
+  void drawMe(){
     pg.beginDraw();
       pg.fill(col);
       pg.stroke(col);

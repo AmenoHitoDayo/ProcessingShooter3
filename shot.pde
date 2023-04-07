@@ -26,8 +26,8 @@ class Shot extends Mover{
         cues = new ArrayList<ShotMoveCue>();
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
         executeCue();
         if(count < delay){
             isHittable = false;
@@ -39,7 +39,7 @@ class Shot extends Mover{
         }
     }
 
-    void drawMe(PGraphics pg){
+    void drawMe(){
         if(count < delay){
             delayDraw(pg);
         }else{
@@ -165,9 +165,9 @@ class RectShot extends Shot{
         super(_x, _y, speed, angle);
     }
 
-    void updateMe(Stage stage){
+    void updateMe(){
         culcLineWeight();
-        super.updateMe(stage);
+        super.updateMe();
     }
 
     void shotDraw(PGraphics pg){
@@ -225,8 +225,8 @@ class LaserShot extends Shot{
         setDeletable(false);
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
         if(leng < mxLeng){
             leng = min(leng + vel.mag(), mxLeng);
             pos = (defPos);
@@ -307,8 +307,8 @@ class JikiRockOnShot extends Shot{
         searchTarget();
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
         if(target != null && !target.areYouDead()){
             homing();
         }else if(targetSelectCount < 5){
@@ -388,15 +388,15 @@ class JikiBarrierShot extends Shot{
         setBlendStyle(ADD);
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
         if(count > 1){
             this.kill();
         }
         tamaKeshi();
     }
 
-    void drawMe(PGraphics pg){
+    void drawMe(){
         pg.beginDraw();
             pg.push();
 
@@ -441,9 +441,9 @@ class JikiBlueLaser extends Shot{
         setBlendStyle(ADD);
     }
 
-    void updateMe(Stage stage){
+    void updateMe(){
         println("blueShot");
-        super.updateMe(stage);
+        super.updateMe();
         size = (size + 64 / (width / 10) * 2);
         if(count > width / 10){
             this.kill();
@@ -452,13 +452,13 @@ class JikiBlueLaser extends Shot{
         
     }
 
-    void drawMe(PGraphics pg){
+    void drawMe(){
         println("blueShotDraw");
         pg.beginDraw();
 
         pg.push();
             pg.blendMode(getBlendStyle());
-            super.drawMe(pg);
+            super.drawMe();
         pg.pop();
 
         pg.endDraw();

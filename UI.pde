@@ -9,20 +9,19 @@ class UI{
         gauge = new HPGauge();
     }
 
-    void drawMe(PGraphics _pg){
-        pg = _pg;
+    void drawMe(){
+        pg = stage.getBuffer();
         drawHP();
         drawColorPoint();
         drawReleaseWaitGauge();
         drawEnemyCount();
         drawTekidanCount();
         if(isGaugeUsing == true && gauge.getBaseEnemy() != null){
-            gauge.drawMe(_pg);
+            gauge.drawMe(pg);
         }
     }
     
-    void updateMe(Stage s){
-        stage = s;
+    void updateMe(){
         if(isGaugeUsing){
             if(gauge.getBaseEnemy().areYouDead() || gauge.getBaseEnemy() == null){
                 isGaugeUsing = false;

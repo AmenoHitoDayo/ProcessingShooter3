@@ -36,7 +36,7 @@ class Jiki extends Machine{
     itemSound.setGain(-10f);
   }
 
-  void updateMe(Stage stage){
+  void updateMe(){
     vel = (new PVector(0, 0));
     if(keyPressed){
       if(up){
@@ -58,15 +58,15 @@ class Jiki extends Machine{
     }else{
       vel.mult(speed);
     }
-    shot(stage);
-    hit(stage);
-    absorb(playingStage.buffer);
-    release(stage);
-    super.updateMe(stage);
+    shot();
+    //hit();
+    absorb();
+    release();
+    super.updateMe();
     bound();
   }
 
-  void drawMe(PGraphics pg){
+  void drawMe(){
     pg.beginDraw();
 
     pg.push();
@@ -140,7 +140,7 @@ class Jiki extends Machine{
     pos = new PVector(min(max(pos.x, 0), width), min(max(pos.y, 0), height));
   }
 
-  void shot(Stage stage){
+  void shot(){
     if(z){
       if(count % 8 == 0){
         shotSound.play(0);
@@ -162,7 +162,7 @@ class Jiki extends Machine{
   //赤：追尾弾
   //青：デカレーザー、弾消し効果あり
   //緑：自機周りのバリア、確率で弾消し
-  void releaseShot(Stage stage){
+  void releaseShot(){
     if(RedP > 0){
       if(count % 5 == 0){
         RedP = max(RedP - 30, 0);
@@ -186,8 +186,8 @@ class Jiki extends Machine{
     }
   }
 
-  void hit(Stage stage){
-    Iterator<Shot> it = stage.enemyShots.getArray().iterator();
+  void hit(){
+    Iterator<Shot> it = stage.getEnemyShots().iterator();
     while(it.hasNext()){
       if(isInvincible()) break;
       Shot s = it.next();
@@ -252,7 +252,7 @@ class Jiki extends Machine{
     }
   }
 
-  void absorb(PGraphics pg){
+  void absorb(){
     if(isAbsorbing()){
       absorbArea += absorbMaxArea / absorbFrame;
       pg.beginDraw();
@@ -276,9 +276,9 @@ class Jiki extends Machine{
   }
 
   //これだとX長押しで無限切り替えできてしまいます・・・連続発動不可能なフレームを作るのが手っ取り早いと思う
-  void release(Stage stage){
+  void release(){
     if(isRelease){
-      releaseShot(stage);
+      releaseShot();
       if(!canRelease()){
         isRelease = false;
       }

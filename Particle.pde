@@ -17,7 +17,7 @@ class rectParticle extends Particle{
         size =(12);
     }
     
-    void drawMe(PGraphics pg){
+    void drawMe(){
         pg.beginDraw();
 
         this.size =(size + 32 / lifeTime);
@@ -37,13 +37,12 @@ class rectParticle extends Particle{
 }
 
 class circleParticle extends Particle{
-    private float baseAngle = 0;
     circleParticle(float _x, float _y, color _c){
         super(_x, _y, _c);
         size =(24);
     }
     
-    void drawMe(PGraphics pg){
+    void drawMe(){
         pg.beginDraw();
 
         this.size =(size + 32 / lifeTime);

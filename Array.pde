@@ -5,20 +5,20 @@ class Movers{
         movers = new ArrayList<Mover>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(){
         Iterator<Mover> it = movers.iterator();
         while(it.hasNext()){
             Mover m = it.next();
-            m.updateMe(stage);
+            m.updateMe();
             if(m.areYouDead()){
                 it.remove();
             }
         }
     }
 
-    void drawMe(PGraphics pg){
+    void drawMe(){
         for(int i = 0; i < movers.size(); i++){
-            movers.get(i).drawMe(pg);
+            movers.get(i).drawMe();
         }
     }
 
@@ -44,20 +44,20 @@ class Shots{
         shots = new ArrayList<Shot>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(){
         Iterator<Shot> it = shots.iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            s.updateMe(stage);
+            s.updateMe();
             if(s.areYouDead() == true){
                 it.remove();
             }
         }
     }
 
-    void drawMe(PGraphics pg){
+    void drawMe(){
         for(int i = 0; i < shots.size(); i++){
-            shots.get(i).drawMe(pg);
+            shots.get(i).drawMe();
         }
     }
 
@@ -76,18 +76,20 @@ class Shots{
 
 class Enemys{
     private ArrayList<Enemy> enemys;
+    private Stage stage;
 
     Enemys(){
         enemys = new ArrayList<Enemy>();
+        stage = playingStage;
     }
 
-    void updateMe(Stage stage){
+    void updateMe(){
         Iterator<Enemy> it = enemys.iterator();
         while(it.hasNext()){
             Enemy e = it.next();
-            e.updateMe(stage);
-            e.shot(stage);
-            hit(stage, e);
+            e.updateMe();
+            e.shot();
+            hit(e);
             if(e.areYouDead()){
                 if(e.isOutOfScreen() == false){
                     e.playDeadSound();
@@ -99,13 +101,13 @@ class Enemys{
         }
     }
 
-    void drawMe(PGraphics pg){
+    void drawMe(){
         for(int i = 0; i < enemys.size(); i++){
-            enemys.get(i).drawMe(pg);
+            enemys.get(i).drawMe();
         }
     }
 
-    void hit(Stage stage, Enemy enemy){
+    void hit(Enemy enemy){
         Iterator<Shot> it = stage.jikiShots.getArray().iterator();
         while(it.hasNext()){
             Shot s = it.next();
@@ -146,20 +148,20 @@ class Items{
         items = new ArrayList<Item>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(){
         Iterator<Item> it = items.iterator();
         while(it.hasNext()){
             Item i = it.next();
-            i.updateMe(stage);
+            i.updateMe();
             if(i.isOutOfScreen()){
                 it.remove();
             }
         }
     }
 
-    void drawMe(PGraphics pg){
+    void drawMe(){
         for(int i = 0; i < items.size(); i++){
-            items.get(i).drawMe(pg);
+            items.get(i).drawMe();
         }
     }
 
@@ -179,11 +181,11 @@ class Particles{
         particles = new ArrayList<Particle>();
     }
     
-    void updateMe(Stage stage){
+    void updateMe(){
         Iterator<Particle> it = particles.iterator();
         while(it.hasNext()){
             Particle p = it.next();
-            p.updateMe(stage);
+            p.updateMe();
             if(p.getCount() > p.getLifeTime()){
                 it.remove();
             }
@@ -191,9 +193,9 @@ class Particles{
     }
         
 
-    void drawMe(PGraphics pg){
+    void drawMe(){
         for(int i = 0; i < particles.size(); i++){
-            particles.get(i).drawMe(pg);
+            particles.get(i).drawMe();
         }
     }
         

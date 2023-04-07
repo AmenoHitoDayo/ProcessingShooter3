@@ -15,8 +15,8 @@ class Enemy extends Machine{
     }
 
     //移動とかのショット以外の挙動はここに書く
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
         if(isOutOfScreen()){
             kill();
         }
@@ -24,11 +24,11 @@ class Enemy extends Machine{
 
     //敵機体の描画をここに書く
     void drawMe(PGraphics pg){
-        super.drawMe(pg);
+        super.drawMe();
     }
 
     //ショットの発射処理はここに書く
-    void shot(Stage stage){
+    void shot(){
 
     }
 
@@ -55,7 +55,7 @@ class SampleEnemy extends Enemy{
         col = HSVtoRGB(hue, 255, 255);
     }
 
-    void shot(Stage stage){
+    void shot(){
         if(count % 6 == 1){
             for(int i = 0; i < way; i++){
                 LaserShot shot = new LaserShot(pos.x, pos.y, 50, 5);
@@ -119,8 +119,8 @@ class Aim01 extends Enemy{
         col = HSVtoRGB(shotHue, 255, 255);
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
 
         if(count < 60){
             vel = new PVector(-1.5, 0);
@@ -132,7 +132,7 @@ class Aim01 extends Enemy{
         }
     }
 
-    void shot(Stage stage){
+    void shot(){
         if(count > 60 && count <= 180){
             if(count % 15 == 0){
                 PVector dirToJiki = new PVector(stage.getJiki().getX() - pos.x, stage.getJiki().getY() - pos.y);
@@ -164,8 +164,8 @@ class Circle01 extends Enemy{
     }
     int shotCount = 0;
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
 
         if(count == 0){
             vel = (new PVector(-1, 0));
@@ -178,7 +178,7 @@ class Circle01 extends Enemy{
         }
     }
 
-    void shot(Stage stage){
+    void shot(){
         if(count >= 60 && count <= 180 && count % 30 == 0){
             PVector dirToJiki = new PVector(stage.getJiki().getX() - pos.x, stage.getJiki().getY() - pos.y);
             float angle = dirToJiki.heading();
@@ -219,8 +219,8 @@ class ShotGun01 extends Enemy{
         col = (HSVtoRGB(90, 255, 255));
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
         
         if(count == 1){
             vel = (new PVector(-2, 0));
@@ -237,7 +237,7 @@ class ShotGun01 extends Enemy{
         }
     }
 
-    void drawMe(PGraphics pg){
+    void drawMe(){
         pg.beginDraw();
 
         pg.fill(col);
@@ -247,7 +247,7 @@ class ShotGun01 extends Enemy{
         pg.endDraw();
     }
 
-    void shot(Stage stage){
+    void shot(){
         if(count == 65){
             for(int i = 0; i < 30; i++){
                 Shot shot = new Shot(getX(), pos.y, 15);
@@ -270,8 +270,8 @@ class Red01 extends Enemy{
         vel = (new PVector(-5, 0));
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
 
         if(count == 30){
             vel = (new PVector(0, 0));
@@ -281,7 +281,7 @@ class Red01 extends Enemy{
         }
     }
 
-    void shot(Stage stage){
+    void shot(){
         if(count >= 30 && count <= 300){
             if(count % 5 == 0){
                 Shot shot = new Shot(pos.x, pos.y, 15);
@@ -316,8 +316,8 @@ class Green01 extends Enemy{
         vel = (new PVector(-5, 0));
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
 
         if(count == 30){
             vel = (new PVector(0, 0));
@@ -327,7 +327,7 @@ class Green01 extends Enemy{
         }
     }
 
-    void shot(Stage stage){
+    void shot(){
         if(count >= 30 && count <= 300){
             if(count % 5 == 0){
                 Shot shot = new Shot(pos.x, pos.y, 15);
@@ -362,8 +362,8 @@ class Blue01 extends Enemy{
         vel = (new PVector(-5, 0));
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
 
         if(count == 30){
             vel = (new PVector(0, 0));
@@ -373,7 +373,7 @@ class Blue01 extends Enemy{
         }
     }
 
-    void shot(Stage stage){
+    void shot(){
         if(count >= 30 && count <= 300){
             if(count % 5 == 0){
                 Shot shot = new Shot(pos.x, pos.y, 30);
@@ -409,8 +409,8 @@ class MarchLaser01 extends Enemy{
     }
 
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
     }
 
     void shot(Stage stage){
@@ -437,7 +437,7 @@ class Missile01 extends Enemy{
         col = color(255, 10, 185);
     }
 
-    void shot(Stage stage){
+    void shot(){
         if(pos.x < 0 && !shotFinish){
             for(int i = 0; i < 10; i++){
                 Shot shot = new Shot(pos.x, pos.y, 10);
@@ -479,8 +479,8 @@ class MidBoss01 extends Enemy{
         vel = (new PVector(-5, 0));
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
+    void updateMe(){
+        super.updateMe();
         if(count > 1){
             for(int i = 0; i < 5; i++){
                 bits[i].setPos(pos.x + bitRadius * cos(radians(count + 360 / 5 * i)), pos.y + bitRadius * sin(radians(count + 360 / 5 * i)));
@@ -495,7 +495,7 @@ class MidBoss01 extends Enemy{
         }
     }
 
-    void shot(Stage stage){
+    void shot(){
         if(count == 1){
             for(int i = 0; i < 5; i++){
                 Shot shot = new Shot(pos.x + bitRadius * cos(radians(count + 360 / 5 * i)), pos.y + bitRadius * sin(radians(count + 360 / 5 * i)), 30);

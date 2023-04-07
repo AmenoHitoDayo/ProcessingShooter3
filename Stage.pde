@@ -15,6 +15,10 @@ class Stage{
     private AudioPlayer bgm;
 
     Stage(){
+
+        //Array(というかその中身)でbuffer取るんでこれ最初にしんとぬるぽなるよ
+        buffer = createGraphics(width, height);
+
         enemyShots = new Shots();
         enemys = new Enemys();
         items = new Items();
@@ -25,7 +29,6 @@ class Stage{
         count = 0;
         ui = new UI();
 
-        buffer = createGraphics(width, height);
         setBGM("sol_battle047.mp3");
         bgm.printControls();
     }
@@ -34,17 +37,17 @@ class Stage{
         if(!bgm.isPlaying() && jiki.getHP() > 0)bgm.loop();
 
         if(jiki.getHP() <= 0) return;
-        particles.updateMe(this);
-        enemys.updateMe(this);
-        jiki.updateMe(this);
-        items.updateMe(this);
-        jikiShots.updateMe(this);
-        enemyShots.updateMe(this);
-        particles_zenkei.updateMe(this);
+        particles.updateMe();
+        enemys.updateMe();
+        jiki.updateMe();
+        items.updateMe();
+        jikiShots.updateMe();
+        enemyShots.updateMe();
+        particles_zenkei.updateMe();
         if(isCountUP){
             count++;
         }
-        ui.updateMe(this);
+        ui.updateMe();
         stageStructure();
     }
 
@@ -55,14 +58,14 @@ class Stage{
         buffer.background(0);
         buffer.rectMode(CENTER);
 
-        particles.drawMe(buffer);
-        enemys.drawMe(buffer);
-        jiki.drawMe(buffer);
-        items.drawMe(buffer);
-        jikiShots.drawMe(buffer);
-        enemyShots.drawMe(buffer);
-        particles_zenkei.drawMe(buffer);
-        ui.drawMe(buffer);
+        particles.drawMe();
+        enemys.drawMe();
+        jiki.drawMe();
+        items.drawMe();
+        jikiShots.drawMe();
+        enemyShots.drawMe();
+        particles_zenkei.drawMe();
+        ui.drawMe();
         
         buffer.endDraw();
 
@@ -126,7 +129,15 @@ class Stage{
     }
     
     public PGraphics getBuffer(){
-      return buffer;
+        return buffer;
+    }
+
+    public ArrayList<Shot> getEnemyShots(){
+        return enemyShots.getArray();
+    }
+
+    public ArrayList<Shot> getJikiShots(){
+        return jikiShots.getArray();
     }
 
     int getEnemyCount(){
