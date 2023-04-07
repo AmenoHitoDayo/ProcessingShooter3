@@ -193,30 +193,22 @@ class Jiki extends Machine{
       if(isInvincible()) break;
       Shot s = it.next();
       //被弾判定
-      //collision関数はmoverのデフォであったほうがいいね多分これ・・・
-      if(s.collision(this)){
-        if(s.isHittable){
-          if(s.isDeletable){
-            //被弾エフェクト
-            hitSound.play(0);
-            circleParticle r1 = new circleParticle(s.getX(), s.getY(), s.col);
-            stage.addParticle(r1);
-            s.kill();
-          }else{
-            //被弾エフェクト
-            circleParticle r1 = new circleParticle(pos.x, pos.y, s.col);
-            stage.addParticle(r1);
-          }
-        }
+      //collision関数はmoverのデフォであったほうがいいね多分これ・・
+      if(s.collision(this) && s.isHittable){
+        //被弾エフェクト
+        hitSound.play(0);
+        circleParticle r1 = new circleParticle(pos.x, pos.y, s.getColor());
+        stage.addParticle(r1);
+        if(s.isDeletable){s.kill();}
         HPDown(1);
-        continue;
+        continue; //被弾した弾を吸収しないようにする（この状況は発生するんか？）
       }
 
-      //吸収システム用の判定
+      //吸収システム用の判定(吸収円にさわった敵弾をアイテム化)
       if(isAbsorbing()){
         float d = dist(pos.x, pos.y, s.getX(), s.getY());
         if(d < s.getSize() + absorbArea && s.isDeletable == true && s.isHittable){
-          Item i = new Item(s.getX(), s.getY(), red(s.col), green(s.col), blue(s.col));
+          Item i = new Item(s.getX(), s.getY(), red(s.getColor()), green(s.getColor()), blue(s.getColor()));
           it.remove();
           stage.items.addItem(i);
           print("absorb");
@@ -228,16 +220,16 @@ class Jiki extends Machine{
     //敵との接触判定
     while(it2.hasNext()){
       Enemy e = it2.next();
-      if(e.collision(this)){
-        if(!isInvincible()){
-          e.HPDown(1);
-          HPDown(1);
+      if(e.collision(this) && !isInvincible()){
+        e.HPDown(1);
+        HPDown(1);
 
-          //被弾エフェクト
-          hitSound.play(0);
-          circleParticle r1 = new circleParticle(e.getX(), e.getY(), e.getColor());
-          stage.addParticle(r1);
-        }
+        //被弾エフェクト
+        hitSound.play(0);
+        circleParticle r1 = new circleParticle(e.getX(), e.getY(), e.getColor());
+        stage.addParticle(r1);
+
+        continue;
       }
     }
 
@@ -247,7 +239,7 @@ class Jiki extends Machine{
       Item i = it3.next();
       if(i.collision(this)){
         itemSound.play(0);
-        getColorP(i.RP / 30, i.GP / 30, i.BP / 30);
+        getColorPoint(i.RP / 30, i.GP / 30, i.BP / 30);
         it3.remove();
       }
     }
@@ -311,7 +303,7 @@ class Jiki extends Machine{
     }
   }
 
-  void getColorP(float R, float G, float B){
+  void getColorPoint(float R, float G, float B){
     RedP = min(255, RedP + R);
     GreenP = min(255, GreenP + G);
     BlueP = min(255, BlueP + B);

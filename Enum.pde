@@ -15,11 +15,7 @@ public enum ShotStyle{
 
 public enum JikiState{
     normal,
-    slow,
     absorbing,
-    absorbingSlow,
     releasing,
-    releasingSlow,
     invincible,
-    invincibleSlow
 }

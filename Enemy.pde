@@ -248,6 +248,7 @@ class ShotGun01 extends Enemy{
                 shot.setSize(6);
                 shot.setColor(HSVtoRGB(90, 120, 255));
                 shot.setBlendStyle(ADD);
+                shot.shotStyle = ShotStyle.Oval;
                 stage.addEnemyShot(shot);
             }
         }
@@ -427,35 +428,57 @@ class Missile01 extends Enemy{
         super(_x, _y, 2);
         size = (16);
         vel = new PVector(-4, 0);
+        accel = new PVector(-0.1, 0);
         col = color(255, 10, 185);
     }
 
     void shot(){
         if(pos.x < 0 && !shotFinish){
-            for(int i = 0; i < 10; i++){
-                Shot shot = new Shot(pos.x, pos.y, 10);
-                float angle = TWO_PI / 10 * i;
-                shot.size = (8);
-                shot.col = (col);
-                shot.setVel(0, 0);
-                shot.setAccel(0.05 * cos(angle), 0.05 * sin(angle));
-                stage.addEnemyShot(shot);
-            }
+            circleShot(stage, pos, 10, 0, 0.05, 0, col);
             shotFinish = true;
         }
     }
 
     public void kill(){
-        for(int i = 0; i < 10; i++){
-            Shot shot = new Shot(pos.x, pos.y, 10);
-            float angle = TWO_PI / 10 * i;
-            shot.size = (8);
-            shot.col = (col);
-            shot.setVel(0, 0);
-            shot.setAccel(0.05 * cos(angle), 0.05 * sin(angle));
-            stage.addEnemyShot(shot);
-        }
+        circleShot(stage, pos, 10, 0, 0.05, 0, col);
         super.kill();
+    }
+}
+
+//重力落下噴水
+class Fountain01 extends Enemy{
+    Fountain01(float _x, float _y){
+        super(_x, _y, 3);
+        size = 16;
+        col = HSVtoRGB(215, 255, 255);
+        vel = new PVector(0, -1);
+    }
+
+    void updateMe(Stage _s){
+        super.updateMe(_s);
+        if(count == 45){
+            vel = new PVector(0, 0);
+        }
+        if(count == 90){
+            vel = new PVector(0, 1);
+        }
+    }
+
+    void shot(){
+        if(count == 60){
+            //噴水
+        }
+    }
+}
+
+//東方虹龍洞2面に出てくる妖精っぽいの
+//クラスタ渦巻き＋大米固定
+class UM02Fae extends Enemy{
+    UM02Fae(float _x, float _y){
+        super(_x, _y, 3);
+        size = 16;
+        col = HSVtoRGB(215, 255, 255);
+        vel = new PVector(0, -1);
     }
 }
 
@@ -473,6 +496,8 @@ class MidBoss01 extends Enemy{
 
     void updateMe(Stage _s){
         super.updateMe(_s);
+
+        //なんでこれ弾幕制御なのにupdateMeに書いてるのこれ
         if(count > 1){
             for(int i = 0; i < 5; i++){
                 bits[i].setPos(pos.x + bitRadius * cos(radians(count + 360 / 5 * i)), pos.y + bitRadius * sin(radians(count + 360 / 5 * i)));
@@ -499,6 +524,8 @@ class MidBoss01 extends Enemy{
             }
         }
 
+        //ビット制御
+        //クソ読みづらいんで、あとで各ビット毎の制動関数作って呼びつけるのがいいと思う。
         if(count > 60 && getHP() > 1){
             switch(count % 60){
                 case 0:

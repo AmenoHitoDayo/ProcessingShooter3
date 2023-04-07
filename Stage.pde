@@ -83,7 +83,7 @@ class Stage{
         }
     }
 
-    //名前がわかりにくい・・・ステージの構成を書くところです（何Fで何の敵がでるか）
+    //名前がわかりにくい・・・ステージの構成を書くところです（何Fで何の敵がでるかとか）
     void stageStructure(){
 
     }
@@ -117,6 +117,7 @@ class Stage{
         playingStage = stage;
     }
 
+    //以下getter/setter
     public Jiki getJiki(){
         return jiki;
     }
@@ -168,7 +169,7 @@ class Stage01 extends Stage{
         super();
         setBGM(stageBGM);
         getBGM().setGain(-10f);
-        count = 600;
+        count = 0;
     }
 
     void stageStructure(){
@@ -196,17 +197,20 @@ class Stage01 extends Stage{
             addEnemy(new Blue01(width, height / 2 + height / 3));
         }
         if(count == 660){
-            
+            //660F目に来たらいったんカウンタとめる
             if(isCountUP){
                 isCountUP = false;
             }else{
+                //他に敵がいなくなったら中ボス出す
                 if(getEnemyCount() == 0){
                     if(!isMidBossAppeared){
                         Enemy e = new MidBoss01(width, height / 2);
                         addEnemy(e);
                         getUI().makeGauge(e);
+                        //中ボス出たフラグ
                         isMidBossAppeared = true;
                     }else{
+                        //中ボス出たあとに敵数が0になった=中ボスが倒れたのでカウント再開
                         println("CountRestart");
                         isCountUP = true;
                     }

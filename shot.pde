@@ -1,10 +1,11 @@
 class Shot extends Mover{
-    private int delay = 0;
-    private ArrayList<ShotMoveCue> cues;
-    private boolean isDeletable = true;
-    private boolean isHittable = true;
-    private int blendStyle = BLEND;
-    private Mover parent = null;
+    protected int delay = 0;
+    protected ArrayList<ShotMoveCue> cues;
+    protected boolean isDeletable = true;
+    protected boolean isHittable = true;
+    protected int blendStyle = BLEND;
+    protected Mover parent = null;
+    protected ShotStyle shotStyle = ShotStyle.Orb;
 
     Shot(float _x, float _y){
         super(_x, _y);
@@ -52,6 +53,25 @@ class Shot extends Mover{
     }
 
     void shotDraw(PGraphics pg){
+        switch(shotStyle){
+            case Orb:
+                orbShotDraw(pg, this);
+            break;
+            case Oval:
+                ovalShotDraw(pg, this);
+            break;
+            case Rect:
+                rectShotDraw(pg, this);
+            break;
+            case Glow:
+                glowShotDraw(pg, this);
+            break;
+            default:
+                orbShotDraw(pg, this);
+            break;
+        }
+
+        /*
         pg.beginDraw();
             pg.push();
                 pg.blendMode(blendStyle);
@@ -60,9 +80,19 @@ class Shot extends Mover{
                 pg.ellipse(pos.x, pos.y, size * 2, size * 2);
             pg.pop();
         pg.endDraw();
+        */
     }
 
     void delayDraw(PGraphics pg){
+        switch(shotStyle){
+            case Rect:
+                rectDelayDraw(pg, this);
+            break;
+            default:
+                orbDelayDraw(pg, this);
+            break;
+        }
+
         pg.beginDraw();
 
         pg.push();
@@ -82,11 +112,15 @@ class Shot extends Mover{
         vel = (new PVector(speed * cos(angle), speed * sin(angle)));
     }
 
+    public void setAccelerationFromAccelAngle(float acc, float angle){
+        accel = (new PVector(acc * cos(angle), acc * sin(angle)));
+    }
+
     void executeCue(){
         if(cues.size() > 0){
             for(int i = 0; i < cues.size(); i++){
                 ShotMoveCue cue = cues.get(i);
-                if(cue.getCount() == this.count){
+                if(cue.getCount() == count){
                     this.vel = (cue.getVel());
                     this.accel = (cue.getAccel());
                     this.col = (cue.getColor());
@@ -103,12 +137,16 @@ class Shot extends Mover{
         return blendStyle;
     }
 
+    public boolean isHittable(){
+        return isHittable;
+    }
+
     public int getDelay(){
         return delay;
     }
 
-    public boolean getHittable(){
-        return isHittable;
+    public void setDelay(int _d){
+        delay = _d;
     }
 
     public void setDeletable(boolean _d){
@@ -181,7 +219,7 @@ class RectShot extends Shot{
         pg.stroke(col);
         pg.noFill();
         pg.push();
-            pg.blendMode(getBlendStyle());
+            pg.blendMode(blendStyle);
             pg.translate(pos.x, pos.y);
             pg.rotate(vel.heading() + TWO_PI / 4);
             pg.rect(0, 0, size * 2, size * 2, size / 4);
@@ -201,7 +239,7 @@ class RectShot extends Shot{
                 pg.strokeWeight(lineWeight + lineWeight / 2 * i);
                 pg.stroke(col, 255 / 4);
                 pg.noFill();
-                float delaysize = map(getDelay() - count, 0, getDelay(), size, size * 2);
+                float delaysize = map(delay - count, 0, delay, size, size * 2);
                 pg.rect(0, 0, delaysize * 2, delaysize * 2, delaysize / 4);
             }
         pg.pop();
@@ -215,10 +253,10 @@ class RectShot extends Shot{
 }
 
 class LaserShot extends Shot{
-    float leng = 0, wid = 0;    //長さと太さ　sizeはつかわない
-    float mxLeng = 0;
-    PVector apex;   //先端の位置
-    PVector defPos; //初期位置
+    private float leng = 0, wid = 0;    //長さと太さ　sizeはつかわない
+    private float mxLeng = 0;
+    private PVector apex;   //先端の位置
+    private PVector defPos; //初期位置
 
     LaserShot(float _x, float _y, float _l, float _w){
         super(_x, _y);
@@ -242,7 +280,7 @@ class LaserShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            blendMode(getBlendStyle());
+            blendMode(blendStyle);
             pg.noStroke();
             pg.fill(col);
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
@@ -258,13 +296,13 @@ class LaserShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            blendMode(getBlendStyle());
+            blendMode(blendStyle);
             pg.noStroke();
-            pg.fill(col, map(getDelay() - count, 0, getDelay(), 255, 0));
+            pg.fill(col, map(delay - count, 0, delay, 255, 0));
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
             pg.translate(center.x, center.y);
             pg.rotate(vel.heading());
-            float delaysize = map(getDelay() - count, 0, getDelay(), wid, 0);
+            float delaysize = map(delay - count, 0, delay, wid, 0);
             pg.rect(0, 0, leng, delaysize * 2, delaysize / 2);
         pg.pop();
 
@@ -329,7 +367,7 @@ class JikiRockOnShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            blendMode(getBlendStyle());
+            blendMode(blendStyle);
             pg.strokeWeight(2);
             pg.stroke(255);
             pg.fill(col);
@@ -404,7 +442,7 @@ class JikiBarrierShot extends Shot{
         pg.beginDraw();
             pg.push();
 
-            pg.blendMode(getBlendStyle());
+            pg.blendMode(blendStyle);
             pg.strokeWeight(2);
             pg.stroke(255);
             pg.fill(col, 32);
@@ -433,7 +471,7 @@ class JikiBarrierShot extends Shot{
     }
 }
 
-//見た目はできたんだけどなぜか当たり判定がぬえ
+//青ﾊﾟﾜ弾　敵弾を搔き消せる
 class JikiBlueLaser extends Shot{
     JikiBlueLaser(float _x, float _y){
         super(_x, _y, 64);
@@ -448,7 +486,7 @@ class JikiBlueLaser extends Shot{
     void updateMe(Stage _s){
         println("blueShot");
         super.updateMe(_s);
-        size = (size + 64 / (width / 10) * 2);
+        size = min((size + 64 / (width / 10) * 2), 64);
         if(count > width / 10){
             this.kill();
         }
@@ -461,7 +499,7 @@ class JikiBlueLaser extends Shot{
         pg.beginDraw();
 
         pg.push();
-            pg.blendMode(getBlendStyle());
+            pg.blendMode(blendStyle);
             super.drawMe(pg);
         pg.pop();
 
@@ -470,17 +508,15 @@ class JikiBlueLaser extends Shot{
 
     void tamaKeshi(){
         Stage stage = playingStage;
-        Iterator<Shot> it = stage.enemyShots.getArray().iterator();
+        Iterator<Shot> it = stage.getEnemyShots().iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            if(this.collision(s) == true){
-                if(s.isDeletable){
-                    rectParticle r = new rectParticle(s.getX(), s.getY(), s.col);
-                    r.baseAngle = s.getVel().heading();
-                    stage.addParticle(r);
-                    println("deleteshot");
-                    s.kill();
-                }
+            if(this.collision(s) == true && s.isDeletable){
+                rectParticle r = new rectParticle(s.getX(), s.getY(), s.col);
+                r.baseAngle = s.getVel().heading();
+                stage.addParticle(r);
+                println("deleteshot");
+                s.kill();
             }
         }
     }

@@ -14,9 +14,11 @@ class Mover{
     vel = new PVector(0, 0);
     accel = new PVector(0, 0);
     col = color(255);
+    stage = playingStage;
   }
 
   void updateMe(Stage _s){
+    //毎フレstageとるのダサすぎるんだけどこれしないとぬるぽが出るぉ・・・
     stage = _s;
 
     //制動用のカウンター
@@ -40,9 +42,9 @@ class Mover{
   boolean collision(Mover m){
       float d = dist(pos.x, pos.y, m.pos.x, m.pos.y);
       if(d < (size + m.size)){
-          return true;
+        return true;
       }else{
-          return false;
+        return false;
       }
   }
 

@@ -76,7 +76,6 @@ class Shots{
 
 class Enemys{
     private ArrayList<Enemy> enemys;
-    private Stage stage;
 
     Enemys(){
         enemys = new ArrayList<Enemy>();
@@ -93,7 +92,7 @@ class Enemys{
                 if(e.isOutOfScreen() == false){
                     e.playDeadSound();
                     circleParticle r = new circleParticle(e.getX(), e.getY(), e.getColor());
-                    stage.addParticle(r);
+                    _s.addParticle(r);
                 }
                 it.remove();
             }
@@ -110,18 +109,15 @@ class Enemys{
         Iterator<Shot> it = stage.jikiShots.getArray().iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            if(s.collision(enemy)){
-                if(s.isHittable){
-                    //被弾エフェクト
-                    enemy.playHitSound();
-                    rectParticle r1 = new rectParticle(s.getX(), s.getY(), s.col);
-                    stage.addParticle(r1);
-                    if(s.isDeletable){
-                        s.kill();
-                    }
-                    enemy.HPDown(1);
+            if(s.collision(enemy) && s.isHittable){
+                //被弾エフェクト
+                enemy.playHitSound();
+                rectParticle r1 = new rectParticle(s.getX(), s.getY(), s.getColor());
+                stage.addParticle(r1);
+                if(s.isDeletable){
+                    s.kill();
                 }
-                continue;
+                enemy.HPDown(1);
             }
         }
     }

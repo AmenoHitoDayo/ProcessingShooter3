@@ -13,7 +13,6 @@ PVector VectorDown(){
 
 //大きさと角度を入れて正三角形ができる
 void easyTriangle(PGraphics pg, PVector pos, float angle, float size){
-
     pg.beginDraw();
 
     pg.pushMatrix();
@@ -70,6 +69,7 @@ color HSVtoRGB(float h, float s, float v){
     return color(r, g, b);
 }
 
+//線形当たり判定用関数
 boolean lineCollision2(float cx, float cy, float r, float x1, float y1, float x2, float y2){
     float dist1 = dist(cx, cy, x1, y1);
     float dist2 = dist(cx, cy, x2, y2);
