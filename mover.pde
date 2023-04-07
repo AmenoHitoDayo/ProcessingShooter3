@@ -105,6 +105,15 @@ class Mover{
   public void setSize(int _s){
     size = _s;
   }
+
+  public void setColor(color _c){
+    col = _c;
+  }
+
+  public void setColor(float r, float g, float b){
+    col = color(r, g, b);
+  }
+  
 }
 
 class Machine extends Mover{

@@ -75,8 +75,8 @@ class SampleEnemy extends Enemy{
 
                 RectShot shot2 = new RectShot(pos.x, pos.y, 30);
                 shot2.setVelocityFromSpeedAngle(2, radians(angle + 45) + TWO_PI / way * i);
-                shot.size = 6;
-                shot2.col = (HSVtoRGB(hue, 255 - 64, 255));
+                shot.setSize(6);
+                shot2.setColor(HSVtoRGB(hue, 255 - 64, 255));
                 
                 ShotMoveCue cue = new ShotMoveCue(60, 
                     PVector.mult(shot2.vel, 3),
@@ -137,13 +137,7 @@ class Aim01 extends Enemy{
             if(count % 15 == 0){
                 PVector dirToJiki = new PVector(stage.getJiki().getX() - pos.x, stage.getJiki().getY() - pos.y);
                 float angle = dirToJiki.heading();
-                for(int i = 0; i < 3; i++){
-                    RectShot shot = new RectShot(pos.x, pos.y, 15);
-                    shot.setVelocityFromSpeedAngle(3, angle + radians(-30 + 30 * i));
-                    shot.size = 6;
-                    shot.col = (HSVtoRGB(shotHue, 255, 255));
-                    stage.addEnemyShot(shot);
-                }
+                nWay(stage, pos, 3, 3.0f, angle, radians(15), HSVtoRGB(shotHue, 255, 255));
                 shotHue -= 10;
             }
         }
@@ -179,32 +173,32 @@ class Circle01 extends Enemy{
     }
 
     void shot(Stage stage){
-        if(count >= 60 && count <= 180 && count % 30 == 0){
-            PVector dirToJiki = new PVector(stage.getJiki().getX() - pos.x, stage.getJiki().getY() - pos.y);
-            float angle = dirToJiki.heading();
-            float hue = shotCount * 10;
-            if(shotCount % 2 == 0){
-                for(int i = 0; i < 13; i++){
-                    RectShot shot = new RectShot(pos.x, pos.y, 15);
-                    shot.setVelocityFromSpeedAngle(3, angle + TWO_PI / 13 * i);
-                    shot.size = (8);
-                    shot.col = (HSVtoRGB(hue, 255, 255));
-                    stage.addEnemyShot(shot);
-                    hue += 360 / 13;
-                }
-            }else{
-                angle += TWO_PI / 14 / 2;
-                for(int i = 0; i < 14; i++){
-                    RectShot shot = new RectShot(pos.x, pos.y, 15);
-                    shot.setVelocityFromSpeedAngle(3, angle + TWO_PI / 14 * i);
-                    shot.size = (8);
-                    shot.col = (HSVtoRGB(hue, 255, 255));
-                    stage.addEnemyShot(shot);
-                    hue += 360 / 14;
-                }
+        if(count < 60 || count > 180 || count % 30 != 0)return;
+
+        PVector dirToJiki = new PVector(stage.getJiki().getX() - pos.x, stage.getJiki().getY() - pos.y);
+        float angle = dirToJiki.heading();
+        float hue = shotCount * 10;
+        if(shotCount % 2 == 0){
+            for(int i = 0; i < 13; i++){
+                RectShot shot = new RectShot(pos.x, pos.y, 15);
+                shot.setVelocityFromSpeedAngle(3, angle + TWO_PI / 13 * i);
+                shot.setSize(8);
+                shot.setColor(HSVtoRGB(hue, 255, 255));
+                stage.addEnemyShot(shot);
+                hue += 360 / 13;
             }
-            shotCount++;
+        }else{
+            angle += TWO_PI / 14 / 2;
+            for(int i = 0; i < 14; i++){
+                RectShot shot = new RectShot(pos.x, pos.y, 15);
+                shot.setVelocityFromSpeedAngle(3, angle + TWO_PI / 14 * i);
+                shot.setSize(8);
+                shot.setColor(HSVtoRGB(hue, 255, 255));
+                stage.addEnemyShot(shot);
+                hue += 360 / 14;
+            }
         }
+        shotCount++;
     }
 }
 
@@ -252,8 +246,8 @@ class ShotGun01 extends Enemy{
             for(int i = 0; i < 30; i++){
                 Shot shot = new Shot(getX(), pos.y, 15);
                 shot.setVelocityFromSpeedAngle(3 + random(-1, 1), shotAngle + radians(random(-bure, bure)));
-                shot.size = (6);
-                shot.col = (HSVtoRGB(90, 120, 255));
+                shot.setSize(6);
+                shot.setColor(HSVtoRGB(90, 120, 255));
                 shot.setBlendStyle(ADD);
                 stage.addEnemyShot(shot);
             }
@@ -467,16 +461,16 @@ class Missile01 extends Enemy{
     }
 }
 
-//撃破時にビットが居残りすることがある
+//撃破時にビットが居残りすることがあるっぽい？
 class MidBoss01 extends Enemy{
     float bitRadius = 0;
     Shot[] bits = new Shot[5];
 
     MidBoss01(float _x, float _y){
         super(_x, _y, 100);
-        size = (32);
-        col = (color(255, 255, 255));
-        vel = (new PVector(-5, 0));
+        size = 32;
+        col = color(255, 255, 255);
+        vel = new PVector(-5, 0);
     }
 
     void updateMe(Stage stage){
@@ -584,8 +578,39 @@ class MidBoss01 extends Enemy{
 
         if(getHP() <= 1){
             for(int i = 0; i < 5; i++){
-                stage.enemyShots.removeShot(bits[i]);
+                stage.removeEnemyShot(bits[i]);
             }
+        }
+    }
+}
+
+class Boss_Mauve extends Enemy{
+    private int keitai = 0;
+    Boss_Mauve(float _x, float _y){
+        super(_x, _y, 100);
+        size = 32;
+        col = color(#915da3);
+        vel = new PVector(-3, 0);
+    }
+
+    void updateMe(Stage stage){
+        switch(keitai){
+            case 0:
+                if(count == 30){
+                    vel = new PVector(0, 0);
+                }else if(count > 30){
+
+                }
+            break;
+        }
+    }
+
+    void shot(Stage stage){
+        switch(keitai){
+            case 0:
+                if(count <= 30)return;
+                
+            break;
         }
     }
 }

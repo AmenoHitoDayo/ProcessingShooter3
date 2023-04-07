@@ -108,6 +108,10 @@ class Stage{
         particles.addParticle(p);
     }
 
+    public void removeEnemyShot(Shot s){
+        enemyShots.removeShot(s);
+    }
+
     void startNewStage(Stage stage){
         stage.jiki = this.jiki;
         playingStage = stage;
@@ -123,10 +127,6 @@ class Stage{
 
     public UI getUI(){
         return ui;
-    }
-    
-    public PGraphics getBuffer(){
-      return buffer;
     }
 
     int getEnemyCount(){
@@ -160,6 +160,7 @@ class Stage01 extends Stage{
         super();
         setBGM(stageBGM);
         getBGM().setGain(-10f);
+        count = 0;
     }
 
     void stageStructure(){

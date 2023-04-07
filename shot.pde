@@ -4,6 +4,7 @@ class Shot extends Mover{
     private boolean isDeletable = true;
     private boolean isHittable = true;
     private int blendStyle = BLEND;
+    private Mover parent = null;
 
     Shot(float _x, float _y){
         super(_x, _y);
@@ -35,6 +36,9 @@ class Shot extends Mover{
             isHittable = true;
         }
         if(isOutOfScreen()){
+            kill();
+        }
+        if(parent != null && parent.isDead){
             kill();
         }
     }

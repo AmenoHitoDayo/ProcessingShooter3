@@ -66,6 +66,7 @@ class Jiki extends Machine{
     bound();
   }
 
+  //ここ醜すぎるので後でなおす
   void drawMe(PGraphics pg){
     pg.beginDraw();
 
