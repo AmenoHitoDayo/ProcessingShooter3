@@ -124,6 +124,10 @@ class Stage{
     public UI getUI(){
         return ui;
     }
+    
+    public PGraphics getBuffer(){
+      return buffer;
+    }
 
     int getEnemyCount(){
         return enemys.getArray().size();
