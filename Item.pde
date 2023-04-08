@@ -40,8 +40,8 @@ class Item extends Mover{
     }
 
     @Override 
-    void updateMe(Stage _s){
-        super.updateMe(_s);
-        vel = (PVector.sub(stage.getJiki().getPos(), pos).normalize().mult(5));
+    void updateMe(){
+        super.updateMe();
+        vel = (PVector.sub(playingStage.getJiki().getPos(), pos).normalize().mult(5));
     }
 }

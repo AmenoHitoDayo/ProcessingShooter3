@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public Stage playingStage;
-boolean right = false, left = false, up = false, down = false, z = false, slow = false, c = false;
-public Scene scene = Scene.GameScene;
+public Title title;
+public Scene scene = Scene.TitleScene;
 Minim minim;
 public int defaultHP = 10;
 public float fps = 60.0f;
@@ -25,34 +25,49 @@ void setup() {
     kinkakuji = loadFont("Kinkakuji-Normal-48.vlw");
 
     minim = new Minim(this);
-    playingStage = new Stage01();
+    //playingStage = new Stage01();
+    title = new Title();
 }
 
 void draw() {
-    background(0);
+    //background(0);
     
-    playingStage.updateMe();
-    playingStage.drawMe();
+    switch(scene){
+        case TitleScene:
+            title.updateMe();
+            title.drawMe();
+        break;
+        case GameScene:
+            playingStage.updateMe();
+            playingStage.drawMe();
+        break;
+        case GameOverScene:
+            gameOver();
+        break;
+    }
 }
 
 void keyPressed(){
-    playingStage.jiki.releaseKey();
-
-    if(key == 'w' || keyCode == UP) up = true;
-    if(key == 'd' || keyCode == RIGHT) right = true;
-    if(key == 's' || keyCode == DOWN) down = true;
-    if(key == 'a' || keyCode == LEFT) left = true;
-    if(key == 'z' || key == 'Z') z = true;
-    if(key == 'c' || key == 'C') c = true;
-    if(keyCode == SHIFT) slow = true;
+    switch(scene){
+        case TitleScene:
+            title.keyPressed();
+        break;
+        case GameScene:
+            playingStage.keyPressed();
+        break;
+        case GameOverScene:
+            gameOverKeyPressed();
+        break;
+    }
 }
 
 void keyReleased() {
-    if(key == 'w' || keyCode == UP) up = false;
-    if(key == 'd' || keyCode == RIGHT) right = false;
-    if(key == 's' || keyCode == DOWN) down = false;
-    if(key == 'a' || keyCode == LEFT) left = false;
-    if(key == 'z' || key == 'Z') z = false;
-    if(key == 'c' || key == 'C') c = false;
-    if(keyCode == SHIFT) slow = false;
+    switch(scene){
+        case TitleScene:
+
+        break;
+        case GameScene:
+            playingStage.keyReleased();
+        break;
+    }
 }

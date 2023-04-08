@@ -29,8 +29,8 @@ class Shot extends Mover{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         executeCue();
         if(count < delay){
             isHittable = false;
@@ -44,7 +44,7 @@ class Shot extends Mover{
         //画面外で死んでもなるのはよくない。
         if(parent != null && parent.isDead && !parent.isOutOfScreen()){
             Item item = new Item(pos.x, pos.y, 0, 0, 0);
-            stage.addItem(item);
+            playingStage.addItem(item);
 
             kill();
         }
@@ -62,8 +62,8 @@ class Shot extends Mover{
     @Override
     void kill(){
         if(!isOutOfScreen()){
-            rectParticle particle = new rectParticle(pos.x, pos.y, col);
-            stage.addParticle(particle);
+            RectParticle particle = new RectParticle(pos.x, pos.y, col, size * 2);
+            playingStage.addParticle(particle);
         }
         super.kill();
     }
@@ -164,7 +164,6 @@ class ShotMoveCue{
     private PVector accel;
     private float rotation;
     private color col;
-
     
     ShotMoveCue(int _c, PVector _v, PVector _a, float _r, int _col){
         count = _c;
@@ -208,8 +207,8 @@ class OrbitShot extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
 
         if(count < waitFrame){
             radius.add(PVector.div(orbitRadius, waitFrame));
@@ -235,8 +234,8 @@ class LaserShot extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         if(leng < mxLeng){
             leng = min(leng + vel.mag(), mxLeng);
             pos = (defPos);
@@ -321,8 +320,8 @@ class JikiRockOnShot extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         if(target != null && !target.areYouDead()){
             homing();
         }else if(targetSelectCount < 5){
@@ -374,10 +373,9 @@ class JikiRockOnShot extends Shot{
 
     void searchTarget(){
         println("search:" + this.targetSelectCount);
-        Stage stage = playingStage;
         Enemy t = null;
         float distant = 10000;
-        Iterator<Enemy> it = stage.enemys.getArray().iterator();
+        Iterator<Enemy> it = playingStage.enemys.getArray().iterator();
         while(it.hasNext()){
             Enemy e = it.next();
             float d = dist(pos.x, pos.y, e.getX(), e.getY());
@@ -404,8 +402,8 @@ class JikiBarrierShot extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         if(count > 1){
             this.kill();
         }
@@ -428,8 +426,7 @@ class JikiBarrierShot extends Shot{
     }
 
     void tamaKeshi(){
-        Stage stage = playingStage;
-        Iterator<Shot> it = stage.enemyShots.getArray().iterator();
+        Iterator<Shot> it = playingStage.getEnemyShots().iterator();
         while(it.hasNext()){
             Shot s = it.next();
             if(s.collision(this) == true){
@@ -456,8 +453,8 @@ class JikiBlueLaser extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         size = min((size + 64 / (width / 10) * 2), 64);
         if(count > width / 10){
             this.kill();
@@ -473,8 +470,7 @@ class JikiBlueLaser extends Shot{
     }
 
     void tamaKeshi(){
-        Stage stage = playingStage;
-        Iterator<Shot> it = stage.getEnemyShots().iterator();
+        Iterator<Shot> it = playingStage.getEnemyShots().iterator();
         while(it.hasNext()){
             Shot s = it.next();
             if(this.collision(s) == true && s.isDeletable){

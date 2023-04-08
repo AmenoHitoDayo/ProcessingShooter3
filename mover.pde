@@ -9,20 +9,17 @@ class Mover{
   protected float size = 4; //当たり判定の半径
   protected color col;
 
-  protected Stage stage;
-
   Mover(float _x, float _y){
     pos = new PVector(_x, _y);
     vel = new PVector(0, 0);
     accel = new PVector(0, 0);
     rotation = 0;
     col = color(255);
-    stage = playingStage;
   }
 
-  void updateMe(Stage _s){
+  void updateMe(){
     //毎フレstageとるのダサすぎるんだけどこれしないとぬるぽが出るぉ・・・
-    stage = _s;
+    //stage = _s;
 
     //制動用のカウンター
     count++;
@@ -138,8 +135,8 @@ class Machine extends Mover{
   }
   
   @Override
-  void updateMe(Stage _s){
-    super.updateMe(_s);
+  void updateMe(){
+    super.updateMe();
   }
 
   @Override

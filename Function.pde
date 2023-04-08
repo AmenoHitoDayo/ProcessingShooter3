@@ -96,3 +96,9 @@ PVector vectorFromMagAngle(float mag, float angle){
     PVector v = new PVector(mag * cos(angle), mag * sin(angle));
     return v;
 }
+
+//始点から終点まで指定フレームで到達できるベクターを返す
+PVector makeVectorForPointSecond(PVector deperture, PVector arrive, int second){
+    PVector v = PVector.div(new PVector(arrive.x - deperture.x, arrive.y - deperture.y), second);
+    return v;
+}

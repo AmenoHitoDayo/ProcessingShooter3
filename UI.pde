@@ -1,11 +1,9 @@
 class UI{
-    private Stage stage;
     private boolean isGaugeUsing = false;
     private HPGauge gauge;
     private PGraphics pg;
     
     UI(){
-        stage = playingStage;
         gauge = new HPGauge();
     }
 
@@ -22,8 +20,7 @@ class UI{
         }
     }
     
-    void updateMe(Stage s){
-        stage = s;
+    void updateMe(){
         if(isGaugeUsing){
             if(gauge.getBaseEnemy().areYouDead() || gauge.getBaseEnemy() == null){
                 isGaugeUsing = false;
@@ -34,14 +31,14 @@ class UI{
     void drawHP(){
         pg.beginDraw();
             pg.noStroke();
-            if(stage.getJiki().getX() < 32 && stage.getJiki().getY() < 16){
+            if(playingStage.getJiki().getX() < 32 && playingStage.getJiki().getY() < 16){
                 pg.fill(255, 127);
             }else{
                 pg.fill(255);
             }
             pg.textFont(kinkakuji, 16);
             pg.text("HP : ", 0, 16);
-            for(int i = 0; i < stage.getJiki().getHP(); i++){
+            for(int i = 0; i < playingStage.getJiki().getHP(); i++){
                 easyTriangle(pg, 6 * 5 + 8 + 16 * i, 10, 0, 8);
             }
         pg.endDraw();
@@ -49,63 +46,63 @@ class UI{
 
     void drawColorPoint(){
         pg.beginDraw();
-            if(stage.jiki.getX() < 64 && stage.jiki.getY() > height - 16 * 2){
+            if(playingStage.jiki.getX() < 64 && playingStage.jiki.getY() > height - 16 * 2){
                 pg.fill(255, 127);
             }else{
                 pg.fill(255);
             }
             pg.textFont(kinkakuji, 16);
-            pg.text("RED : " + stage.jiki.RedP, 0, height - 16 * 2);
-            pg.text("GREEN : " + stage.jiki.GreenP, 0, height - 16 * 1);
-            pg.text("BLUE : " + stage.jiki.BlueP, 0, height - 16 * 0);
+            pg.text("RED : " + playingStage.jiki.RedP, 0, height - 16 * 2);
+            pg.text("GREEN : " + playingStage.jiki.GreenP, 0, height - 16 * 1);
+            pg.text("BLUE : " + playingStage.jiki.BlueP, 0, height - 16 * 0);
         pg.endDraw();
     }
 
     void drawReleaseWaitGauge(){
         pg.beginDraw();
-            if(stage.jiki.releaseWaitCount > stage.jiki.getCount()){
-                float length = map(stage.jiki.releaseWaitCount - stage.jiki.getCount(), 0, stage.jiki.releaseWaitFrame, 0, 32);
+            if(playingStage.jiki.releaseWaitCount > playingStage.jiki.getCount()){
+                float length = map(playingStage.jiki.releaseWaitCount - playingStage.jiki.getCount(), 0, playingStage.jiki.releaseWaitFrame, 0, 32);
                 pg.noFill();
                 pg.stroke(255);
                 pg.strokeWeight(3);
-                pg.line(stage.jiki.getX() - 16, stage.jiki.getY() - 16 - 8, stage.jiki.getX() - 16 + length, stage.jiki.getY() - 16 - 8);
+                pg.line(playingStage.jiki.getX() - 16, playingStage.jiki.getY() - 16 - 8, playingStage.jiki.getX() - 16 + length, playingStage.jiki.getY() - 16 - 8);
             }
         pg.endDraw();
     }
 
     void drawEnemyCount(){
         pg.beginDraw();
-            if(stage.jiki.getX() < 32 && stage.jiki.getY() < 32){
+            if(playingStage.jiki.getX() < 32 && playingStage.jiki.getY() < 32){
                 pg.fill(255, 127);
             }else{
                 pg.fill(255);
             }
             pg.textFont(kinkakuji, 16);
-            pg.text("Enemys : " + stage.getEnemyCount(), 0, 16 * 2);
+            pg.text("Enemys : " + playingStage.getEnemyCount(), 0, 16 * 2);
         pg.endDraw();
     }
 
     void drawTekidanCount(){
         pg.beginDraw();
-            if(stage.jiki.getX() < 32 && stage.jiki.getY() < 16 * 3){
+            if(playingStage.jiki.getX() < 32 && playingStage.jiki.getY() < 16 * 3){
                 pg.fill(255, 127);
             }else{
                 pg.fill(255);
             }
             pg.textFont(kinkakuji, 16);
-            pg.text("Shots : " + stage.getShotCount(), 0, 16 * 3);
+            pg.text("Shots : " + playingStage.getShotCount(), 0, 16 * 3);
         pg.endDraw();
     }
 
     void drawScoreCount(){
         pg.beginDraw();
-            if(stage.jiki.getX() < 32 && stage.jiki.getY() < 16 * 4){
+            if(playingStage.jiki.getX() < 32 && playingStage.jiki.getY() < 16 * 4){
                 pg.fill(255, 127);
             }else{
                 pg.fill(255);
             }
             pg.textFont(kinkakuji, 16);
-            pg.text("Score : " + stage.getJiki().getScore(), 0, 16 * 4);
+            pg.text("Score : " + playingStage.getJiki().getScore(), 0, 16 * 4);
         pg.endDraw();
     }
 
@@ -115,7 +112,7 @@ class UI{
     }
 
     void getStage(){
-        stage = playingStage;
+        playingStage = playingStage;
     }
 }
 

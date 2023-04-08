@@ -5,11 +5,11 @@ class Movers{
         movers = new ArrayList<Mover>();
     }
 
-    void updateMe(Stage _s){
+    void updateMe(){
         Iterator<Mover> it = movers.iterator();
         while(it.hasNext()){
             Mover m = it.next();
-            m.updateMe(_s);
+            m.updateMe();
             if(m.areYouDead()){
                 it.remove();
             }
@@ -38,17 +38,17 @@ class Movers{
 }
 
 class Shots{
-    private ArrayList<Shot> shots;
+    protected ArrayList<Shot> shots;
 
     Shots(){
         shots = new ArrayList<Shot>();
     }
 
-    void updateMe(Stage _s){
+    void updateMe(){
         Iterator<Shot> it = shots.iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            s.updateMe(_s);
+            s.updateMe();
             if(s.areYouDead() == true){
                 it.remove();
             }
@@ -81,13 +81,13 @@ class Enemys{
         enemys = new ArrayList<Enemy>();
     }
 
-    void updateMe(Stage _s){
+    void updateMe(){
         Iterator<Enemy> it = enemys.iterator();
         while(it.hasNext()){
             Enemy e = it.next();
-            e.updateMe(_s);
+            e.updateMe();
             e.shot();
-            hit(_s, e);
+            hit(playingStage, e);
             if(e.areYouDead()){
                 it.remove();
             }
@@ -137,11 +137,11 @@ class Items{
         items = new ArrayList<Item>();
     }
 
-    void updateMe(Stage _s){
+    void updateMe(){
         Iterator<Item> it = items.iterator();
         while(it.hasNext()){
             Item i = it.next();
-            i.updateMe(_s);
+            i.updateMe();
             if(i.isOutOfScreen()){
                 it.remove();
             }
@@ -170,11 +170,11 @@ class Particles{
         particles = new ArrayList<Particle>();
     }
     
-    void updateMe(Stage _s){
+    void updateMe(){
         Iterator<Particle> it = particles.iterator();
         while(it.hasNext()){
             Particle p = it.next();
-            p.updateMe(_s);
+            p.updateMe();
             if(p.getCount() > p.getLifeTime()){
                 it.remove();
             }
