@@ -6,8 +6,11 @@ class Stage{
     private Particles particles;
     private Jiki jiki;
     private Particles particles_zenkei;
-    private int count = 0;
-    private boolean isCountUP = true;
+    private UI ui;
+
+    protected boolean isCountUP = true;
+    protected int count = 0;
+    protected AudioPlayer bgm;
 
     private PGraphics buffer;
 
@@ -19,12 +22,16 @@ class Stage{
         particles = new Particles();
         particles_zenkei = new Particles();
         jikiShots = new Shots();
-        count = 700;
+        count = 0;
+        ui = new UI();
 
         buffer = createGraphics(width, height);
+        setBGM("sol_battle047.mp3");
+        bgm.printControls();
     }
 
     void updateMe(){
+
         if(jiki.getHP() <= 0) return;
         particles.updateMe(this);
         enemys.updateMe(this);
@@ -36,7 +43,8 @@ class Stage{
         if(isCountUP){
             count++;
         }
-        enemySpawn();
+        ui.updateMe(this);
+        stageStructure();
     }
 
     void drawMe(){
@@ -53,13 +61,34 @@ class Stage{
         jikiShots.drawMe(buffer);
         enemyShots.drawMe(buffer);
         particles_zenkei.drawMe(buffer);
+        ui.drawMe(buffer);
         
         buffer.endDraw();
+
+        if(jiki.getHP() <= 0){
+            bgm.pause();
+
+            buffer.beginDraw();
+
+                buffer.noStroke();
+                buffer.fill(0, 127);
+                buffer.rect(width / 2, height / 2, width, height);
+                buffer.fill(255);
+                
+                buffer.textSize(16);
+                buffer.text("Game Over", width / 2 - 8 * 4.5, height / 2 - 16);
+
+            buffer.endDraw();
+        }
     }
 
-    //名前がわかりにくい・・・ステージの構成を書くところです（何Fで何の敵がでるか）
-    void enemySpawn(){
+    //名前がわかりにくい・・・ステージの構成を書くところです（何Fで何の敵がでるかとか）
+    void stageStructure(){
 
+    }
+
+    public void setBGM(String bgmFileName){
+        bgm = minim.loadFile(bgmFileName);
     }
 
     public void addEnemy(Enemy e){
@@ -78,29 +107,46 @@ class Stage{
         particles.addParticle(p);
     }
 
+    public void addItem(Item i){
+        items.addItem(i);
+    }
+
+    public void removeEnemyShot(Shot s){
+        enemyShots.removeShot(s);
+    }
+
     void startNewStage(Stage stage){
         stage.jiki = this.jiki;
         playingStage = stage;
     }
 
-    public int getCount(){
-        return count;
-    }
-
+    //以下getter/setter
     public Jiki getJiki(){
         return jiki;
     }
 
-    public boolean getCountUP(){
-        return isCountUP;
+    public AudioPlayer getBGM(){
+        return bgm;
     }
 
-    public void setCountUP(boolean _b){
-        isCountUP = _b;
+    public UI getUI(){
+        return ui;
+    }
+
+    public ArrayList<Shot> getEnemyShots(){
+        return enemyShots.getArray();
+    }
+
+    public ArrayList<Enemy> getEnemys(){
+        return enemys.getArray();
     }
 
     int getEnemyCount(){
         return enemys.getArray().size();
+    }
+
+    int getShotCount(){
+        return enemyShots.getArray().size();
     }
 }
 
@@ -110,7 +156,7 @@ class SampleStage extends Stage{
     }
 
     void enemySpawn(){
-        if(getCount() % 10 == 0 && getEnemyCount() <= 0){
+        if(count % 10 == 0 && getEnemyCount() <= 0){
             addEnemy(new SampleEnemy());
         }
     }
@@ -118,60 +164,145 @@ class SampleStage extends Stage{
 
 class Stage01 extends Stage{
     boolean isMidBossAppeared = false;
+    boolean isBossAppeared = false;
+
+    private String stageBGM = "sol_battle047.mp3";
+    private String bossBGM = "sol_battle046.mp3";
+
     Stage01(){
         super();
+        setBGM(stageBGM);
+        getBGM().setGain(-10f);
+        bgm.loop();
+        count = 10;
     }
 
-    void enemySpawn(){
-        if(getCount() == 30 || getCount() == 60 || getCount() == 90){
+    void stageStructure(){
+        if(count == 30 || count == 60 || count == 90){
             addEnemy(new March01(width - 120, 0));
         }
-        if(getCount() == 60 || getCount() == 90 || getCount() == 120){
+        if(count == 60 || count == 90 || count == 120){
             addEnemy(new March02(width - 180, height));
         }
-        if(getCount() == 180){
+        if(count == 180){
             addEnemy(new Aim01(width, 120));
         }
-        if(getCount() == 300){
+        if(count == 300){
             Aim01 aim01_1 = new Aim01(width, height - 120);
             aim01_1.setHue(205);
             addEnemy(aim01_1);
         }
-        if(getCount() == 400){
+        if(count == 500){
             addEnemy(new Red01(width, height / 2));
         }
-        if(getCount() == 500){
+        if(count == 600){
             addEnemy(new Green01(width, height / 2 - height / 3));
         }
-        if(getCount() == 600){
+        if(count == 700){
             addEnemy(new Blue01(width, height / 2 + height / 3));
         }
-        if(getCount() == 660){
-            if(getCountUP() == true){
-                setCountUP(false);
-            }
-            if(getCountUP() == false && getEnemyCount() == 0){
-                if(!isMidBossAppeared){
-                    addEnemy(new MidBoss01(width, height / 2));
-                    isMidBossAppeared = true;
-                }else{
-                    println("CountRestart");
-                    setCountUP(true);
+        if(count == 760){
+            //ここに来たらいったんカウンタとめる
+            if(isCountUP){
+                isCountUP = false;
+            }else{
+                //他に敵がいなくなったら中ボス出す
+                if(getEnemyCount() == 0 && getShotCount() == 0){
+                    if(!isMidBossAppeared){
+                        Enemy e = new MidBoss01(width, height / 2);
+                        addEnemy(e);
+                        getUI().makeGauge(e);
+                        //中ボス出たフラグ
+                        isMidBossAppeared = true;
+                    }else{
+                        //中ボス出たあとに敵数が0になった=中ボスが倒れたのでカウント再開
+                        println("CountRestart");
+                        isCountUP = true;
+                    }
                 }
             }
         }
-        if(getCount() == 700){
+        
+        if(count == 860){
+            addEnemy(new Missile01(width, height / 7));
+        }
+        if(count == 870){
+            addEnemy(new Missile01(width, height / 7 * 2));
+        }
+        if(count == 880){
+            addEnemy(new Missile01(width, height / 7 * 3));
+        }
+        if(count == 890){
+            addEnemy(new Missile01(width, height / 7 * 4));
+        }
+        //ここにミサイルウェーブもう1個
+
+        if(count == 960){
+            addEnemy(new Fountain01(200, height, radians(-90)));
+        }
+        if(count == 970){
+            addEnemy(new Fountain01(300, height, radians(-90)));
+        }
+        if(count == 980){
+            addEnemy(new Fountain01(400, height, radians(-90)));
+        }
+
+        if(count == 1000 || count == 1030 || count == 1060){
+            addEnemy(new MarchLaser01(width, height - 100));
+        }
+        if(count == 1015 || count == 1045 || count == 1075){
+            addEnemy(new MarchLaser01(width, 100));
+        }
+
+        if(count == 1120){
+            addEnemy(new Fountain01(250, 0, radians(90)));
+        }
+        if(count == 1130){
+            addEnemy(new Fountain01(350, 0, radians(90)));
+        }
+        if(count == 1140){
+            addEnemy(new Fountain01(450, 0, radians(90)));
+        }
+
+        if(count == 1200){
             addEnemy(new Circle01(width, height / 2));
         }
-        if(getCount() == 760){
+        
+        if(count == 1260){
             addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
             addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
         }
-        if(getCount() == 820 || getCount() == 850 || getCount() == 880){
-            addEnemy(new MarchLaser01(width, height - 100));
+
+        if(count == 1400){
+            addEnemy(new Lissajous01(width, height  /2));
         }
-        if(getCount() == 840 || getCount() == 870 || getCount() == 900){
-            addEnemy(new MarchLaser01(width, 100));
+
+        if(count == 1600){
+            //ここに来たらいったんカウンタとめる
+            if(isCountUP){
+                isCountUP = false;
+            }else{
+                //他に敵がいなくなったら中ボス出す
+                if(getEnemyCount() == 0 && getShotCount() == 0){
+                    if(!isBossAppeared){
+                        //音楽を変える
+                        bgm.pause();
+                        setBGM(bossBGM);
+                        getBGM().setGain(-10f);
+                        bgm.loop(0);
+
+                        Enemy e = new Boss_Mauve(width, height / 2);
+                        addEnemy(e);
+                        getUI().makeGauge(e);
+                        //中ボス出たフラグ
+                        isBossAppeared = true;
+                    }else{
+                        //中ボス出たあとに敵数が0になった=中ボスが倒れたのでカウント再開
+                        println("CountRestart");
+                        isCountUP = true;
+                    }
+                }
+            }
         }
     }
 }

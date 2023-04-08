@@ -1,32 +1,38 @@
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public Stage playingStage;
-public UI ui;
 boolean right = false, left = false, up = false, down = false, z = false, slow = false, c = false;
 public Scene scene = Scene.GameScene;
+Minim minim;
+public int defaultHP = 10;
+public float fps = 60.0f;
 
-public enum Scene{
-    TitleScene,
-    GameScene,
-    GameOverScene,
-    GameClearScene
-}
+public PFont kinkakuji;
 
 void setup() {
     size(640, 480);
     background(0);
+    frameRate(fps);
     //smooth();
+    kinkakuji = loadFont("Kinkakuji-Normal-48.vlw");
 
+    minim = new Minim(this);
     playingStage = new Stage01();
-    ui = new UI();
 }
 
 void draw() {
     background(0);
+    
     playingStage.updateMe();
     playingStage.drawMe();
-    ui.drawMe();
 }
 
 void keyPressed(){

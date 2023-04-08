@@ -1,26 +1,35 @@
 class Mover{
-  private boolean isDead = false;
+  protected boolean isDead = false;
 
-  private PVector pos;
-  private PVector vel;
-  private PVector accel;
-  private int count;  //タイマー　寿命計算とかに使う
-  private float size = 4; //当たり判定の半径
-  private color col;
+  protected PVector pos;
+  protected PVector vel;
+  protected PVector accel;
+  protected float rotation;
+  protected int count;  //タイマー　寿命計算とかに使う
+  protected float size = 4; //当たり判定の半径
+  protected color col;
+
+  protected Stage stage;
 
   Mover(float _x, float _y){
     pos = new PVector(_x, _y);
     vel = new PVector(0, 0);
     accel = new PVector(0, 0);
+    rotation = 0;
     col = color(255);
+    stage = playingStage;
   }
 
-  void updateMe(Stage stage){
+  void updateMe(Stage _s){
+    //毎フレstageとるのダサすぎるんだけどこれしないとぬるぽが出るぉ・・・
+    stage = _s;
+
     //制動用のカウンター
     count++;
 
     //移動
     vel.add(accel);
+    vel.rotate(rotation);
     pos.add(vel);
   }
 
@@ -37,15 +46,15 @@ class Mover{
   boolean collision(Mover m){
       float d = dist(pos.x, pos.y, m.pos.x, m.pos.y);
       if(d < (size + m.size)){
-          return true;
+        return true;
       }else{
-          return false;
+        return false;
       }
   }
 
   //画面外判定
   public boolean isOutOfScreen(){
-    if(getX() < 0 - getSize() || getX() > width + getSize() || getY() < 0 - getSize() || getY() > height + getSize()){
+    if(pos.x < 0 - size || pos.x > width + size || pos.y < 0 - size || pos.y > height + size){
       return true;
     }else{
       return false;
@@ -57,10 +66,11 @@ class Mover{
     isDead = true;
   }
 
-  public PVector getPos(){
-    return pos;
+  public boolean areYouDead(){
+    return isDead;
   }
-
+  
+  //ここからgetter / setter
   public float getX(){
     return pos.x;
   }
@@ -68,7 +78,19 @@ class Mover{
   public float getY(){
     return pos.y;
   }
-
+  
+  public color getColor(){
+    return col;
+  }
+  
+  public int getCount(){
+    return count;
+  }
+  
+  public PVector getPos(){
+    return pos;
+  }
+  
   public PVector getVel(){
     return vel;
   }
@@ -81,69 +103,51 @@ class Mover{
     return size;
   }
 
-  public int getCount(){
-    return count;
-  }
-
-  public color getColor(){
-    return col;
-  }
-
-  public boolean areYouDead(){
-    return isDead;
-  }
-
-  public void setColor(color _c){
-    col = _c;
-  }
-
-  public void setPos(PVector _p){
-    pos = _p;
-  }
-
   public void setPos(float _x, float _y){
     pos = new PVector(_x, _y);
-  }
-
-  public void setVel(PVector _v){
-    vel = _v;
   }
 
   public void setVel(float _x, float _y){
     vel = new PVector(_x, _y);
   }
 
-  public void setAccel(PVector _a){
-    accel = _a;
-  }
-
-  public void Accel(float _x, float _y){
+  public void setAccel(float _x, float _y){
     accel = new PVector(_x, _y);
   }
-
-
-  public void setSize(float _s){
+  
+  public void setSize(int _s){
     size = _s;
   }
+
+  public void setColor(color _c){
+    col = _c;
+  }
+
+  public void setColor(float r, float g, float b){
+    col = color(r, g, b);
+  }
+  
 }
 
 class Machine extends Mover{
-  private int HP;
+  protected int HP;
   
   Machine(float _x, float _y, int _HP){
     super(_x, _y);
     HP = _HP;
   }
   
-  void updateMe(Stage stage){
-    super.updateMe(stage);
+  @Override
+  void updateMe(Stage _s){
+    super.updateMe(_s);
   }
 
+  @Override
   void drawMe(PGraphics pg){
     pg.beginDraw();
-      pg.fill(getColor());
-      pg.stroke(getColor());
-      easyTriangle(pg, getPos(), radians(180), getSize());
+      pg.fill(col);
+      pg.stroke(col);
+      easyTriangle(pg, pos, radians(180), size);
     pg.endDraw();
   }
 
@@ -153,5 +157,6 @@ class Machine extends Mover{
 
   void HPDown(int down){
     HP -= down;
+    if(HP <= 0){kill();}
   }
 }

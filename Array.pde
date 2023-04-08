@@ -5,11 +5,11 @@ class Movers{
         movers = new ArrayList<Mover>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Mover> it = movers.iterator();
         while(it.hasNext()){
             Mover m = it.next();
-            m.updateMe(stage);
+            m.updateMe(_s);
             if(m.areYouDead()){
                 it.remove();
             }
@@ -32,7 +32,7 @@ class Movers{
         movers.remove(m);
     }
 
-    public ArrayList<Mover> getList(){
+    public ArrayList<Mover> getArray(){
         return movers;
     }
 }
@@ -44,11 +44,11 @@ class Shots{
         shots = new ArrayList<Shot>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Shot> it = shots.iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            s.updateMe(stage);
+            s.updateMe(_s);
             if(s.areYouDead() == true){
                 it.remove();
             }
@@ -69,7 +69,7 @@ class Shots{
         shots.remove(s);
     }
 
-    ArrayList<Shot> getShots(){
+    ArrayList<Shot> getArray(){
         return shots;
     }
 }
@@ -81,18 +81,14 @@ class Enemys{
         enemys = new ArrayList<Enemy>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Enemy> it = enemys.iterator();
         while(it.hasNext()){
             Enemy e = it.next();
-            e.updateMe(stage);
-            e.shot(stage);
-            hit(stage, e);
+            e.updateMe(_s);
+            e.shot();
+            hit(_s, e);
             if(e.areYouDead()){
-                if(e.isOutOfScreen() == false){
-                    rectParticle r = new rectParticle(e.getPos().x, e.getPos().y, e.getColor());
-                    stage.particles.addParticle(r);
-                }
                 it.remove();
             }
         }
@@ -105,21 +101,17 @@ class Enemys{
     }
 
     void hit(Stage stage, Enemy enemy){
-        Iterator<Shot> it = stage.jikiShots.getShots().iterator();
+        Iterator<Shot> it = stage.jikiShots.getArray().iterator();
         while(it.hasNext()){
             Shot s = it.next();
-            if(s.collision(enemy)){
-                if(s.isHittable){
-                    //被弾エフェクト
-                    rectParticle r1 = new rectParticle(enemy.getPos().x, enemy.getPos().y, s.col);
-                    stage.particles.addParticle(r1);
-
-                    if(s.isDeletable){
-                        s.kill();
-                    }
+            if(s.collision(enemy) && s.isHittable){
+                enemy.playHitSound();
+                if(s.isDeletable){
+                    s.kill();
+                }
+                if(!enemy.invincible){
                     enemy.HPDown(1);
                 }
-                continue;
             }
         }
     }
@@ -145,12 +137,12 @@ class Items{
         items = new ArrayList<Item>();
     }
 
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Item> it = items.iterator();
         while(it.hasNext()){
             Item i = it.next();
-            i.updateMe(stage);
-            if(i.getPos().x < 0 - i.getSize() || i.getPos().x > width + i.getSize() || i.getPos().y < 0 - i.getSize() || i.getPos().y > height + i.getSize()){
+            i.updateMe(_s);
+            if(i.isOutOfScreen()){
                 it.remove();
             }
         }
@@ -178,12 +170,12 @@ class Particles{
         particles = new ArrayList<Particle>();
     }
     
-    void updateMe(Stage stage){
+    void updateMe(Stage _s){
         Iterator<Particle> it = particles.iterator();
         while(it.hasNext()){
             Particle p = it.next();
-            p.updateMe(stage);
-            if(p.getCount() > p.lifeTime){
+            p.updateMe(_s);
+            if(p.getCount() > p.getLifeTime()){
                 it.remove();
             }
         }

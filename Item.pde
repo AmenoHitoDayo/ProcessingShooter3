@@ -5,9 +5,10 @@ class Item extends Mover{
         RP = R;
         GP = G;
         BP = B;
-        setSize(8);
+        size = 8;
     }
 
+    @Override
     void drawMe(PGraphics pg){
         pg.beginDraw();
 
@@ -19,27 +20,28 @@ class Item extends Mover{
             
             pg.noStroke();
             pg.fill(255, 0, 0, RP);
-            pg.ellipse(getX() + 3 * cos(radians(getCount())), getY() + 3 * sin(radians(getCount())), getSize(), getSize());
+            pg.ellipse(pos.x + 3 * cos(radians(count)), pos.y + 3 * sin(radians(count)), size, size);
 
             pg.noStroke();
             pg.fill(0, 255, 0, GP);
-            pg.ellipse(getX() + 3 * cos(radians(getCount() + 120)), getY() + 3 * sin(radians(getCount() + 120)), getSize(), getSize());
+            pg.ellipse(pos.x + 3 * cos(radians(count + 120)), pos.y + 3 * sin(radians(count + 120)), size, size);
 
             pg.noStroke();
             pg.fill(0, 0, 255, BP);
-            pg.ellipse(getX() + 3 * cos(radians(getCount() + 240)), getY() + 3 * sin(radians(getCount() + 240)), getSize(), getSize());
+            pg.ellipse(pos.x + 3 * cos(radians(count + 240)), pos.y + 3 * sin(radians(count + 240)), size, size);
 
             pg.noStroke();
-            pg.fill(255);
-            pg.ellipse(getX(), getY(), 6, 6);
+            pg.fill(255, 127);
+            pg.ellipse(pos.x, pos.y, 6, 6);
 
         pg.pop();
         
         pg.endDraw();
     }
 
-    void updateMe(Stage stage){
-        super.updateMe(stage);
-        setVel(PVector.sub(stage.jiki.getPos(), this.getPos()).normalize().mult(5));
+    @Override 
+    void updateMe(Stage _s){
+        super.updateMe(_s);
+        vel = (PVector.sub(stage.getJiki().getPos(), pos).normalize().mult(5));
     }
 }
