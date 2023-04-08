@@ -130,7 +130,7 @@ class Mover{
 }
 
 class Machine extends Mover{
-  private int HP;
+  protected int HP;
   
   Machine(float _x, float _y, int _HP){
     super(_x, _y);

@@ -109,7 +109,9 @@ class Enemys{
                 if(s.isDeletable){
                     s.kill();
                 }
-                enemy.HPDown(1);
+                if(!enemy.invincible){
+                    enemy.HPDown(1);
+                }
             }
         }
     }

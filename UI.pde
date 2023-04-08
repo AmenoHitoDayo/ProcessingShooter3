@@ -16,6 +16,7 @@ class UI{
         drawReleaseWaitGauge();
         drawEnemyCount();
         drawTekidanCount();
+        drawScoreCount();
         if(isGaugeUsing == true && gauge.getBaseEnemy() != null){
             gauge.drawMe(_pg);
         }
@@ -93,6 +94,18 @@ class UI{
             }
             pg.textFont(kinkakuji, 16);
             pg.text("Shots : " + stage.getShotCount(), 0, 16 * 3);
+        pg.endDraw();
+    }
+
+    void drawScoreCount(){
+        pg.beginDraw();
+            if(stage.jiki.getX() < 32 && stage.jiki.getY() < 16 * 4){
+                pg.fill(255, 127);
+            }else{
+                pg.fill(255);
+            }
+            pg.textFont(kinkakuji, 16);
+            pg.text("Score : " + stage.getJiki().getScore(), 0, 16 * 4);
         pg.endDraw();
     }
 

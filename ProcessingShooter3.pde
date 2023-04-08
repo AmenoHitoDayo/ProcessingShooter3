@@ -30,6 +30,7 @@ void setup() {
 
 void draw() {
     background(0);
+    
     playingStage.updateMe();
     playingStage.drawMe();
 }

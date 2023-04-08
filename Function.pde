@@ -91,3 +91,8 @@ boolean lineCollision2(float cx, float cy, float r, float x1, float y1, float x2
         return false;
     }
 }
+
+PVector vectorFromMagAngle(float mag, float angle){
+    PVector v = new PVector(mag * cos(angle), mag * sin(angle));
+    return v;
+}

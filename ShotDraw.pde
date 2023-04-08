@@ -12,13 +12,16 @@ public void orbShotDraw(PGraphics pg, Shot shot){
 }
 
 public void ovalShotDraw(PGraphics pg, Shot shot){
+    float lineWeight = shot.getSize() / 3;
+
     pg.beginDraw();
         pg.push();
             pg.blendMode(shot.getBlendStyle());
             pg.translate(shot.getX(), shot.getY());
             pg.rotate(shot.getVel().heading());
-            pg.noStroke();
-            pg.fill(shot.getColor());
+            pg.strokeWeight(lineWeight);
+            pg.stroke(shot.getColor());
+            pg.fill(shot.getColor(), 152);
             pg.ellipse(0, 0, shot.getSize() * 3, shot.getSize() * 2);
         pg.pop();
     pg.endDraw();

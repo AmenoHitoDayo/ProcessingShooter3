@@ -31,7 +31,7 @@ class Item extends Mover{
             pg.ellipse(pos.x + 3 * cos(radians(count + 240)), pos.y + 3 * sin(radians(count + 240)), size, size);
 
             pg.noStroke();
-            pg.fill(255);
+            pg.fill(255, 127);
             pg.ellipse(pos.x, pos.y, 6, 6);
 
         pg.pop();

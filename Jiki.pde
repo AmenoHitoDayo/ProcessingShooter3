@@ -6,17 +6,19 @@ class Jiki extends Machine{
   private int absorbFrame = 60;
   private int absorbCount = 0;
   private int absorbArea = 0;
-  private int absorbMaxArea = 150;
+  private int absorbMaxArea = 64;
   private int releaseWaitFrame = 30;
   private int releaseWaitCount = 0;
   private float RedP, GreenP, BlueP;
   private boolean isRelease = false;  //開放しているかどうか
   private float absorbPower = 0;  //吸収は連打できるようにしない。時間で吸収用のパワが増える
+  private int totalItem = 0;  //集めたアイテムの総数　特定個でエクステンド
 
   private AudioPlayer shotSound;
   private AudioPlayer hitSound;
   private AudioPlayer absorbSound;
   private AudioPlayer itemSound;
+  private AudioPlayer extendSound;
 
   Jiki(){
     super(width / 2, height / 2, defaultHP);
@@ -34,6 +36,8 @@ class Jiki extends Machine{
     absorbSound.setGain(-10f);
     itemSound = minim.loadFile("魔王魂 効果音 ジッポ-開ける音.mp3");
     itemSound.setGain(-10f);
+    extendSound = minim.loadFile("maou_se_magical14.mp3");
+    extendSound.setGain(-10f);
   }
 
   @Override
@@ -234,6 +238,14 @@ class Jiki extends Machine{
     while(it3.hasNext()){
       Item i = it3.next();
       if(i.collision(this)){
+        totalItem++;
+
+        //色アイテム特定数取得でエクステンド
+        if(totalItem % 255 == 0){
+          extendSound.play(0);
+          HP++;
+        }
+
         itemSound.play(0);
         getColorPoint(i.RP / 30, i.GP / 30, i.BP / 30);
         it3.remove();
@@ -300,10 +312,14 @@ class Jiki extends Machine{
     }
   }
 
-  void getColorPoint(float R, float G, float B){
+  public void getColorPoint(float R, float G, float B){
     RedP = min(255, RedP + R);
     GreenP = min(255, GreenP + G);
     BlueP = min(255, BlueP + B);
+  }
+
+  public int getScore(){
+    return totalItem;
   }
 
   boolean isInvincible(){

@@ -10,9 +10,9 @@ class Stage{
 
     protected boolean isCountUP = true;
     protected int count = 0;
+    protected AudioPlayer bgm;
 
     private PGraphics buffer;
-    private AudioPlayer bgm;
 
     Stage(){
         enemyShots = new Shots();
@@ -31,7 +31,6 @@ class Stage{
     }
 
     void updateMe(){
-        if(!bgm.isPlaying() && jiki.getHP() > 0)bgm.loop();
 
         if(jiki.getHP() <= 0) return;
         particles.updateMe(this);
@@ -165,6 +164,7 @@ class SampleStage extends Stage{
 
 class Stage01 extends Stage{
     boolean isMidBossAppeared = false;
+    boolean isBossAppeared = false;
 
     private String stageBGM = "sol_battle047.mp3";
     private String bossBGM = "sol_battle046.mp3";
@@ -173,7 +173,8 @@ class Stage01 extends Stage{
         super();
         setBGM(stageBGM);
         getBGM().setGain(-10f);
-        count = 0;
+        bgm.loop();
+        count = 10;
     }
 
     void stageStructure(){
@@ -220,45 +221,88 @@ class Stage01 extends Stage{
                     }
                 }
             }
-            
         }
-        if(count == 800){
-            addEnemy(new Circle01(width, height / 2));
-        }
-        /*
-        if(count == 760){
-            addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
-            addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
-        }
-        */
-        if(count == 880 || count == 910 || count == 940){
-            addEnemy(new MarchLaser01(width, height - 100));
-        }
-        if(count == 900 || count == 930 || count == 960){
-            addEnemy(new MarchLaser01(width, 100));
-        }
-        if(count == 960){
+        
+        if(count == 860){
             addEnemy(new Missile01(width, height / 7));
         }
-        if(count == 970){
+        if(count == 870){
             addEnemy(new Missile01(width, height / 7 * 2));
         }
-        if(count == 980){
+        if(count == 880){
             addEnemy(new Missile01(width, height / 7 * 3));
         }
-        if(count == 990){
+        if(count == 890){
             addEnemy(new Missile01(width, height / 7 * 4));
         }
         //ここにミサイルウェーブもう1個
 
-        if(count == 1160){
-            addEnemy(new Fountain01(200, height));
+        if(count == 960){
+            addEnemy(new Fountain01(200, height, radians(-90)));
         }
-        if(count == 1170){
-            addEnemy(new Fountain01(300, height));
+        if(count == 970){
+            addEnemy(new Fountain01(300, height, radians(-90)));
         }
-        if(count == 1180){
-            addEnemy(new Fountain01(400, height));
+        if(count == 980){
+            addEnemy(new Fountain01(400, height, radians(-90)));
+        }
+
+        if(count == 1000 || count == 1030 || count == 1060){
+            addEnemy(new MarchLaser01(width, height - 100));
+        }
+        if(count == 1015 || count == 1045 || count == 1075){
+            addEnemy(new MarchLaser01(width, 100));
+        }
+
+        if(count == 1120){
+            addEnemy(new Fountain01(250, 0, radians(90)));
+        }
+        if(count == 1130){
+            addEnemy(new Fountain01(350, 0, radians(90)));
+        }
+        if(count == 1140){
+            addEnemy(new Fountain01(450, 0, radians(90)));
+        }
+
+        if(count == 1200){
+            addEnemy(new Circle01(width, height / 2));
+        }
+        
+        if(count == 1260){
+            addEnemy(new ShotGun01(width, 120, radians(180 - 30)));
+            addEnemy(new ShotGun01(width, height - 120, radians(180 + 30)));
+        }
+
+        if(count == 1400){
+            addEnemy(new Lissajous01(width, height  /2));
+        }
+
+        if(count == 1600){
+            //ここに来たらいったんカウンタとめる
+            if(isCountUP){
+                isCountUP = false;
+            }else{
+                //他に敵がいなくなったら中ボス出す
+                if(getEnemyCount() == 0 && getShotCount() == 0){
+                    if(!isBossAppeared){
+                        //音楽を変える
+                        bgm.pause();
+                        setBGM(bossBGM);
+                        getBGM().setGain(-10f);
+                        bgm.loop(0);
+
+                        Enemy e = new Boss_Mauve(width, height / 2);
+                        addEnemy(e);
+                        getUI().makeGauge(e);
+                        //中ボス出たフラグ
+                        isBossAppeared = true;
+                    }else{
+                        //中ボス出たあとに敵数が0になった=中ボスが倒れたのでカウント再開
+                        println("CountRestart");
+                        isCountUP = true;
+                    }
+                }
+            }
         }
     }
 }

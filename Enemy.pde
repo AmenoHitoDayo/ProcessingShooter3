@@ -2,6 +2,9 @@ class Enemy extends Machine{
     private AudioPlayer deadSound;
     private AudioPlayer hitSound;
 
+    //これtrueにしてたら弾があたらない
+    protected boolean invincible = false;
+
     Enemy(float _x, float _y, int _HP){
         super(_x, _y, _HP);
         size = 16;
@@ -275,9 +278,9 @@ class ShotGun01 extends Enemy{
                 Shot shot = new Shot(getX(), getY(), 15);
                 float angle = shotAngle + radians(random(-bure, bure));
                 shot.setVelocityFromSpeedAngle(3 + random(-1, 1), angle);
-                shot.setSize(6);
-                shot.setColor(HSVtoRGB(90, 120, 255));
-                shot.setBlendStyle(ADD);
+                shot.setSize(4);
+                shot.setColor(HSVtoRGB(random(360), 50, 255));
+                shot.setBlendStyle(LIGHTEST);
                 shot.shotStyle = ShotStyle.Oval;
                 stage.addEnemyShot(shot);
             }
@@ -515,13 +518,14 @@ class Missile01 extends Enemy{
 
 //重力落下噴水
 class Fountain01 extends Enemy{
-    private float shotAngle = radians(-90);
+    private float shotAngle;
     private float bure = 7.5;
-    Fountain01(float _x, float _y){
+    Fountain01(float _x, float _y, float _angle){
         super(_x, _y, 3);
         size = 16;
         col = HSVtoRGB(215, 255, 255);
-        vel = new PVector(0, -1);
+        vel = new PVector(1 * cos(_angle), 1 * sin(_angle));
+        shotAngle = _angle;
     }
 
     @Override
@@ -531,7 +535,7 @@ class Fountain01 extends Enemy{
             vel = new PVector(0, 0);
         }
         if(count == 90){
-            vel = new PVector(0, 1);
+            kill();
         }
     }
 
@@ -548,6 +552,17 @@ class Fountain01 extends Enemy{
     void shot(){
         if(count == 60){
             //噴水
+            ArrayList<Shot> shots = nWay(pos, 10, 6, shotAngle, radians(5));
+            for(Shot s : shots){
+                s.setAccel(0, 0.098);
+                s.setSize(6);
+                s.setColor(red(col) + random(-20, 40), green(col) + random(-20, 40), blue(col) + random(40));
+                s.setBlendStyle(LIGHTEST);
+                s.shotStyle = ShotStyle.Oval;
+                stage.addEnemyShot(s);
+            }
+
+            /*
             for(int i = 0; i < 30; i++){
                 Shot shot = new Shot(getX(), getY(), 15);
                 float angle = shotAngle + radians(random(-bure, bure));
@@ -559,6 +574,7 @@ class Fountain01 extends Enemy{
                 shot.shotStyle = ShotStyle.Oval;
                 stage.addEnemyShot(shot);
             }
+            */
         }
     }
 }
@@ -600,6 +616,60 @@ class UM02Fae extends Enemy{
     }
 }
 
+//落下弾をまき散らしながら突っ込んでくるやつ
+class ShootingStar extends Enemy{
+    ShootingStar(float _x, float _y){
+        super(_x, _y, 5);
+    }
+}
+
+class Lissajous01 extends Enemy{
+    Lissajous01(float _x, float _y){
+        super(_x, _y, 50);
+        size = 24;
+        col = color(64, 127, 255);
+        vel = new PVector(-3, 0);
+        invincible = true;
+    }
+
+    @Override
+    void updateMe(Stage _s){
+        super.updateMe(_s);
+        if(count < 30)return;
+        if(count == 30){
+            invincible = false;
+            vel = new PVector(0, 0);
+        }
+        if(count > 1200){
+            vel = new PVector(1, 0);
+        }
+    }
+
+    @Override
+    void shot(){
+        if(count < 30)return;
+
+        float angle = radians(count * 7) % TWO_PI;
+        float radius = 50f;
+        PVector liss = new PVector(pos.x + radius * cos(3 * angle), pos.y + radius * sin(2 * angle));
+        Shot s = new Shot(liss.x, liss.y, 30);
+        s.setColor(color(0, 255, 255));
+        s.setShotStyle(ShotStyle.Oval);
+        s.setSize(4);
+        s.setVel(0, 0);
+        s.setAccelerationFromAccelAngle(0.01, angle);
+        s.addCue(new ShotMoveCue(
+            60,
+            vectorFromMagAngle(2, angle),
+            new PVector(0, 0),
+            map(angle, 0, TWO_PI, -0.03, 0.03),
+            s.getColor()
+        ));
+        s.parent = this;
+        stage.addEnemyShot(s);
+    }
+}
+
 //撃破時にビットが居残りすることがあるっぽい？
 class MidBoss01 extends Enemy{
     float bitRadius = 0;
@@ -610,20 +680,26 @@ class MidBoss01 extends Enemy{
         size = 32;
         col = color(255, 255, 255);
         vel = new PVector(-5, 0);
+        invincible = true;
     }
 
     @Override
     void updateMe(Stage _s){
         super.updateMe(_s);
 
+        if(count < 30) return;
+
         if(count == 30){
+            invincible = false;
             vel = (new PVector(0, 0));
         }
 
         //積み防止というかあれ
-        if(count > 1000){
+        if(count > 1500){
             kill();
         }
+
+        vel = new PVector(0, cos(radians(count - 30)) * 2);
     }
 
     @Override
@@ -750,21 +826,22 @@ class MidBoss01 extends Enemy{
 
 class Boss_Mauve extends Enemy{
     private int keitai = 0;
+    float aimAngle = 0; //射角用の
     Boss_Mauve(float _x, float _y){
-        super(_x, _y, 100);
+        super(_x, _y, 500);
         size = 32;
         col = color(#915da3);
-        vel = new PVector(-3, 0);
+        vel = new PVector(-5, 0);
     }
 
     @Override
     void updateMe(Stage _s){
+        super.updateMe(_s);
         switch(keitai){
             case 0:
+                if(count < 30) return;
                 if(count == 30){
                     vel = new PVector(0, 0);
-                }else if(count > 30){
-
                 }
             break;
         }
@@ -774,9 +851,57 @@ class Boss_Mauve extends Enemy{
     void shot(){
         switch(keitai){
             case 0:
-                if(count <= 30)return;
-                
+                if(count < 30)return;
+                formOne();
             break;
+        }
+    }
+
+    //第一形態のショット
+    void formOne(){
+        int baseCount = (count - 30) % 120;
+
+        if(baseCount == 0 || baseCount == 20){
+            PVector dirToJiki = new PVector(stage.getJiki().getX() - pos.x, stage.getJiki().getY() - pos.y);
+            aimAngle = dirToJiki.heading();
+            println(aimAngle);
+        }
+        if(baseCount < 20){
+            float angle = map(baseCount, 0, 20, radians(30), radians(300));
+            for(int i = 0; i < 3; i++){
+                Shot s = new Shot(pos.x + cos(angle) * 50, pos.y + sin(angle) * 180);
+                s.setColor(col);
+                s.setShotStyle(ShotStyle.Glow);
+                s.setBlendStyle(LIGHTEST);
+                s.setSize(6);
+                s.setVelocityFromSpeedAngle(3 + 0.25 * i, aimAngle);
+                stage.addEnemyShot(s);
+            }
+        }
+        if(baseCount > 30 && baseCount < 50){
+            float angle = map(baseCount, 30, 50, radians(330), radians(60));
+            for(int i = 0; i < 3; i++){
+                Shot s = new Shot(pos.x + cos(angle) * 50, pos.y + sin(angle) * 180);
+                s.setColor(col);
+                s.setShotStyle(ShotStyle.Glow);
+                s.setBlendStyle(LIGHTEST);
+                s.setSize(6);
+                s.setVelocityFromSpeedAngle(3 + 0.25 * i, aimAngle);
+                stage.addEnemyShot(s);
+            }
+        }
+        if(baseCount > 60 && baseCount < 120 && baseCount % 10 == 0){
+            float angle = map(baseCount, 60, 90, radians(90), radians(270));
+            PVector p = new PVector(pos.x + 30 * cos(random(TWO_PI)), pos.y + 30 * sin(random(TWO_PI)));
+            for(int i = 0; i < 5; i++){
+                ArrayList<Shot> shots = nWay(p, 3, 2 + 0.5 * i, angle, radians(20));
+                for(Shot s : shots){
+                    s.setSize(4);
+                    s.setColor(HSVtoRGB(240, 100, 255));
+                    s.setDelay(30);
+                    stage.addEnemyShot(s);
+                }
+            }
         }
     }
 }

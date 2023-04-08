@@ -351,7 +351,7 @@ class JikiRockOnShot extends Shot{
     }
 
     void homing(){
-        //ターゲットが死んでると暴走するっぽい(解決)
+        //ターゲットが死んでると暴走するっぽい(解決...?)
         //追尾が弱くて撃ち損な感じがあるので、追尾対象がなくなったら追尾対象探し直しとかするべきかと　
         float angle = new PVector(target.getX() - pos.x, target.getY() - pos.y).heading();
         if(angle > PI){
@@ -449,7 +449,7 @@ class JikiBlueLaser extends Shot{
         super(_x, _y, 64);
         vel = (new PVector(10, 0));
         accel = (new PVector(0.1, 0));
-        col = (color(64, 64, 255, 128));
+        col = (color(64, 64, 255, 180));
         setDeletable(false);
         setHittable(true);
         setBlendStyle(BLEND);
