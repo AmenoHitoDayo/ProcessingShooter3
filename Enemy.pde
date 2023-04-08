@@ -536,7 +536,7 @@ class MarchLaser01 extends Enemy{
                 LaserShot laser = new LaserShot(pos.x, pos.y, 35, 8);
                 laser.col = (col);
                 laser.setVelocityFromSpeedAngle(3, radians(45) + radians(90) * i);
-                laser.setBlendStyle(SCREEN);
+                laser.setBlendStyle(BLEND);
                 playingStage.addEnemyShot(laser);
             }
         }
@@ -968,6 +968,7 @@ class Boss_Mauve extends Enemy{
                 s.setBlendStyle(LIGHTEST);
                 s.setSize(6);
                 s.setVelocityFromSpeedAngle(3 + 0.25 * i, aimAngle);
+                s.rotation = -0.01;
                 playingStage.addEnemyShot(s);
             }
         }
@@ -980,6 +981,7 @@ class Boss_Mauve extends Enemy{
                 s.setBlendStyle(LIGHTEST);
                 s.setSize(6);
                 s.setVelocityFromSpeedAngle(3 + 0.25 * i, aimAngle);
+                s.rotation = 0.01;
                 playingStage.addEnemyShot(s);
             }
         }
@@ -990,6 +992,7 @@ class Boss_Mauve extends Enemy{
                 ArrayList<Shot> shots = nWay(p, 3, 2 + 0.5 * i, angle, radians(20));
                 for(Shot s : shots){
                     s.setSize(4);
+                    s.setAccel(-0.049, 0);
                     s.setColor(HSVtoRGB(240, 100, 255));
                     s.setDelay(30);
                     playingStage.addEnemyShot(s);

@@ -277,12 +277,14 @@ class Stage01 extends Stage{
             addEnemy(new Fountain01(400, height, radians(-90)));
         }
 
+
         if(count == 1175 || count == 1205 || count == 1235){
             addEnemy(new MarchLaser01(width, height - 100));
         }
         if(count == 1200 || count == 1230 || count == 1260){
             addEnemy(new MarchLaser01(width, 100));
         }
+        
 
         if(count == 1215){
             addEnemy(new Fountain01(250, 0, radians(90)));

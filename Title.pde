@@ -3,25 +3,29 @@ class Title{
     ArrayList<Particle> particles;
 
     PGraphics buffer;
+    PVector pos;
     int count = 0;
 
     Title(){
         particles = new ArrayList<Particle>();
-
+        refreshPos();
         buffer = createGraphics(width, height);
     }
 
     public void updateMe(){
+
         if(count % 10 == 0){
             GlowBallParticle gp = new GlowBallParticle(random(width), -100);
             particles.add(gp);
         }
+
         Iterator<Particle> it = particles.iterator();
         while(it.hasNext()){
             Particle p = it.next();
             p.updateMe();
             if(p.areYouDead())it.remove();
         }
+
         count++;
     }
 
@@ -36,6 +40,7 @@ class Title{
             p.drawMe(buffer);
         }
 
+        drawArrow();
         drawMoji();
     }
 
@@ -44,7 +49,7 @@ class Title{
 
         buffer.push();
 
-        buffer.textAlign(CENTER);
+        buffer.textAlign(CENTER, CENTER);
         buffer.textFont(kinkakuji);
 
         buffer.textSize(64);
@@ -61,11 +66,54 @@ class Title{
         buffer.endDraw();
     }
 
+    void drawArrow(){
+        buffer.beginDraw();
+        buffer.fill(255);
+        buffer.endDraw();
+
+        easyTriangle(buffer, pos, 0, 16);
+        
+        buffer.beginDraw();
+        buffer.fill(0);
+        buffer.ellipse(pos.x, pos.y, 8, 8);
+
+        buffer.endDraw();
+    }
+
+    void refreshPos(){
+        if(cursorNum < 0)cursorNum = 1;
+        if(cursorNum > 1)cursorNum = 0;
+
+        switch(cursorNum){
+            case 0:
+                pos = new PVector(width / 2 - 96, height / 2 + 64);
+                break;
+            case 1:
+                pos = new PVector(width / 2 - 96, height / 2 + 128);
+                break;
+        }
+    }
+
     void keyPressed(){
         if(key == 'z' || key == 'Z'){
-            particles.clear();
-            playingStage = new Stage01();
-            scene = Scene.GameScene;
+            if(cursorNum == 0){
+                particles.clear();
+                playingStage = new Stage01();
+                scene = Scene.GameScene;
+            }else if(cursorNum == 1){
+                exit();
+            }
+        }
+
+        if(key == 'w' || key == 'W' || keyCode == UP){
+            cursorNum--;
+            refreshPos();
+        }
+
+        if(key == 's' || key == 'S' || keyCode == DOWN){
+            println("/o/");
+            cursorNum++;
+            refreshPos();
         }
     }
 }
