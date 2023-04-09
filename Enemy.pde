@@ -898,7 +898,7 @@ class Boss_Mauve extends Enemy{
     Boss_Mauve(float _x, float _y){
         super(_x, _y, 500);
         size = 32;
-        col = color(#915da3);
+        col = color(#8d64aa);
         vel = new PVector(-5, 0);
         invincible = true;
         keitai = 0;
@@ -1020,7 +1020,7 @@ class Boss_Mauve extends Enemy{
         if(HP < maxHP / 3){formChange();}
 
         if(baseCount == 60){
-            PVector p = new PVector(width - 100 - random(-20, 20), random(64, height - 64));
+            PVector p = new PVector(width - 100 - random(-20, 20), playingStage.getJiki().getPos().y);
             vel = makeVectorForPointSecond(pos, p, 60);
         }else if(baseCount % 120 == 0){
             setVel(0, 0);

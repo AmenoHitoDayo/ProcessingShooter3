@@ -19,6 +19,7 @@ class Jiki extends Machine{
   private AudioPlayer absorbSound;
   private AudioPlayer itemSound;
   private AudioPlayer extendSound;
+  private AudioPlayer releaseSound;
 
   private Stage stage;
 
@@ -42,8 +43,10 @@ class Jiki extends Machine{
     absorbSound.setGain(-10f);
     itemSound = minim.loadFile("魔王魂 効果音 ジッポ-開ける音.mp3");
     itemSound.setGain(-10f);
-    extendSound = minim.loadFile("maou_se_magical14.mp3");
+    extendSound = minim.loadFile("maou_se_magical01.mp3");
     extendSound.setGain(-10f);
+    releaseSound = minim.loadFile("maou_se_magical14.mp3");
+    releaseSound.setGain(-10f);
   }
 
   void updateMe(Stage _s){
@@ -297,6 +300,7 @@ class Jiki extends Machine{
       }
     }else{
       if(x && canRelease()){
+        releaseSound.play(0);
         releaseWaitCount = count + releaseWaitFrame;
         isRelease = true;
       }

@@ -119,8 +119,8 @@ class Stage{
     }
 
     void endStage(){
-        //弾・敵・パーティクル・アイテム殺す
         //クリア画面へ移行
+        clearJingle.play(0);
         scene = Scene.GameClearScene;
         finalScore = jiki.totalItem;
         bgm.pause();
