@@ -28,8 +28,10 @@ class Stage{
 
         buffer = createGraphics(width, height);
         setBGM("sol_battle047.mp3");
+        
         clearJingle = minim.loadFile("sol_fanfare002.mp3");
         clearJingle.setGain(-10f);
+        
         bgm.printControls();
     }
 
@@ -120,6 +122,7 @@ class Stage{
         //弾・敵・パーティクル・アイテム殺す
         //クリア画面へ移行
         scene = Scene.GameClearScene;
+        finalScore = jiki.totalItem;
         bgm.pause();
     }
 
@@ -339,8 +342,10 @@ class Stage01 extends Stage{
             }
         }
 
-        if(count > 2000){
-            endStage();
+        if(count > 1800){
+            if(getEnemyCount() == 0 && getShotCount() == 0){
+                endStage();
+            }
         }
     }
 }

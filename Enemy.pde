@@ -786,7 +786,7 @@ class MidBoss01 extends Enemy{
         }
 
         //ビット制御
-        //クソ読みづらいんで、あとで各ビット毎の制動関数作って呼びつけるのがいいと思う。
+        //読みづらいんで、あとで各ビット毎の制動関数作って呼びつけるのがいいと思う。
         if(count > 60){
             ctrlRed();
             ctrlYellow();
@@ -1062,7 +1062,7 @@ class Boss_Mauve extends Enemy{
         }else if(baseCount > 60 && baseCount < 120 && baseCount % 3 == 0){
             float angle = map(baseCount, 60, 120, 0, TWO_PI);
             for(int i = 0; i < 2; i++){
-                Shot l = new Shot(pos.x, pos.y);
+                LaserShot l = new LaserShot(pos.x, pos.y, 48, 2.5);
                 l.setSize(8);
                 l.setShotStyle(ShotStyle.Rect);
                 l.setVelocityFromSpeedAngle(2, angle + TWO_PI / 2 * i);

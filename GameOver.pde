@@ -12,7 +12,7 @@ void gameOver(){
             fill(255);
             textSize(48);
             text("Game Over", width / 2, height / 2);
-            textSize(24);
+            textSize(16);
             text("Zキーでタイトルにもどります", width / 2, height / 2 + 52);
         pop();
         isGameOverAppeard = true;
@@ -39,6 +39,8 @@ void gameClear(){
         textSize(48);
         text("Game Clear!", width / 2, height / 2);
         textSize(24);
+        text("Score : " + finalScore, width / 2, height / 2 + 32);
+        textSize(16);
         text("Zキーでタイトルにもどります", width / 2, height / 2 + 52);
     pop();
 }

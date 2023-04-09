@@ -14,6 +14,7 @@ public Scene scene = Scene.TitleScene;
 Minim minim;
 public int defaultHP = 10;
 public float fps = 60.0f;
+public int finalScore = 0;
 
 public PFont kinkakuji;
 

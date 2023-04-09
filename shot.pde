@@ -305,6 +305,23 @@ class LaserShot extends Shot{
             pg.rect(0, 0, leng, wid * 2, wid / 2);
         pg.pop();
 
+        /*
+        //当たり判定確認用
+        pg.strokeWeight(0.5);
+        pg.stroke(255);
+        pg.fill(255, 32);
+        float angle = vel.heading();
+        //なんかいfor文を回すか
+        int kurikaeshi = floor((leng - wid) / wid);
+        for(int i = 1; i <= kurikaeshi; i++){
+            //円判定の位置(ケツ+)
+            PVector pos2 = new PVector(pos.x + wid * i * cos(angle), pos.y + wid * i * sin(angle));
+        pg.ellipse(pos2.x, pos2.y, wid * 2, wid * 2);
+        }
+        PVector pos3 = new PVector(apex.x + wid * cos(angle - PI), apex.y + wid * sin(angle - PI));
+        pg.ellipse(pos3.x, pos3.y, wid * 2, wid * 2);
+        */
+
         pg.endDraw();
     }
 
@@ -328,6 +345,27 @@ class LaserShot extends Shot{
 
     @Override
     boolean collision(Mover m){
+        //レーザーの頭からケツまで円判定を敷き詰めるやりかた
+
+        float angle = vel.heading();
+        //なんかいfor文を回すか
+        int kurikaeshi = floor((leng - wid) / wid);
+        for(int i = 1; i <= kurikaeshi; i++){
+            //円判定の位置(ケツ+)
+            PVector pos2 = new PVector(pos.x + wid * i * cos(angle), pos.y + wid * i * sin(angle));
+            float d = dist(pos2.x, pos2.y, m.pos.x, m.pos.y);
+            if(d < size + m.size){
+                return true;
+            }
+        }
+        PVector pos3 = new PVector(apex.x + wid * cos(angle - PI), apex.y + wid * sin(angle - PI));
+        float d = dist(pos3.x, pos3.y, m.pos.x, m.pos.y);
+            if(d < size + m.size){
+                return true;
+            }
+        return false;
+
+    /*
         //if(lineCollision(m, apex, pos)){return true;}
         if(lineCollision2(m.pos.x, m.pos.y, m.getSize(), apex.x, apex.y, pos.x, pos.y)){print("hit");return true;}
 
@@ -349,6 +387,7 @@ class LaserShot extends Shot{
         
 
         return false;
+        */
     }
     
 }
