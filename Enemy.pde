@@ -894,37 +894,51 @@ class MidBoss01 extends Enemy{
 class Boss_Mauve extends Enemy{
     private int keitai = 0;
     float aimAngle = 0; //射角用の
+    int maxHP = 500;
     Boss_Mauve(float _x, float _y){
         super(_x, _y, 500);
         size = 32;
         col = color(#915da3);
         vel = new PVector(-5, 0);
+        invincible = true;
+        keitai = 0;
     }
 
     @Override
     void updateMe(){
         super.updateMe();
+        if(count < 30) return;
+        if(count == 30){
+            vel = new PVector(0, 0);
+            invincible = false;
+        }
         switch(keitai){
             case 0:
                 formOne_Move();
-            break;
+                break;
             case 1:
-                if(count < 25)break;
-                if(count == 25){vel = new PVector(0, 0);}
-                if(count == 30){invincible = false;}
+                formTwo_Move();
+                break;
+            case 2:
+                formTri_Move();
                 break;
         }
     }
 
     @Override
     void shot(){
+        if(count < 30)return;
         switch(keitai){
             case 0:
-                if(count < 30)return;
+
                 formOne_Shot();
-            break;
+                break;
             case 1:
-            break;
+                formTwo_Shot();
+                break;
+            case 2:
+                formTri_Shot();
+                break;
         }
     }
 
@@ -933,6 +947,7 @@ class Boss_Mauve extends Enemy{
         if(count < 30) return;
         if(count == 30){
             vel = new PVector(0, 0);
+            invincible = false;
         }
         if(count % 120 == 0){
             PVector p = new PVector(width - 100, random(64, height - 64));
@@ -941,17 +956,15 @@ class Boss_Mauve extends Enemy{
             setVel(0, 0);
         }
 
-        if(HP < 500 / 3 * 2){
-            count = 0;
-            keitai = 1;
-            invincible = true;
-            PVector p = new PVector(width - 100, height / 2);
-            vel = makeVectorForPointSecond(pos, p, 25);
+        if(HP < maxHP / 3 * 2){
+            formChange();
         }
     }
 
     //第一形態のショット
+    //前半60Fで引っかき、後半60Fで3Wayばらまき
     void formOne_Shot(){
+        if(count < 30) return;
         int baseCount = (count - 30) % 120;
 
         if(baseCount == 0 || baseCount == 20){
@@ -968,7 +981,6 @@ class Boss_Mauve extends Enemy{
                 s.setBlendStyle(LIGHTEST);
                 s.setSize(6);
                 s.setVelocityFromSpeedAngle(3 + 0.25 * i, aimAngle);
-                s.rotation = -0.01;
                 playingStage.addEnemyShot(s);
             }
         }
@@ -981,7 +993,6 @@ class Boss_Mauve extends Enemy{
                 s.setBlendStyle(LIGHTEST);
                 s.setSize(6);
                 s.setVelocityFromSpeedAngle(3 + 0.25 * i, aimAngle);
-                s.rotation = 0.01;
                 playingStage.addEnemyShot(s);
             }
         }
@@ -999,5 +1010,101 @@ class Boss_Mauve extends Enemy{
                 }
             }
         }
+    }
+
+    void formTwo_Move(){
+        int baseCount = (count - 30) % 120;
+        if(count < 30) return;
+
+        if(HP < maxHP / 3){formChange();}
+
+        if(baseCount == 60){
+            PVector p = new PVector(width - 100 - random(-20, 20), random(64, height - 64));
+            vel = makeVectorForPointSecond(pos, p, 60);
+        }else if(baseCount % 120 == 0){
+            setVel(0, 0);
+        }
+    }
+
+    //破裂弾幕
+    void formTwo_Shot(){
+        if(count < 30) return;
+        int baseCount = (count - 30) % 120;
+
+        
+        if(baseCount % 20 == 0 && baseCount < 60){
+            //baseCount = 0, 10, 20
+            ExplodeShot explodeShot = new ExplodeShot(pos.x, pos.y);
+            explodeShot.setVelocityFromSpeedAngle(2, radians(baseCount / 20 * 90 + 90));
+            explodeShot.setColor(col);
+            explodeShot.setSize(10);
+            ArrayList<Shot> clusters = new ArrayList<Shot>();
+            float angle = random(TWO_PI);
+            int way = 6;
+            for(int i = 0; i < 6; i++){
+                ArrayList<Shot> hen = lineShot(
+                    new PVector(0, 0), 
+                    way,
+                    3,
+                    angle + TWO_PI / 6 * i,
+                    (TWO_PI / 6) / (way - 1)
+                );
+                for(Shot s: hen){
+                    s.setColor(col);
+                    s.setSize(4);
+                    s.setShotStyle(ShotStyle.Oval);
+                }
+                clusters.addAll(hen);
+            }
+            explodeShot.setCluster(clusters);
+            playingStage.addEnemyShot(explodeShot);
+        }else if(baseCount > 60 && baseCount < 120 && baseCount % 3 == 0){
+            float angle = map(baseCount, 60, 120, 0, TWO_PI);
+            for(int i = 0; i < 2; i++){
+                Shot l = new Shot(pos.x, pos.y);
+                l.setSize(8);
+                l.setShotStyle(ShotStyle.Rect);
+                l.setVelocityFromSpeedAngle(2, angle + TWO_PI / 2 * i);
+                l.setColor(HSVtoRGB(240, 100, 255));
+                playingStage.addEnemyShot(l);
+            }
+        }
+    }
+
+    void formTri_Move(){
+
+    }
+
+    //波粒+突撃弾
+    void formTri_Shot(){
+        if(count < 30 || count % 3 != 0)return;
+        
+        for(int i = 0; i < 3; i++){
+            float angle = aimAngle + TWO_PI / 3 * i;
+            Shot s = new Shot(pos.x + cos(angle) * 72, pos.y + sin(angle) * 72, 60);
+            s.setSize(8);
+            s.setShotStyle(ShotStyle.Orb); 
+            //-s.setBlendStyle(ADD);
+            s.setVelocityFromSpeedAngle(0.5, angle);
+            s.setColor(col);
+            s.addCue(new ShotMoveCue(
+                60,
+                s.getVel(),
+                vectorFromMagAngle(0.05, angle),
+                0,
+                col
+            ));
+            playingStage.addEnemyShot(s);
+        }
+        aimAngle += radians(count / 10);
+    }
+
+    void formChange(){
+        aimAngle = 0;
+        count = 0;
+        keitai ++;
+        invincible = true;
+        PVector p = new PVector(width - 100, height / 2);
+        vel = makeVectorForPointSecond(pos, p, 30);
     }
 }

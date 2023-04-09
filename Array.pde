@@ -37,11 +37,19 @@ class Movers{
     }
 }
 
+//このやり方でやれば、ShotからShotを追加できるんじゃないかなと。
+//またこのやり方だとIteratorじゃなくてforでもできるとおもう。
+//ゆくゆくはShots以外もこれにしたい
+//問題はListが3つもあるので重そうだということ
 class Shots{
     protected ArrayList<Shot> shots;
+    protected ArrayList<Shot> removedShots;
+    protected ArrayList<Shot> addedShots;
 
     Shots(){
         shots = new ArrayList<Shot>();
+        removedShots = new ArrayList<Shot>();
+        addedShots = new ArrayList<Shot>();
     }
 
     void updateMe(){
@@ -50,9 +58,17 @@ class Shots{
             Shot s = it.next();
             s.updateMe();
             if(s.areYouDead() == true){
-                it.remove();
+                removedShots.add(s);
             }
         }
+
+        //iterator内でshotを追加/削除するのではなく、
+        //そのフレーム内で追加された/削除されたリストをつくって
+        //フレームの最後にまとめて処理する。
+        shots.removeAll(removedShots);
+        shots.addAll(addedShots);
+        removedShots.clear();
+        addedShots.clear();
     }
 
     void drawMe(PGraphics pg){
@@ -62,11 +78,11 @@ class Shots{
     }
 
     void addShot(Shot s){
-        shots.add(s);
+        addedShots.add(s);
     }
 
     void removeShot(Shot s){
-        shots.remove(s);
+        removedShots.add(s);
     }
 
     ArrayList<Shot> getArray(){

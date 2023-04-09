@@ -213,16 +213,62 @@ class OrbitShot extends Shot{
         if(count < waitFrame){
             radius.add(PVector.div(orbitRadius, waitFrame));
         }
-        pos = new PVector(parent.getX() + cos(angle) * radius.x, parent.getY() + sin(angle) * radius.y);
+        if(parent != null){
+            pos = new PVector(parent.getX() + cos(angle) * radius.x, parent.getY() + sin(angle) * radius.y);
+        }
         angle += spinSpd;
+    }
+
+    void setAngle(float _a){
+        angle = _a;
+    }
+}
+
+//炸裂して全方位弾をまき散らす
+class ExplodeShot extends Shot{
+    private float explodeFarme = 60;    //何F目で破裂するか
+    private ArrayList<Shot> clusters;   //破裂時にまき散らす弾幕
+
+    ExplodeShot(float _x, float _y){
+        super(_x, _y);
+        clusters = new ArrayList<Shot>();
+        isDeletable = false;
+    }
+
+    @Override
+    void updateMe(){
+        super.updateMe();
+
+        if(count >= explodeFarme){
+            explosion();
+            kill();
+        }
+    }
+
+    @Override
+    void kill(){
+        super.kill();
+    }
+
+    void explosion(){
+        println("exp");
+        for(Shot s: clusters){
+            println("lode");
+            s.pos = s.getPos().add(this.pos); //自分の位置から出るようにする
+            playingStage.addEnemyShot(s);
+        }
+    }
+
+    void setCluster(ArrayList<Shot> shots){
+        clusters = shots;
     }
 }
 
 class LaserShot extends Shot{
-    private float leng = 0, wid = 0;    //長さと太さ　sizeはつかわない
-    private float mxLeng = 0;
-    private PVector apex;   //先端の位置
-    private PVector defPos; //初期位置
+    protected float leng = 0, wid = 0;    //長さと太さ　sizeはつかわない
+    protected float mxLeng = 0;
+    protected PVector apex;   //先端の位置
+    protected PVector defPos; //初期位置
 
     LaserShot(float _x, float _y, float _l, float _w){
         super(_x, _y);
@@ -248,9 +294,11 @@ class LaserShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            blendMode(blendStyle);
+            pg.blendMode(blendStyle);
             pg.noStroke();
             pg.fill(col);
+            pg.ellipse(pos.x, pos.y, wid * 3, wid * 3);
+            pg.ellipse(apex.x, apex.y, wid * 3, wid * 3);
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
             pg.translate(center.x, center.y);
             pg.rotate(vel.heading());
@@ -265,7 +313,7 @@ class LaserShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            blendMode(blendStyle);
+            pg.blendMode(blendStyle);
             pg.noStroke();
             pg.fill(col, map(delay - count, 0, delay, 255, 0));
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);

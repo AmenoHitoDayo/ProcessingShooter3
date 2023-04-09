@@ -42,6 +42,6 @@ class Item extends Mover{
     @Override 
     void updateMe(){
         super.updateMe();
-        vel = (PVector.sub(playingStage.getJiki().getPos(), pos).normalize().mult(5));
+        vel = (PVector.sub(playingStage.getJiki().getPos(), pos).normalize(null).mult(5));
     }
 }

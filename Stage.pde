@@ -184,7 +184,7 @@ class Stage01 extends Stage{
         super();
         setBGM(stageBGM);
         getBGM().setGain(-10f);
-        count = 0;
+        count = 1700;
     }
 
     void stageStructure(){
@@ -286,6 +286,7 @@ class Stage01 extends Stage{
         }
         
 
+        
         if(count == 1215){
             addEnemy(new Fountain01(250, 0, radians(90)));
         }
@@ -295,6 +296,7 @@ class Stage01 extends Stage{
         if(count == 1235){
             addEnemy(new Fountain01(450, 0, radians(90)));
         }
+        
 
         if(count == 1400){
             addEnemy(new Circle01(width, height / 2));
