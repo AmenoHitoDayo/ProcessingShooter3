@@ -184,7 +184,7 @@ class Stage01 extends Stage{
         super();
         setBGM(stageBGM);
         getBGM().setGain(-10f);
-        count = 1700;
+        count = 0;
     }
 
     void stageStructure(){

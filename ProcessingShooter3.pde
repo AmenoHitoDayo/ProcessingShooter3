@@ -44,6 +44,9 @@ void draw() {
         case GameOverScene:
             gameOver();
         break;
+        case GameClearScene:
+            gameClear();
+        break;
     }
 }
 
@@ -56,6 +59,9 @@ void keyPressed(){
             playingStage.keyPressed();
         break;
         case GameOverScene:
+            gameOverKeyPressed();
+        break;
+        case GameClearScene:
             gameOverKeyPressed();
         break;
     }

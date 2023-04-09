@@ -1004,6 +1004,7 @@ class Boss_Mauve extends Enemy{
                 for(Shot s : shots){
                     s.setSize(4);
                     s.setAccel(-0.049, 0);
+                    s.setShotStyle(ShotStyle.Oval);
                     s.setColor(HSVtoRGB(240, 100, 255));
                     s.setDelay(30);
                     playingStage.addEnemyShot(s);
@@ -1036,7 +1037,7 @@ class Boss_Mauve extends Enemy{
             //baseCount = 0, 10, 20
             ExplodeShot explodeShot = new ExplodeShot(pos.x, pos.y);
             explodeShot.setVelocityFromSpeedAngle(2, radians(baseCount / 20 * 90 + 90));
-            explodeShot.setColor(col);
+            explodeShot.setColor(HSVtoRGB(240, 100, 255));
             explodeShot.setSize(10);
             ArrayList<Shot> clusters = new ArrayList<Shot>();
             float angle = random(TWO_PI);
@@ -1050,7 +1051,7 @@ class Boss_Mauve extends Enemy{
                     (TWO_PI / 6) / (way - 1)
                 );
                 for(Shot s: hen){
-                    s.setColor(col);
+                    s.setColor(explodeShot.getColor());
                     s.setSize(4);
                     s.setShotStyle(ShotStyle.Oval);
                 }
@@ -1065,7 +1066,7 @@ class Boss_Mauve extends Enemy{
                 l.setSize(8);
                 l.setShotStyle(ShotStyle.Rect);
                 l.setVelocityFromSpeedAngle(2, angle + TWO_PI / 2 * i);
-                l.setColor(HSVtoRGB(240, 100, 255));
+                l.setColor(col);
                 playingStage.addEnemyShot(l);
             }
         }

@@ -297,8 +297,8 @@ class LaserShot extends Shot{
             pg.blendMode(blendStyle);
             pg.noStroke();
             pg.fill(col);
-            pg.ellipse(pos.x, pos.y, wid * 3, wid * 3);
-            pg.ellipse(apex.x, apex.y, wid * 3, wid * 3);
+            //pg.ellipse(pos.x, pos.y, wid * 3, wid * 3);
+            //pg.ellipse(apex.x, apex.y, wid * 3, wid * 3);
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
             pg.translate(center.x, center.y);
             pg.rotate(vel.heading());

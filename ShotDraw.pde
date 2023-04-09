@@ -21,7 +21,7 @@ public void ovalShotDraw(PGraphics pg, Shot shot){
             pg.rotate(shot.getVel().heading());
             pg.strokeWeight(lineWeight);
             pg.stroke(shot.getColor());
-            pg.fill(shot.getColor(), 152);
+            pg.fill(shot.getColor(), 180);
             pg.ellipse(0, 0, shot.getSize() * 3, shot.getSize() * 2);
         pg.pop();
     pg.endDraw();
