@@ -19,6 +19,13 @@ class Jiki extends Machine{
   private AudioPlayer absorbSound;
   private AudioPlayer itemSound;
   private AudioPlayer extendSound;
+  private AudioPlayer releaseSound;
+
+  private Stage stage;
+
+
+  //キー操作用のbool群
+  private boolean right = false, left = false, up = false, down = false, slow = false, z = false, x = false, c = false;
 
   Jiki(){
     super(width / 2, height / 2, defaultHP);
@@ -36,13 +43,15 @@ class Jiki extends Machine{
     absorbSound.setGain(-10f);
     itemSound = minim.loadFile("魔王魂 効果音 ジッポ-開ける音.mp3");
     itemSound.setGain(-10f);
-    extendSound = minim.loadFile("maou_se_magical14.mp3");
+    extendSound = minim.loadFile("maou_se_magical01.mp3");
     extendSound.setGain(-10f);
+    releaseSound = minim.loadFile("maou_se_magical14.mp3");
+    releaseSound.setGain(-10f);
   }
 
-  @Override
   void updateMe(Stage _s){
-    super.updateMe(_s);
+    super.updateMe();
+    stage = _s;
     vel = (new PVector(0, 0));
     if(keyPressed){
       if(up){
@@ -194,8 +203,11 @@ class Jiki extends Machine{
   }
 
   void hit(){
-    Iterator<Shot> it = stage.getEnemyShots().iterator();
+    ArrayList<Shot> shots = stage.enemyShots.shots;
+    Iterator<Shot> it = shots.iterator();
+    
     while(it.hasNext()){
+      
       if(isInvincible()) break;
       Shot s = it.next();
       //被弾判定
@@ -217,6 +229,7 @@ class Jiki extends Machine{
           print("absorb");
         }
       }
+      
     }
   
     Iterator<Enemy> it2 = stage.getEnemys().iterator();
@@ -231,10 +244,11 @@ class Jiki extends Machine{
 
         continue;
       }
+      
     }
 
     //アイテム取得判定
-    Iterator<Item> it3 = stage.items.getArray().iterator();
+    Iterator<Item> it3 = stage.getItems().iterator();
     while(it3.hasNext()){
       Item i = it3.next();
       if(i.collision(this)){
@@ -251,6 +265,7 @@ class Jiki extends Machine{
         it3.remove();
       }
     }
+    
   }
 
   void absorb(PGraphics pg){
@@ -276,32 +291,42 @@ class Jiki extends Machine{
     }
   }
 
-  //これだとX長押しで無限切り替えできてしまいます・・・連続発動不可能なフレームを作るのが手っ取り早いと思う
+  //リリース処理とリリース時の挙動が一緒に書いてあるのでわかりづらい・・・
   void release(){
     if(isRelease){
       releaseShot();
-      if(!canRelease()){
+      if(!canRelease() || (x && count > releaseWaitCount)){
         isRelease = false;
+      }
+    }else{
+      if(x && canRelease()){
+        releaseSound.play(0);
+        releaseWaitCount = count + releaseWaitFrame;
+        isRelease = true;
       }
     }
   }
 
-  void releaseKey(){
-    if(key == 'x' || key == 'X'){
-      if(isRelease){
-        if(count > releaseWaitCount){
-          releaseWaitCount = count + releaseWaitFrame;
-          isRelease = false;
-        }
-      }else{
-        if(count > releaseWaitCount){
-          if(canRelease()){
-            releaseWaitCount = count + releaseWaitFrame;
-            isRelease = true;
-          }
-        }
-      }
-    }
+  void keyPressed(){
+    if(key == 'w' || keyCode == UP) up = true;
+    if(key == 'd' || keyCode == RIGHT) right = true;
+    if(key == 's' || keyCode == DOWN) down = true;
+    if(key == 'a' || keyCode == LEFT) left = true;
+    if(key == 'z' || key == 'Z') z = true;
+    if(key == 'x' || key == 'X') x = true;
+    if(key == 'c' || key == 'C') c = true;
+    if(keyCode == SHIFT) slow = true;
+  }
+
+  void keyReleased(){
+    if(key == 'w' || keyCode == UP) up = false;
+    if(key == 'd' || keyCode == RIGHT) right = false;
+    if(key == 's' || keyCode == DOWN) down = false;
+    if(key == 'a' || keyCode == LEFT) left = false;
+    if(key == 'z' || key == 'Z') z = false;
+    if(key == 'x' || key == 'X') x = false;
+    if(key == 'c' || key == 'C') c = false;
+    if(keyCode == SHIFT) slow = false;
   }
 
   @Override

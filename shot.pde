@@ -29,8 +29,8 @@ class Shot extends Mover{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         executeCue();
         if(count < delay){
             isHittable = false;
@@ -44,7 +44,7 @@ class Shot extends Mover{
         //画面外で死んでもなるのはよくない。
         if(parent != null && parent.isDead && !parent.isOutOfScreen()){
             Item item = new Item(pos.x, pos.y, 0, 0, 0);
-            stage.addItem(item);
+            playingStage.addItem(item);
 
             kill();
         }
@@ -62,8 +62,8 @@ class Shot extends Mover{
     @Override
     void kill(){
         if(!isOutOfScreen()){
-            rectParticle particle = new rectParticle(pos.x, pos.y, col);
-            stage.addParticle(particle);
+            RectParticle particle = new RectParticle(pos.x, pos.y, col, size * 2);
+            playingStage.addParticle(particle);
         }
         super.kill();
     }
@@ -164,7 +164,6 @@ class ShotMoveCue{
     private PVector accel;
     private float rotation;
     private color col;
-
     
     ShotMoveCue(int _c, PVector _v, PVector _a, float _r, int _col){
         count = _c;
@@ -208,22 +207,68 @@ class OrbitShot extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
 
         if(count < waitFrame){
             radius.add(PVector.div(orbitRadius, waitFrame));
         }
-        pos = new PVector(parent.getX() + cos(angle) * radius.x, parent.getY() + sin(angle) * radius.y);
+        if(parent != null){
+            pos = new PVector(parent.getX() + cos(angle) * radius.x, parent.getY() + sin(angle) * radius.y);
+        }
         angle += spinSpd;
+    }
+
+    void setAngle(float _a){
+        angle = _a;
+    }
+}
+
+//炸裂して全方位弾をまき散らす
+class ExplodeShot extends Shot{
+    private float explodeFarme = 60;    //何F目で破裂するか
+    private ArrayList<Shot> clusters;   //破裂時にまき散らす弾幕
+
+    ExplodeShot(float _x, float _y){
+        super(_x, _y);
+        clusters = new ArrayList<Shot>();
+        isDeletable = false;
+    }
+
+    @Override
+    void updateMe(){
+        super.updateMe();
+
+        if(count >= explodeFarme){
+            explosion();
+            kill();
+        }
+    }
+
+    @Override
+    void kill(){
+        super.kill();
+    }
+
+    void explosion(){
+        println("exp");
+        for(Shot s: clusters){
+            println("lode");
+            s.pos = s.getPos().add(this.pos); //自分の位置から出るようにする
+            playingStage.addEnemyShot(s);
+        }
+    }
+
+    void setCluster(ArrayList<Shot> shots){
+        clusters = shots;
     }
 }
 
 class LaserShot extends Shot{
-    private float leng = 0, wid = 0;    //長さと太さ　sizeはつかわない
-    private float mxLeng = 0;
-    private PVector apex;   //先端の位置
-    private PVector defPos; //初期位置
+    protected float leng = 0, wid = 0;    //長さと太さ　sizeはつかわない
+    protected float mxLeng = 0;
+    protected PVector apex;   //先端の位置
+    protected PVector defPos; //初期位置
 
     LaserShot(float _x, float _y, float _l, float _w){
         super(_x, _y);
@@ -235,8 +280,8 @@ class LaserShot extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         if(leng < mxLeng){
             leng = min(leng + vel.mag(), mxLeng);
             pos = (defPos);
@@ -249,14 +294,33 @@ class LaserShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            blendMode(blendStyle);
+            pg.blendMode(blendStyle);
             pg.noStroke();
             pg.fill(col);
+            //pg.ellipse(pos.x, pos.y, wid * 3, wid * 3);
+            //pg.ellipse(apex.x, apex.y, wid * 3, wid * 3);
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
             pg.translate(center.x, center.y);
             pg.rotate(vel.heading());
             pg.rect(0, 0, leng, wid * 2, wid / 2);
         pg.pop();
+
+        /*
+        //当たり判定確認用
+        pg.strokeWeight(0.5);
+        pg.stroke(255);
+        pg.fill(255, 32);
+        float angle = vel.heading();
+        //なんかいfor文を回すか
+        int kurikaeshi = floor((leng - wid) / wid);
+        for(int i = 1; i <= kurikaeshi; i++){
+            //円判定の位置(ケツ+)
+            PVector pos2 = new PVector(pos.x + wid * i * cos(angle), pos.y + wid * i * sin(angle));
+        pg.ellipse(pos2.x, pos2.y, wid * 2, wid * 2);
+        }
+        PVector pos3 = new PVector(apex.x + wid * cos(angle - PI), apex.y + wid * sin(angle - PI));
+        pg.ellipse(pos3.x, pos3.y, wid * 2, wid * 2);
+        */
 
         pg.endDraw();
     }
@@ -266,7 +330,7 @@ class LaserShot extends Shot{
         pg.beginDraw();
 
         pg.push();
-            blendMode(blendStyle);
+            pg.blendMode(blendStyle);
             pg.noStroke();
             pg.fill(col, map(delay - count, 0, delay, 255, 0));
             PVector center = new PVector((apex.x + pos.x) / 2, (apex.y + pos.y) / 2);
@@ -281,6 +345,27 @@ class LaserShot extends Shot{
 
     @Override
     boolean collision(Mover m){
+        //レーザーの頭からケツまで円判定を敷き詰めるやりかた
+
+        float angle = vel.heading();
+        //なんかいfor文を回すか
+        int kurikaeshi = floor((leng - wid) / wid);
+        for(int i = 1; i <= kurikaeshi; i++){
+            //円判定の位置(ケツ+)
+            PVector pos2 = new PVector(pos.x + wid * i * cos(angle), pos.y + wid * i * sin(angle));
+            float d = dist(pos2.x, pos2.y, m.pos.x, m.pos.y);
+            if(d < size + m.size){
+                return true;
+            }
+        }
+        PVector pos3 = new PVector(apex.x + wid * cos(angle - PI), apex.y + wid * sin(angle - PI));
+        float d = dist(pos3.x, pos3.y, m.pos.x, m.pos.y);
+            if(d < size + m.size){
+                return true;
+            }
+        return false;
+
+    /*
         //if(lineCollision(m, apex, pos)){return true;}
         if(lineCollision2(m.pos.x, m.pos.y, m.getSize(), apex.x, apex.y, pos.x, pos.y)){print("hit");return true;}
 
@@ -302,6 +387,7 @@ class LaserShot extends Shot{
         
 
         return false;
+        */
     }
     
 }
@@ -321,8 +407,8 @@ class JikiRockOnShot extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         if(target != null && !target.areYouDead()){
             homing();
         }else if(targetSelectCount < 5){
@@ -374,10 +460,9 @@ class JikiRockOnShot extends Shot{
 
     void searchTarget(){
         println("search:" + this.targetSelectCount);
-        Stage stage = playingStage;
         Enemy t = null;
         float distant = 10000;
-        Iterator<Enemy> it = stage.enemys.getArray().iterator();
+        Iterator<Enemy> it = playingStage.enemys.getArray().iterator();
         while(it.hasNext()){
             Enemy e = it.next();
             float d = dist(pos.x, pos.y, e.getX(), e.getY());
@@ -404,8 +489,8 @@ class JikiBarrierShot extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         if(count > 1){
             this.kill();
         }
@@ -428,8 +513,7 @@ class JikiBarrierShot extends Shot{
     }
 
     void tamaKeshi(){
-        Stage stage = playingStage;
-        Iterator<Shot> it = stage.enemyShots.getArray().iterator();
+        Iterator<Shot> it = playingStage.getEnemyShots().iterator();
         while(it.hasNext()){
             Shot s = it.next();
             if(s.collision(this) == true){
@@ -456,8 +540,8 @@ class JikiBlueLaser extends Shot{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
+    void updateMe(){
+        super.updateMe();
         size = min((size + 64 / (width / 10) * 2), 64);
         if(count > width / 10){
             this.kill();
@@ -473,8 +557,7 @@ class JikiBlueLaser extends Shot{
     }
 
     void tamaKeshi(){
-        Stage stage = playingStage;
-        Iterator<Shot> it = stage.getEnemyShots().iterator();
+        Iterator<Shot> it = playingStage.getEnemyShots().iterator();
         while(it.hasNext()){
             Shot s = it.next();
             if(this.collision(s) == true && s.isDeletable){

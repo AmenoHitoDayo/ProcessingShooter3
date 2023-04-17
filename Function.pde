@@ -70,6 +70,7 @@ color HSVtoRGB(float h, float s, float v){
 }
 
 //線形当たり判定用関数
+//これまだバグっているっぽい
 boolean lineCollision2(float cx, float cy, float r, float x1, float y1, float x2, float y2){
     float dist1 = dist(cx, cy, x1, y1);
     float dist2 = dist(cx, cy, x2, y2);
@@ -94,5 +95,11 @@ boolean lineCollision2(float cx, float cy, float r, float x1, float y1, float x2
 
 PVector vectorFromMagAngle(float mag, float angle){
     PVector v = new PVector(mag * cos(angle), mag * sin(angle));
+    return v;
+}
+
+//始点から終点まで指定フレームで到達できるベクターを返す
+PVector makeVectorForPointSecond(PVector deperture, PVector arrive, int second){
+    PVector v = PVector.div(new PVector(arrive.x - deperture.x, arrive.y - deperture.y), second);
     return v;
 }

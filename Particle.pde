@@ -6,9 +6,9 @@ class Particle extends Mover{
     }
 
     @Override
-    void updateMe(Stage _s){
-        super.updateMe(_s);
-        if(count > lifeTime){kill();}
+    void updateMe(){
+        super.updateMe();
+        if(lifeTime != 0 && count > lifeTime){kill();}
     }
     
     public int getLifeTime(){
@@ -16,18 +16,20 @@ class Particle extends Mover{
     }
 }
 
-class rectParticle extends Particle{
+class RectParticle extends Particle{
     private float baseAngle = 0;
-    rectParticle(float _x, float _y, color _c){
+    private float maxSize;
+    RectParticle(float _x, float _y, color _c, float _s){
         super(_x, _y, _c);
-        size =(12);
+        size = _s;
+        maxSize = size * 2;
     }
     
     @Override 
     void drawMe(PGraphics pg){
         pg.beginDraw();
 
-        this.size =(size + 32 / lifeTime);
+        this.size =(size + maxSize / lifeTime);
 
         pg.push();
             pg.blendMode(ADD);
@@ -43,18 +45,20 @@ class rectParticle extends Particle{
     }
 }
 
-class circleParticle extends Particle{
+class CircleParticle extends Particle{
     private float baseAngle = 0;
-    circleParticle(float _x, float _y, color _c){
+    private float maxSize;
+    CircleParticle(float _x, float _y, color _c, float _s){
         super(_x, _y, _c);
-        size =(24);
+        size = _s;
+        maxSize = size * 2;
     }
     
     @Override 
     void drawMe(PGraphics pg){
         pg.beginDraw();
 
-        this.size =(size + 32 / lifeTime);
+        this.size =(size + maxSize / lifeTime);
 
         pg.push();
             pg.blendMode(ADD);
@@ -64,6 +68,36 @@ class circleParticle extends Particle{
             pg.ellipse(pos.x, pos.y, size + count, size + count);
         pg.pop();
 
+        pg.endDraw();
+    }
+}
+
+class GlowBallParticle extends Particle{
+    GlowBallParticle(float _x, float _y){
+        super(_x, _y, HSVtoRGB(random(360), 255, 255));
+        size = random(10, 100);
+        vel = new PVector(random(-0.25, 0.25), random(1));
+        lifeTime = 0;
+    }
+
+    @Override
+    void updateMe(){
+        super.updateMe();
+        size -= 0.01;
+        if(size <= 0)kill();
+    }
+
+    @Override
+    void drawMe(PGraphics pg){
+        pg.beginDraw();
+            pg.push();
+            pg.blendMode(EXCLUSION);
+            for(int i = 0; i < 10; i++){
+                pg.fill(col, 10);
+                pg.noStroke();
+                pg.ellipse(pos.x, pos.y, size * pow(0.95, i), size * pow(0.95, i));
+            }
+            pg.pop();
         pg.endDraw();
     }
 }
