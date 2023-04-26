@@ -18,6 +18,9 @@ public int finalScore = 0;
 
 public PFont kinkakuji;
 
+public final ConfigStruct defaultConfig = new ConfigStruct(); //初期状態コンフィグ
+public ConfigStruct gameConfig = new ConfigStruct();        //実際にゲーム内で適用するコンフィぐ
+
 void setup() {
     size(640, 480);
     background(0);

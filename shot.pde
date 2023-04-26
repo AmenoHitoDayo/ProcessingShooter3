@@ -305,10 +305,11 @@ class LaserShot extends Shot{
             pg.rect(0, 0, leng, wid * 2, wid / 2);
         pg.pop();
 
-        /*
+        
         //当たり判定確認用
-        pg.strokeWeight(0.5);
-        pg.stroke(255);
+        
+        pg.strokeWeight(1);
+        pg.stroke(0);
         pg.fill(255, 32);
         float angle = vel.heading();
         //なんかいfor文を回すか
@@ -320,7 +321,7 @@ class LaserShot extends Shot{
         }
         PVector pos3 = new PVector(apex.x + wid * cos(angle - PI), apex.y + wid * sin(angle - PI));
         pg.ellipse(pos3.x, pos3.y, wid * 2, wid * 2);
-        */
+        
 
         pg.endDraw();
     }
