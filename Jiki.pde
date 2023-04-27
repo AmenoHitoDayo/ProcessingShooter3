@@ -28,7 +28,7 @@ class Jiki extends Machine{
   private boolean right = false, left = false, up = false, down = false, slow = false, z = false, x = false, c = false;
 
   Jiki(){
-    super(width / 2, height / 2, defaultHP);
+    super(width / 2, height / 2, gameConfig.defaultLife);
     col = (color(255, 255, 255, 255));
     size =(4);
     RedP = 0;
@@ -43,7 +43,7 @@ class Jiki extends Machine{
     absorbSound.setGain(-10f);
     itemSound = minim.loadFile("魔王魂 効果音 ジッポ-開ける音.mp3");
     itemSound.setGain(-10f);
-    extendSound = minim.loadFile("maou_se_magical01.mp3");
+    extendSound = minim.loadFile("maou_se_magical14.mp3");
     extendSound.setGain(-10f);
     releaseSound = minim.loadFile("maou_se_magical14.mp3");
     releaseSound.setGain(-10f);
@@ -203,13 +203,17 @@ class Jiki extends Machine{
   }
 
   void hit(){
-    ArrayList<Shot> shots = stage.enemyShots.shots;
-    Iterator<Shot> it = shots.iterator();
+    ArrayList<Mover> shots = stage.enemyShots.getArray();
+    Iterator<Mover> it = shots.iterator();
     
     while(it.hasNext()){
       
       if(isInvincible()) break;
-      Shot s = it.next();
+
+      Mover m = it.next();
+      if(!(m instanceof Shot))continue;
+      Shot s = (Shot)m;
+
       //被弾判定
       //collision関数はmoverのデフォであったほうがいいね多分これ・・
       if(s.collision(this) && s.isHittable){
@@ -232,10 +236,12 @@ class Jiki extends Machine{
       
     }
   
-    Iterator<Enemy> it2 = stage.getEnemys().iterator();
+    Iterator<Mover> it2 = stage.getEnemys().iterator();
     //敵との接触判定
     while(it2.hasNext()){
-      Enemy e = it2.next();
+      Mover m = it2.next();
+      if(!(m instanceof Enemy))continue;
+      Enemy e = (Enemy)m;
       if(e.collision(this) && !isInvincible()){
         e.HPDown(1);
         HPDown(1);
@@ -244,28 +250,28 @@ class Jiki extends Machine{
 
         continue;
       }
-      
     }
 
     //アイテム取得判定
-    Iterator<Item> it3 = stage.getItems().iterator();
-    while(it3.hasNext()){
-      Item i = it3.next();
-      if(i.collision(this)){
-        totalItem++;
+    ArrayList<Mover> items = stage.getItems();
+    for(int i = 0; i < items.size(); i++){
+      Mover m = items.get(i);
+      if(!(m instanceof Item))continue;
+      Item item = (Item)m;
 
-        //色アイテム特定数取得でエクステンド
+      if(item.collision(this)){
+        totalItem++;
         if(totalItem % 255 == 0){
           extendSound.play(0);
           HP++;
         }
-
+        float[] colorPoints = item.getColorPoints();
         itemSound.play(0);
-        getColorPoint(i.RP / 30, i.GP / 30, i.BP / 30);
-        it3.remove();
+        getColorPoint(colorPoints[0] / 30, colorPoints[1] / 30, colorPoints[2] / 30);
+
+        stage.removeItem(item);
       }
     }
-    
   }
 
   void absorb(PGraphics pg){
@@ -369,6 +375,10 @@ class Jiki extends Machine{
     }else{
       return false;
     }
+  }
+
+  public void setHP(int _HP){
+    HP = min(maxHP, _HP);
   }
 }
 //てすと02

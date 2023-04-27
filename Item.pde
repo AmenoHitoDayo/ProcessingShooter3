@@ -44,4 +44,9 @@ class Item extends Mover{
         super.updateMe();
         vel = (PVector.sub(playingStage.getJiki().getPos(), pos).normalize(null).mult(5));
     }
+
+    public float[] getColorPoints(){
+        float[] array = {RP, GP, BP};
+        return array;
+    }
 }

@@ -57,9 +57,10 @@ class Title{
         buffer.fill(255);
         buffer.text("Shooting of Color", width / 2, height / 2 - 64);
 
-        buffer.textSize(36);
+        buffer.textSize(24);
         buffer.text("Start", width / 2, height / 2 + 64);
-        buffer.text("Exit", width / 2, height / 2 + 128);
+        buffer.text("Config", width / 2, height / 2 + 64 + 48);
+        buffer.text("Exit", width / 2, height / 2 + 64 + 48 * 2);
 
         buffer.pop();
 
@@ -69,11 +70,9 @@ class Title{
     void drawArrow(){
         buffer.beginDraw();
         buffer.fill(255);
-        buffer.endDraw();
 
         easyTriangle(buffer, pos, 0, 16);
         
-        buffer.beginDraw();
         buffer.fill(0);
         buffer.ellipse(pos.x, pos.y, 8, 8);
 
@@ -81,27 +80,26 @@ class Title{
     }
 
     void refreshPos(){
-        if(cursorNum < 0)cursorNum = 1;
-        if(cursorNum > 1)cursorNum = 0;
+        if(cursorNum < 0)cursorNum = 2;
+        if(cursorNum > 2)cursorNum = 0;
 
-        switch(cursorNum){
-            case 0:
-                pos = new PVector(width / 2 - 96, height / 2 + 64);
-                break;
-            case 1:
-                pos = new PVector(width / 2 - 96, height / 2 + 128);
-                break;
-        }
+        pos = new PVector(width / 2 - 96, height / 2 + 64 + 48 * cursorNum);
+
     }
 
     void keyPressed(){
         if(key == 'z' || key == 'Z'){
-            if(cursorNum == 0){
-                particles.clear();
-                playingStage = new Stage01();
-                scene = Scene.GameScene;
-            }else if(cursorNum == 1){
-                exit();
+            switch(cursorNum){
+                case 0:
+                    particles.clear();
+                    playingStage = new Stage01();
+                    scene = Scene.GameScene;
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    exit();
+                    break;
             }
         }
 

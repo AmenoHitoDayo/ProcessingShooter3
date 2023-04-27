@@ -4,7 +4,7 @@ public enum Scene{
     GameScene,
     GameOverScene,
     GameClearScene,
-    OptionScene
+    ConfigScene
 }
 
 public enum ShotStyle{

@@ -131,7 +131,7 @@ class Machine extends Mover{
   
   Machine(float _x, float _y, int _HP){
     super(_x, _y);
-    HP = _HP;
+    HP = min(maxHP ,_HP);
   }
   
   @Override

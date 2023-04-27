@@ -61,6 +61,8 @@ class SampleEnemy extends Enemy{
     private int way = 4;
     private float hue = 0;
 
+    private Stage stage;
+
     SampleEnemy(){
         super(width, height / 2, 10);
         vel = new PVector(-1, 0);

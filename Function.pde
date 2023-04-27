@@ -12,17 +12,15 @@ PVector VectorDown(){
 }
 
 //大きさと角度を入れて正三角形ができる
+//pgraphicで描画中にendDrawしちゃうとそこでDraw止まってしまうのよねぇ
+//でもbeginDraw忘れたところにこれ書いてもエラーになるわけでわ無いという・・・
 void easyTriangle(PGraphics pg, PVector pos, float angle, float size){
-    pg.beginDraw();
-
     pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.triangle(cos(angle) * size, sin(angle) * size,
                 cos(angle + radians(120)) * size, sin(angle + radians(120)) * size,
                 cos(angle + radians(240)) * size, sin(angle + radians(240)) * size);
     pg.popMatrix();
-
-    pg.endDraw();
 }
 
 void easyTriangle(PGraphics pg, float x, float y, float angle, float size){

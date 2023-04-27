@@ -90,27 +90,31 @@ class Stage{
     }
 
     public void addEnemy(Enemy e){
-        enemys.addEnemy(e);
+        enemys.addMover(e);
     }
 
     public void addEnemyShot(Shot s){
-        enemyShots.addShot(s);
+        enemyShots.addMover(s);
     }
 
     public void addJikiShot(Shot s){
-        jikiShots.addShot(s);
+        jikiShots.addMover(s);
     }
 
     public void addParticle(Particle p){
-        particles.addParticle(p);
+        particles.addMover(p);
     }
 
     public void addItem(Item i){
-        items.addItem(i);
+        items.addMover(i);
     }
 
     public void removeEnemyShot(Shot s){
-        enemyShots.removeShot(s);
+        enemyShots.removeMover(s);
+    }
+
+    public void removeItem(Item i){
+        items.removeMover(i);
     }
 
     void startNewStage(Stage stage){
@@ -139,15 +143,15 @@ class Stage{
         return ui;
     }
 
-    public ArrayList<Shot> getEnemyShots(){
+    public ArrayList<Mover> getEnemyShots(){
         return enemyShots.getArray();
     }
 
-    public ArrayList<Enemy> getEnemys(){
+    public ArrayList<Mover> getEnemys(){
         return enemys.getArray();
     }
 
-    public ArrayList<Item> getItems(){
+    public ArrayList<Mover> getItems(){
         return items.getArray();
     }
 

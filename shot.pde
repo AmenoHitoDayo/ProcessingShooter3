@@ -463,9 +463,11 @@ class JikiRockOnShot extends Shot{
         println("search:" + this.targetSelectCount);
         Enemy t = null;
         float distant = 10000;
-        Iterator<Enemy> it = playingStage.enemys.getArray().iterator();
+        Iterator<Mover> it = playingStage.enemys.getArray().iterator();
         while(it.hasNext()){
-            Enemy e = it.next();
+            Mover m = it.next();
+            if(!(m instanceof Enemy))continue;
+            Enemy e = (Enemy)m;
             float d = dist(pos.x, pos.y, e.getX(), e.getY());
             if(d < distant){
             distant = d;
@@ -514,9 +516,12 @@ class JikiBarrierShot extends Shot{
     }
 
     void tamaKeshi(){
-        Iterator<Shot> it = playingStage.getEnemyShots().iterator();
+        
+        Iterator<Mover> it = playingStage.getEnemyShots().iterator();
         while(it.hasNext()){
-            Shot s = it.next();
+            Mover m = it.next();
+            if(!(m instanceof Shot))continue;
+            Shot s = (Shot)m;
             if(s.collision(this) == true){
                 float ransu = random(100);
                 if(s.isDeletable && ransu < 1){ //1%の確率でバリアに当たった弾がきえる
@@ -525,6 +530,7 @@ class JikiBarrierShot extends Shot{
                 }
             }
         }
+        
     }
 }
 
@@ -558,13 +564,17 @@ class JikiBlueLaser extends Shot{
     }
 
     void tamaKeshi(){
-        Iterator<Shot> it = playingStage.getEnemyShots().iterator();
+        
+        Iterator<Mover> it = playingStage.getEnemyShots().iterator();
         while(it.hasNext()){
-            Shot s = it.next();
+            Mover m = it.next();
+            if(!(m instanceof Shot))continue;
+            Shot s = (Shot)m;
             if(this.collision(s) == true && s.isDeletable){
                 println("deleteshot");
                 s.kill();
             }
         }
+        
     }
 }

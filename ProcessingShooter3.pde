@@ -1,3 +1,7 @@
+//★Begindraw/endDraw 問題（どこに書けばいいのか）
+//いちいちbegin/endするのはめんどいから、Stage/Title/Config(一番外側)でbegin/endすればいい？
+//不用意にenddrawするとその後のものが現れなくなる可能性があるs
+
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
@@ -12,7 +16,6 @@ public Stage playingStage;
 public Title title;
 public Scene scene = Scene.TitleScene;
 Minim minim;
-public int defaultHP = 10;
 public float fps = 60.0f;
 public int finalScore = 0;
 
@@ -20,6 +23,9 @@ public PFont kinkakuji;
 
 public final ConfigStruct defaultConfig = new ConfigStruct(); //初期状態コンフィグ
 public ConfigStruct gameConfig = new ConfigStruct();        //実際にゲーム内で適用するコンフィぐ
+
+//定数 これ以上増えない残機
+public final int maxHP = 30;
 
 void setup() {
     size(640, 480);
@@ -67,6 +73,9 @@ void keyPressed(){
         break;
         case GameClearScene:
             gameOverKeyPressed();
+        break;
+        case ConfigScene:
+            //configKeyPressed();
         break;
     }
 }
