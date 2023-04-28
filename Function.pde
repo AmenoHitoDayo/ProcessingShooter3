@@ -28,6 +28,15 @@ void easyTriangle(PGraphics pg, float x, float y, float angle, float size){
     easyTriangle(pg, v, angle, size);
 }
 
+void drawArrow(PGraphics pg, PVector pos){
+    pg.fill(255);
+
+    easyTriangle(pg, pos, 0, 16);
+    
+    pg.fill(0);
+    pg.ellipse(pos.x, pos.y, 8, 8);
+}
+
 //HSV(360,255,255)をRGB(255, 255, 255)変換
 color HSVtoRGB(float h, float s, float v){
     float r = 0, g = 0, b = 0;
@@ -100,4 +109,39 @@ PVector vectorFromMagAngle(float mag, float angle){
 PVector makeVectorForPointSecond(PVector deperture, PVector arrive, int second){
     PVector v = PVector.div(new PVector(arrive.x - deperture.x, arrive.y - deperture.y), second);
     return v;
+}
+
+//keyCodeを文字列にして返す
+
+String getStringFromCode(int i){
+    String s = "ERROR";
+
+    switch(i){
+        case 37:
+            s = "LEFT ARROW";
+        break;
+        case 38:
+            s = "UP ARROW";
+        break;
+        case 39:
+            s = "RIGHT ARROW";
+        break;
+        case 40:
+            s =  "DOWN ARROW";
+        break;
+        case 10:
+            s = "ENTER";
+        break;
+        case 32:
+            s = "SPACE";
+        break;
+        case 16:
+            s = "SHIFT";
+        break;
+        default:
+            s = String.valueOf((char)i);
+        break;
+    }
+
+    return s;
 }

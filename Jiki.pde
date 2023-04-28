@@ -203,7 +203,7 @@ class Jiki extends Machine{
   }
 
   void hit(){
-    ArrayList<Mover> shots = stage.enemyShots.getArray();
+    List<Mover> shots = stage.enemyShots.getArray();
     Iterator<Mover> it = shots.iterator();
     
     while(it.hasNext()){
@@ -253,7 +253,7 @@ class Jiki extends Machine{
     }
 
     //アイテム取得判定
-    ArrayList<Mover> items = stage.getItems();
+    List<Mover> items = stage.getItems();
     for(int i = 0; i < items.size(); i++){
       Mover m = items.get(i);
       if(!(m instanceof Item))continue;
@@ -314,25 +314,25 @@ class Jiki extends Machine{
   }
 
   void keyPressed(){
-    if(key == 'w' || keyCode == UP) up = true;
-    if(key == 'd' || keyCode == RIGHT) right = true;
-    if(key == 's' || keyCode == DOWN) down = true;
-    if(key == 'a' || keyCode == LEFT) left = true;
-    if(key == 'z' || key == 'Z') z = true;
-    if(key == 'x' || key == 'X') x = true;
-    if(key == 'c' || key == 'C') c = true;
-    if(keyCode == SHIFT) slow = true;
+    if(keyCode == gameKey[keyID.up.getID()]) up = true;
+    if(keyCode == gameKey[keyID.right.getID()]) right = true;
+    if(keyCode == gameKey[keyID.down.getID()]) down = true;
+    if(keyCode == gameKey[keyID.left.getID()]) left = true;
+    if(keyCode == gameKey[keyID.shot.getID()]) z = true;
+    if(keyCode == gameKey[keyID.special.getID()]) x = true;
+    if(keyCode == gameKey[keyID.absorb.getID()]) c = true;
+    if(keyCode == gameKey[keyID.slow.getID()]) slow = true;
   }
 
   void keyReleased(){
-    if(key == 'w' || keyCode == UP) up = false;
-    if(key == 'd' || keyCode == RIGHT) right = false;
-    if(key == 's' || keyCode == DOWN) down = false;
-    if(key == 'a' || keyCode == LEFT) left = false;
-    if(key == 'z' || key == 'Z') z = false;
-    if(key == 'x' || key == 'X') x = false;
-    if(key == 'c' || key == 'C') c = false;
-    if(keyCode == SHIFT) slow = false;
+    if(keyCode == gameKey[keyID.up.getID()]) up = false;
+    if(keyCode == gameKey[keyID.right.getID()]) right = false;
+    if(keyCode == gameKey[keyID.down.getID()]) down = false;
+    if(keyCode == gameKey[keyID.left.getID()]) left = false;
+    if(keyCode == gameKey[keyID.shot.getID()]) z = false;
+    if(keyCode == gameKey[keyID.special.getID()]) x = false;
+    if(keyCode == gameKey[keyID.absorb.getID()]) c = false;
+    if(keyCode == gameKey[keyID.slow.getID()]) slow = false;
   }
 
   @Override

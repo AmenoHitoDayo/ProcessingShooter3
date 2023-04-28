@@ -1,12 +1,12 @@
 class Movers{
-    protected ArrayList<Mover> movers;
-    protected ArrayList<Mover> removedMovers;
-    protected ArrayList<Mover> addedMovers;
+    protected List<Mover> movers;
+    protected List<Mover> removedMovers;
+    protected List<Mover> addedMovers;
 
     Movers(){
-        movers = new ArrayList<Mover>();
-        removedMovers = new ArrayList<Mover>();
-        addedMovers = new ArrayList<Mover>();
+        movers = new LinkedList<Mover>();
+        removedMovers = new LinkedList<Mover>();
+        addedMovers = new LinkedList<Mover>();
     }
 
     void updateMe(){
@@ -43,7 +43,7 @@ class Movers{
         removedMovers.add(m);
     }
 
-    public ArrayList<Mover> getArray(){
+    public List<Mover> getArray(){
         return movers;
     }
 }

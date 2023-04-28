@@ -13,7 +13,7 @@ class UI{
         drawColorPoint();
         drawReleaseWaitGauge();
         drawEnemyCount();
-        drawTekidanCount();
+        //drawTekidanCount();
         drawScoreCount();
         if(isGaugeUsing == true && gauge.getBaseEnemy() != null){
             gauge.drawMe(_pg);
@@ -104,6 +104,10 @@ class UI{
             pg.textFont(kinkakuji, 16);
             pg.text("Score : " + playingStage.getJiki().getScore(), 0, 16 * 4);
         pg.endDraw();
+    }
+
+    void drawControlAssist(){
+        
     }
 
     public void makeGauge(Enemy _e){

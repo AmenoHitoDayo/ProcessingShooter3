@@ -227,7 +227,7 @@ class OrbitShot extends Shot{
 //炸裂して全方位弾をまき散らす
 class ExplodeShot extends Shot{
     private float explodeFarme = 60;    //何F目で破裂するか
-    private ArrayList<Shot> clusters;   //破裂時にまき散らす弾幕
+    private List<Shot> clusters;   //破裂時にまき散らす弾幕
 
     ExplodeShot(float _x, float _y){
         super(_x, _y);
@@ -259,7 +259,7 @@ class ExplodeShot extends Shot{
         }
     }
 
-    void setCluster(ArrayList<Shot> shots){
+    void setCluster(List<Shot> shots){
         clusters = shots;
     }
 }
@@ -306,6 +306,7 @@ class LaserShot extends Shot{
         pg.pop();
 
         
+        /*
         //当たり判定確認用
         
         pg.strokeWeight(1);
@@ -321,6 +322,7 @@ class LaserShot extends Shot{
         }
         PVector pos3 = new PVector(apex.x + wid * cos(angle - PI), apex.y + wid * sin(angle - PI));
         pg.ellipse(pos3.x, pos3.y, wid * 2, wid * 2);
+        */
         
 
         pg.endDraw();

@@ -149,7 +149,7 @@ class Bomb01 extends Enemy{
     @Override
     void shot(){
         if(count != 60) return;
-        ArrayList<Shot> shots = nWay(pos, 5, 3, radians(180), radians(15));
+        List<Shot> shots = nWay(pos, 5, 3, radians(180), radians(15));
         for(Shot s: shots){
             s.setColor(col);
             s.setShotStyle(ShotStyle.Oval);
@@ -184,7 +184,7 @@ class Bomb02 extends Enemy{
         if(count != 60) return;
         PVector dirToJiki = new PVector(playingStage.getJiki().getX() - pos.x, playingStage.getJiki().getY() - pos.y);
         float angle = dirToJiki.heading();
-        ArrayList<Shot> shots = nWay(pos, 6, 3, angle, radians(15));
+        List<Shot> shots = nWay(pos, 6, 3, angle, radians(15));
         for(Shot s: shots){
             s.setColor(col);
             s.setShotStyle(ShotStyle.Oval);
@@ -224,7 +224,7 @@ class Aim01 extends Enemy{
             if(count % 15 == 0){
                 PVector dirToJiki = new PVector(playingStage.getJiki().getX() - pos.x, playingStage.getJiki().getY() - pos.y);
                 float angle = dirToJiki.heading();
-                ArrayList<Shot> shots = nWay(pos, 3, 3.0f, angle, radians(15));
+                List<Shot> shots = nWay(pos, 3, 3.0f, angle, radians(15));
                 for(Shot s : shots){
                     s.setColor(HSVtoRGB(shotHue, 255, 255));
                     s.setSize(8);
@@ -575,7 +575,7 @@ class Missile01 extends Enemy{
     }
 
     void makeCircle(){
-        ArrayList<Shot> shots = circleShot(pos, 10, 0, 0.1, 0);
+        List<Shot> shots = circleShot(pos, 10, 0, 0.1, 0);
         for(Shot s : shots){
             s.setColor(col);
             s.setShotStyle(ShotStyle.Oval);
@@ -621,7 +621,7 @@ class Fountain01 extends Enemy{
     void shot(){
         if(count == 60){
             //噴水
-            ArrayList<Shot> shots = nWay(pos, 10, 6, shotAngle, radians(5));
+            List<Shot> shots = nWay(pos, 10, 6, shotAngle, radians(5));
             for(Shot s : shots){
                 s.setAccel(0, 0.098);
                 s.setSize(6);
@@ -673,7 +673,7 @@ class UM02Fae extends Enemy{
         if(count < 60) return;
 
         if(count % 10 == 0){
-            ArrayList<Shot> shots = nWay(pos, 10, 1.0, 0.005f, angle, radians(1));
+            List<Shot> shots = nWay(pos, 10, 1.0, 0.005f, angle, radians(1));
             for(Shot s : shots){
                 s.setColor(col);
                 s.setSize(4);
@@ -882,7 +882,7 @@ class MidBoss01 extends Enemy{
 
         float a4 = new PVector(playingStage.getJiki().getX() - bits[4].getX(), playingStage.getJiki().getY() - bits[4].getY()).heading();
         for(int i = 0; i < 3; i++){
-            ArrayList<Shot> shots = lineShot(bits[4].getPos(), way, 3.0f, a4 + TWO_PI / 3 * i, radians(120f) / (way - 1));
+            List<Shot> shots = lineShot(bits[4].getPos(), way, 3.0f, a4 + TWO_PI / 3 * i, radians(120f) / (way - 1));
             for(Shot s : shots){
                 s.parent = this;
                 s.setColor(bits[4].getColor());
@@ -1002,7 +1002,7 @@ class Boss_Mauve extends Enemy{
             float angle = map(baseCount, 60, 90, radians(90), radians(270));
             PVector p = new PVector(pos.x + 30 * cos(random(TWO_PI)), pos.y + 30 * sin(random(TWO_PI)));
             for(int i = 0; i < 5; i++){
-                ArrayList<Shot> shots = nWay(p, 3, 2 + 0.5 * i, angle, radians(20));
+                List<Shot> shots = nWay(p, 3, 2 + 0.5 * i, angle, radians(20));
                 for(Shot s : shots){
                     s.setSize(4);
                     s.setAccel(-0.049, 0);
@@ -1041,11 +1041,11 @@ class Boss_Mauve extends Enemy{
             explodeShot.setVelocityFromSpeedAngle(2, radians(baseCount / 20 * 90 + 90));
             explodeShot.setColor(HSVtoRGB(240, 100, 255));
             explodeShot.setSize(10);
-            ArrayList<Shot> clusters = new ArrayList<Shot>();
+            List<Shot> clusters = new ArrayList<Shot>();
             float angle = random(TWO_PI);
             int way = 6;
             for(int i = 0; i < 6; i++){
-                ArrayList<Shot> hen = lineShot(
+                List<Shot> hen = lineShot(
                     new PVector(0, 0), 
                     way,
                     3,

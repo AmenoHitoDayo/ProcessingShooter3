@@ -9,11 +9,15 @@ import ddf.minim.signals.*;
 import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
 
+import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Iterator;
 
 public Stage playingStage;
 public Title title;
+public Config config;
+public KeyConfig keyConfig;
 public Scene scene = Scene.TitleScene;
 Minim minim;
 public float fps = 60.0f;
@@ -37,6 +41,8 @@ void setup() {
     minim = new Minim(this);
     //playingStage = new Stage01();
     title = new Title();
+    config = new Config();
+    keyConfig = new KeyConfig();
 }
 
 void draw() {
@@ -57,6 +63,12 @@ void draw() {
         case GameClearScene:
             gameClear();
         break;
+        case ConfigScene:
+            config.drawMe();
+        break;
+        case KeyConfigScene:
+            keyConfig.drawMe();
+        break;
     }
 }
 
@@ -75,8 +87,12 @@ void keyPressed(){
             gameOverKeyPressed();
         break;
         case ConfigScene:
-            //configKeyPressed();
+            config.KeyPressed();
         break;
+        case KeyConfigScene:
+            keyConfig.KeyPressed();
+        break;
+
     }
 }
 

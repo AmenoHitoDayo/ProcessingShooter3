@@ -143,15 +143,15 @@ class Stage{
         return ui;
     }
 
-    public ArrayList<Mover> getEnemyShots(){
+    public List<Mover> getEnemyShots(){
         return enemyShots.getArray();
     }
 
-    public ArrayList<Mover> getEnemys(){
+    public List<Mover> getEnemys(){
         return enemys.getArray();
     }
 
-    public ArrayList<Mover> getItems(){
+    public List<Mover> getItems(){
         return items.getArray();
     }
 
