@@ -58,15 +58,25 @@ class KeyConfig extends Menu{
 
     public void keyPressed(){
         if(isKeySelecting){
-            isKeySelecting = false;
-            if(selection >= gameKey.length)return;
+            if(selection >= gameKey.length){
+                isKeySelecting = false;
+                return;
+            }
+            //同一キー割り当て防止
+            for(int i = 0; i < gameKey.length; i++){
+                if(i == selection)continue;
+                if(keyCode == gameKey[i]) return;
+            }
             gameKey[selection] = keyCode;
+            isKeySelecting = false;
         }else{
             super.keyPressed();
 
             if(keyCode == RETURN || keyCode == ENTER || keyCode == gameKey[keyID.shot.getID()]){
                 if(selection == 8){
-                    //gameKey = defaultKey;
+                    for(int i = 0; i < gameKey.length; i++){
+                        gameKey[i] = defaultKey[i];
+                    }
                 }else if(selection == 9){
                     scene = Scene.ConfigScene;
                 }else{

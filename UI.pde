@@ -12,7 +12,7 @@ class UI{
         drawHP();
         drawColorPoint();
         drawReleaseWaitGauge();
-        drawEnemyCount();
+        //drawEnemyCount();
         //drawTekidanCount();
         drawScoreCount();
         if(isGaugeUsing == true && gauge.getBaseEnemy() != null){
@@ -96,13 +96,13 @@ class UI{
 
     void drawScoreCount(){
         pg.beginDraw();
-            if(playingStage.jiki.getX() < 32 && playingStage.jiki.getY() < 16 * 4){
+            if(playingStage.jiki.getX() < 32 && playingStage.jiki.getY() < 16 * 3){
                 pg.fill(255, 127);
             }else{
                 pg.fill(255);
             }
             pg.textFont(kinkakuji, 16);
-            pg.text("Score : " + playingStage.getJiki().getScore(), 0, 16 * 4);
+            pg.text("Score : " + playingStage.getJiki().getScore(), 0, 16 * 3);
         pg.endDraw();
     }
 

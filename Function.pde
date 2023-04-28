@@ -118,16 +118,16 @@ String getStringFromCode(int i){
 
     switch(i){
         case 37:
-            s = "LEFT ARROW";
+            s = "←";
         break;
         case 38:
-            s = "UP ARROW";
+            s = "↑";
         break;
         case 39:
-            s = "RIGHT ARROW";
+            s = "→";
         break;
         case 40:
-            s =  "DOWN ARROW";
+            s =  "↓";
         break;
         case 10:
             s = "ENTER";
