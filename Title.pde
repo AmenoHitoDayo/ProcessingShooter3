@@ -72,7 +72,7 @@ class Title{
     }
 
     void keyPressed(){
-        if(key == 'z' || key == 'Z'){
+        if(keyCode == gameKey[keyID.shot.getID()]){
             switch(cursorNum){
                 case 0:
                     particles.clear();
@@ -89,13 +89,13 @@ class Title{
             }
         }
 
-        if(key == 'w' || key == 'W' || keyCode == UP){
+        if(keyCode == gameKey[keyID.up.getID()]){
             cursorNum--;
             refreshPos();
         }
 
-        if(key == 's' || key == 'S' || keyCode == DOWN){
-            println("/o/");
+        if(keyCode == gameKey[keyID.down.getID()]){
+            //println("/o/");
             cursorNum++;
             refreshPos();
         }

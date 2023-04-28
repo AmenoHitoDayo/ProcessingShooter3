@@ -972,7 +972,7 @@ class Boss_Mauve extends Enemy{
         if(baseCount == 0 || baseCount == 20){
             PVector dirToJiki = new PVector(playingStage.getJiki().getX() - pos.x, playingStage.getJiki().getY() - pos.y);
             aimAngle = dirToJiki.heading();
-            println(aimAngle);
+            //println(aimAngle);
         }
         if(baseCount < 20){
             float angle = map(baseCount, 0, 20, radians(30), radians(300));

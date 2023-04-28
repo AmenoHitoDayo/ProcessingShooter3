@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.Arrays;
 
 public Stage playingStage;
 public Title title;
@@ -87,10 +88,10 @@ void keyPressed(){
             gameOverKeyPressed();
         break;
         case ConfigScene:
-            config.KeyPressed();
+            config.keyPressed();
         break;
         case KeyConfigScene:
-            keyConfig.KeyPressed();
+            keyConfig.keyPressed();
         break;
 
     }

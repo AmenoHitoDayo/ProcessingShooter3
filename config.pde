@@ -1,52 +1,33 @@
 //キーコンも入れたい
-class Config{   //設定画面
-    int selection = 0;  //何番目の項目を選んでいるか
+class Config extends Menu{   //設定画面
     ConfigStruct struct;    //
 
-    PGraphics buffer;
-    PVector pos;
-
-    final int topY = 128;
-    final int margin = 40;
-
-    final String[] koumokuText = {
-        "Default Life",   //みたまんま
-        "Controll Assist", //ゲーム画面に操作説明を出すか
-        "BGM Volume",  
-        "SE Volume",
-        "Glow Effect",
-        "Key Setting",
-        "Default",
-        "Back"
-    };
-
     Config(){
+        super();
+
         struct = new ConfigStruct();
         struct.CopyConfig(gameConfig);
 
-        buffer = createGraphics(width, height);
+        topY = 128;
+        margin = 40;
 
-        refreshPos();
+        koumokuText = new ArrayList<>(
+            Arrays.asList(
+                "Default Life",   //みたまんま
+                "Controll Assist", //ゲーム画面に操作説明を出すか
+                "BGM Volume",  
+                "SE Volume",
+                "Glow Effect",
+                "Key Setting",
+                "Default",
+                "Back"
+            )
+        );
     }
 
-    public void drawMe(){
-        image(buffer, 0, 0);
-
-        buffer.beginDraw();
-            buffer.background(0);
-            drawMoji();
-            drawArrow(buffer, pos);
-        buffer.endDraw();
-    }
-
-    public void KeyPressed(){
-        if(keyCode == UP){
-            selection--;
-        }
-        if(keyCode == DOWN){
-            selection++;
-        }
-        if(keyCode == LEFT){
+    public void keyPressed(){
+        super.keyPressed();
+        if(keyCode == gameKey[keyID.left.getID()]){
             switch(selection){
                 case(0):
                     struct.defaultLife = max(--struct.defaultLife, 1);
@@ -65,7 +46,7 @@ class Config{   //設定画面
                 break;
             }
         }
-        if(keyCode == RIGHT){
+        if(keyCode == gameKey[keyID.right.getID()]){
             switch(selection){
                 case(0):
                     struct.defaultLife = min(++struct.defaultLife, maxHP);
@@ -84,7 +65,7 @@ class Config{   //設定画面
                 break;
             }
         }
-        if(keyCode == RETURN || keyCode == ENTER || key == 'Z' || key == 'z'){
+        if(keyCode == RETURN || keyCode == ENTER || keyCode == gameKey[keyID.shot.getID()]){
             if(selection < 5){
                 selection = 7;
             }else if(selection == 5){
@@ -97,18 +78,12 @@ class Config{   //設定画面
                 scene = Scene.TitleScene;
             }
         }
-        
         refreshPos();
     }
 
-    void refreshPos(){
-        if(selection < 0)selection = 0;
-        if(selection > koumokuText.length - 1)selection = koumokuText.length - 1;
-
-        pos = new PVector(32, topY + margin * selection);
-    }
-
     void drawMoji(){
+        super.drawMoji();
+
         buffer.push();
 
         buffer.textFont(kinkakuji);
@@ -119,9 +94,8 @@ class Config{   //設定画面
         buffer.textSize(48);
         buffer.text("Config", 32 - 16, 48);
 
-        buffer.textSize(32);
-        for(int i = 0; i < koumokuText.length; i++){
-            buffer.text(koumokuText[i], 64, topY + margin * i);
+        buffer.textSize(charSize);
+        for(int i = 0; i < koumokuText.size(); i++){
             //すごい無意味を感じる
             switch(i){
                 case(0):    //life
@@ -150,9 +124,6 @@ class Config{   //設定画面
         refreshPos();
         struct.CopyConfig(gameConfig);
     }
-
-    //画面遷移してきたらコンフィグの設定をgameConfigからコピーして表示
-    //左右キーで設定変更
 }
 
 public class ConfigStruct{

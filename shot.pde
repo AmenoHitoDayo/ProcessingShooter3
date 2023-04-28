@@ -251,9 +251,9 @@ class ExplodeShot extends Shot{
     }
 
     void explosion(){
-        println("exp");
+        //println("exp");
         for(Shot s: clusters){
-            println("lode");
+            //println("lode");
             s.pos = s.getPos().add(this.pos); //自分の位置から出るようにする
             playingStage.addEnemyShot(s);
         }
@@ -462,7 +462,7 @@ class JikiRockOnShot extends Shot{
     }
 
     void searchTarget(){
-        println("search:" + this.targetSelectCount);
+        //println("search:" + this.targetSelectCount);
         Enemy t = null;
         float distant = 10000;
         Iterator<Mover> it = playingStage.enemys.getArray().iterator();
@@ -527,7 +527,7 @@ class JikiBarrierShot extends Shot{
             if(s.collision(this) == true){
                 float ransu = random(100);
                 if(s.isDeletable && ransu < 1){ //1%の確率でバリアに当たった弾がきえる
-                    println("deleteshot");
+                    //println("deleteshot");
                     s.kill();
                 }
             }
@@ -561,7 +561,7 @@ class JikiBlueLaser extends Shot{
 
     @Override
     void drawMe(PGraphics pg){
-        println("blueShotDraw");
+        //println("blueShotDraw");
         super.drawMe(pg);
     }
 
@@ -573,7 +573,7 @@ class JikiBlueLaser extends Shot{
             if(!(m instanceof Shot))continue;
             Shot s = (Shot)m;
             if(this.collision(s) == true && s.isDeletable){
-                println("deleteshot");
+                //println("deleteshot");
                 s.kill();
             }
         }

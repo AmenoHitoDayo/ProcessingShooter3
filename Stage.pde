@@ -254,7 +254,7 @@ class Stage01 extends Stage{
                         isMidBossAppeared = true;
                     }else{
                         //中ボス出たあとに敵数が0になった=中ボスが倒れたのでカウント再開
-                        println("CountRestart");
+                        //println("CountRestart");
                         isCountUP = true;
                     }
                 }
@@ -339,7 +339,7 @@ class Stage01 extends Stage{
                         isBossAppeared = true;
                     }else{
                         //ボス出たあとに敵数が0になった=中ボスが倒れたのでカウント再開
-                        println("CountRestart");
+                        //println("CountRestart");
                         isCountUP = true;
                     }
                 }

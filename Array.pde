@@ -4,9 +4,9 @@ class Movers{
     protected List<Mover> addedMovers;
 
     Movers(){
-        movers = new LinkedList<Mover>();
-        removedMovers = new LinkedList<Mover>();
-        addedMovers = new LinkedList<Mover>();
+        movers = new ArrayList<Mover>();
+        removedMovers = new ArrayList<Mover>();
+        addedMovers = new ArrayList<Mover>();
     }
 
     void updateMe(){
