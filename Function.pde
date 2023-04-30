@@ -12,22 +12,29 @@ PVector VectorDown(){
 }
 
 //大きさと角度を入れて正三角形ができる
+//pgraphicで描画中にendDrawしちゃうとそこでDraw止まってしまうのよねぇ
+//でもbeginDraw忘れたところにこれ書いてもエラーになるわけでわ無いという・・・
 void easyTriangle(PGraphics pg, PVector pos, float angle, float size){
-    pg.beginDraw();
-
     pg.pushMatrix();
         pg.translate(pos.x, pos.y);
         pg.triangle(cos(angle) * size, sin(angle) * size,
                 cos(angle + radians(120)) * size, sin(angle + radians(120)) * size,
                 cos(angle + radians(240)) * size, sin(angle + radians(240)) * size);
     pg.popMatrix();
-
-    pg.endDraw();
 }
 
 void easyTriangle(PGraphics pg, float x, float y, float angle, float size){
     PVector v = new PVector(x, y);
     easyTriangle(pg, v, angle, size);
+}
+
+void drawArrow(PGraphics pg, PVector pos){
+    pg.fill(255);
+
+    easyTriangle(pg, pos, 0, 16);
+    
+    pg.fill(0);
+    pg.ellipse(pos.x, pos.y, 8, 8);
 }
 
 //HSV(360,255,255)をRGB(255, 255, 255)変換
@@ -102,4 +109,39 @@ PVector vectorFromMagAngle(float mag, float angle){
 PVector makeVectorForPointSecond(PVector deperture, PVector arrive, int second){
     PVector v = PVector.div(new PVector(arrive.x - deperture.x, arrive.y - deperture.y), second);
     return v;
+}
+
+//keyCodeを文字列にして返す
+
+String getStringFromCode(int i){
+    String s = "ERROR";
+
+    switch(i){
+        case 37:
+            s = "←";
+        break;
+        case 38:
+            s = "↑";
+        break;
+        case 39:
+            s = "→";
+        break;
+        case 40:
+            s =  "↓";
+        break;
+        case 10:
+            s = "ENTER";
+        break;
+        case 32:
+            s = "SPACE";
+        break;
+        case 16:
+            s = "SHIFT";
+        break;
+        default:
+            s = String.valueOf((char)i);
+        break;
+    }
+
+    return s;
 }

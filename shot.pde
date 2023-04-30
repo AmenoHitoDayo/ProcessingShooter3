@@ -227,7 +227,7 @@ class OrbitShot extends Shot{
 //炸裂して全方位弾をまき散らす
 class ExplodeShot extends Shot{
     private float explodeFarme = 60;    //何F目で破裂するか
-    private ArrayList<Shot> clusters;   //破裂時にまき散らす弾幕
+    private List<Shot> clusters;   //破裂時にまき散らす弾幕
 
     ExplodeShot(float _x, float _y){
         super(_x, _y);
@@ -251,15 +251,15 @@ class ExplodeShot extends Shot{
     }
 
     void explosion(){
-        println("exp");
+        //println("exp");
         for(Shot s: clusters){
-            println("lode");
+            //println("lode");
             s.pos = s.getPos().add(this.pos); //自分の位置から出るようにする
             playingStage.addEnemyShot(s);
         }
     }
 
-    void setCluster(ArrayList<Shot> shots){
+    void setCluster(List<Shot> shots){
         clusters = shots;
     }
 }
@@ -305,10 +305,12 @@ class LaserShot extends Shot{
             pg.rect(0, 0, leng, wid * 2, wid / 2);
         pg.pop();
 
+        
         /*
         //当たり判定確認用
-        pg.strokeWeight(0.5);
-        pg.stroke(255);
+        
+        pg.strokeWeight(1);
+        pg.stroke(0);
         pg.fill(255, 32);
         float angle = vel.heading();
         //なんかいfor文を回すか
@@ -321,6 +323,7 @@ class LaserShot extends Shot{
         PVector pos3 = new PVector(apex.x + wid * cos(angle - PI), apex.y + wid * sin(angle - PI));
         pg.ellipse(pos3.x, pos3.y, wid * 2, wid * 2);
         */
+        
 
         pg.endDraw();
     }
@@ -459,12 +462,14 @@ class JikiRockOnShot extends Shot{
     }
 
     void searchTarget(){
-        println("search:" + this.targetSelectCount);
+        //println("search:" + this.targetSelectCount);
         Enemy t = null;
         float distant = 10000;
-        Iterator<Enemy> it = playingStage.enemys.getArray().iterator();
+        Iterator<Mover> it = playingStage.enemys.getArray().iterator();
         while(it.hasNext()){
-            Enemy e = it.next();
+            Mover m = it.next();
+            if(!(m instanceof Enemy))continue;
+            Enemy e = (Enemy)m;
             float d = dist(pos.x, pos.y, e.getX(), e.getY());
             if(d < distant){
             distant = d;
@@ -513,17 +518,21 @@ class JikiBarrierShot extends Shot{
     }
 
     void tamaKeshi(){
-        Iterator<Shot> it = playingStage.getEnemyShots().iterator();
+        
+        Iterator<Mover> it = playingStage.getEnemyShots().iterator();
         while(it.hasNext()){
-            Shot s = it.next();
+            Mover m = it.next();
+            if(!(m instanceof Shot))continue;
+            Shot s = (Shot)m;
             if(s.collision(this) == true){
                 float ransu = random(100);
                 if(s.isDeletable && ransu < 1){ //1%の確率でバリアに当たった弾がきえる
-                    println("deleteshot");
+                    //println("deleteshot");
                     s.kill();
                 }
             }
         }
+        
     }
 }
 
@@ -552,18 +561,22 @@ class JikiBlueLaser extends Shot{
 
     @Override
     void drawMe(PGraphics pg){
-        println("blueShotDraw");
+        //println("blueShotDraw");
         super.drawMe(pg);
     }
 
     void tamaKeshi(){
-        Iterator<Shot> it = playingStage.getEnemyShots().iterator();
+        
+        Iterator<Mover> it = playingStage.getEnemyShots().iterator();
         while(it.hasNext()){
-            Shot s = it.next();
+            Mover m = it.next();
+            if(!(m instanceof Shot))continue;
+            Shot s = (Shot)m;
             if(this.collision(s) == true && s.isDeletable){
-                println("deleteshot");
+                //println("deleteshot");
                 s.kill();
             }
         }
+        
     }
 }

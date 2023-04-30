@@ -2,13 +2,13 @@
 //ArrayListで作った弾ぜんぶが帰るので色とかの設定やステージに追加は自分でやる
 
 //シンプルな全方位(angleで指定した角度を基準)
-public ArrayList<Shot> circleShot(PVector pos, int way, float speed, float angle){
+public List<Shot> circleShot(PVector pos, int way, float speed, float angle){
     return circleShot(pos, way, speed, 0f, angle);
 }
 
 //加速度付けられる版
-public ArrayList<Shot> circleShot(PVector pos, int way, float speed, float accel, float angle){
-    ArrayList<Shot> shots = new ArrayList<Shot>();
+public List<Shot> circleShot(PVector pos, int way, float speed, float accel, float angle){
+    List<Shot> shots = new ArrayList<Shot>();
 
     for(int i = 0; i < way; i++){
         Shot s = new Shot(pos.x, pos.y);
@@ -22,13 +22,13 @@ public ArrayList<Shot> circleShot(PVector pos, int way, float speed, float accel
 
 //angleで指定した角度に向かって飛ぶnWay（扇形）弾
 //gapは、1つの弾と弾の間の角度
-public ArrayList<Shot> nWay(PVector pos, int way, float speed, float angle, float gap){
+public List<Shot> nWay(PVector pos, int way, float speed, float angle, float gap){
     return nWay(pos, way, speed, 0f, angle, gap);
 }
 
 //加速度付けられる版
-public ArrayList<Shot> nWay(PVector pos, int way, float speed, float accel, float angle, float gap){
-    ArrayList<Shot> shots = new ArrayList<Shot>();
+public List<Shot> nWay(PVector pos, int way, float speed, float accel, float angle, float gap){
+    List<Shot> shots = new ArrayList<Shot>();
 
     //偶数弾(外し・狙った位置は安置になる)
     if(way % 2 == 0){
@@ -68,8 +68,8 @@ public ArrayList<Shot> nWay(PVector pos, int way, float speed, float accel, floa
 }
 
 //線形に飛ぶ弾
-public ArrayList<Shot> lineShot(PVector pos, int way, float speed, float angle, float gap){
-    ArrayList<Shot> shots = new ArrayList<Shot>();
+public List<Shot> lineShot(PVector pos, int way, float speed, float angle, float gap){
+    List<Shot> shots = new ArrayList<Shot>();
 
     //偶数弾(外し・狙った位置は安置になる)
     if(way % 2 == 0){
