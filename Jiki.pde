@@ -160,7 +160,7 @@ class Jiki extends Machine{
     if(z){
       if(count % 8 == 0){
         shotSound.play(0);
-        print("z");
+        //print("z");
         float kakudo = 10;
         float kyori = 2;
         for(int i = 0; i < 4; i++){
@@ -230,7 +230,7 @@ class Jiki extends Machine{
           Item i = new Item(s.getX(), s.getY(), red(s.getColor()), green(s.getColor()), blue(s.getColor()));
           s.kill();
           stage.addItem(i);
-          print("absorb");
+          //print("absorb");
         }
       }
       
@@ -292,7 +292,7 @@ class Jiki extends Machine{
         //ここ吸収ボタンおしたときの処理
         absorbSound.play(0);
         absorbCount = count + absorbFrame;
-        print("c");
+        //print("c");
       }
     }
   }

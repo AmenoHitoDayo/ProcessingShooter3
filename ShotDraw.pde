@@ -66,7 +66,7 @@ public void orbDelayDraw(PGraphics pg, Shot shot){
 
         pg.push();
             pg.blendMode(ADD);
-            for(int i = 0; i < 4; i++){
+            for(int i = 0; i < 3; i++){
                 pg.noStroke();
                 pg.fill(shot.getColor(), map(shot.getDelay() - shot.getCount(), 0, shot.getDelay(), 255, 0) / 1.5);
                 float delaysize = map(shot.getDelay() - shot.getCount(), 0, shot.getDelay(), shot.getSize(), shot.getSize() * 4);
