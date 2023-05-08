@@ -1,18 +1,28 @@
-class Title{
-    private int cursorNum = 0;
+class Title extends Menu{
     ArrayList<Particle> particles;
-
-    PGraphics buffer;
-    PVector pos;
     int count = 0;
 
     Title(){
+        super();
+
+        topY = height / 2 + 64;
+        charSize = 24;
+
+        koumokuText = new ArrayList<>(
+            Arrays.asList(
+                "Start",
+                "Config",
+                "Exit"
+            )
+        );
+
         particles = new ArrayList<Particle>();
         refreshPos();
-        buffer = createGraphics(width, height);
     }
 
-    public void updateMe(){
+    public void drawMe(){
+        super.drawMe();
+
         if(count % 10 == 0){
             GlowBallParticle gp = new GlowBallParticle(random(width), -50);
             particles.add(gp);
@@ -22,27 +32,11 @@ class Title{
         while(it.hasNext()){
             Particle p = it.next();
             p.updateMe();
+            p.drawMe(buffer);
             if(p.areYouDead())it.remove();
         }
 
         count++;
-    }
-
-    public void drawMe(){
-        image(buffer, 0, 0);
-
-        buffer.beginDraw();
-            buffer.background(0);
-        buffer.endDraw();
-
-        for(Particle p: particles){
-            p.drawMe(buffer);
-        }
-
-        buffer.beginDraw();
-            drawArrow(buffer, pos);
-            drawMoji();
-        buffer.endDraw();
     }
 
     public void drawMoji(){
@@ -55,25 +49,20 @@ class Title{
         buffer.noStroke();
         buffer.fill(255);
         buffer.text("Shooting of Color", width / 2, height / 2 - 64);
-
+        buffer.textAlign(RIGHT, BOTTOM);
         buffer.textSize(24);
-        buffer.text("Start", width / 2, height / 2 + 64);
-        buffer.text("Config", width / 2, height / 2 + 64 + 48);
-        buffer.text("Exit", width / 2, height / 2 + 64 + 48 * 2);
+        buffer.text("alpha 0.2", width, height);
 
         buffer.pop();
-    }
 
-    void refreshPos(){
-        if(cursorNum < 0)cursorNum = 2;
-        if(cursorNum > 2)cursorNum = 0;
-
-        pos = new PVector(width / 2 - 96, height / 2 + 64 + 48 * cursorNum);
+        super.drawMoji();
     }
 
     void keyPressed(){
+        super.keyPressed();
+
         if(keyCode == gameKey[keyID.shot.getID()]){
-            switch(cursorNum){
+            switch(selection){
                 case 0:
                     particles.clear();
                     playingStage = new Stage01();
@@ -87,17 +76,6 @@ class Title{
                     exit();
                     break;
             }
-        }
-
-        if(keyCode == gameKey[keyID.up.getID()]){
-            cursorNum--;
-            refreshPos();
-        }
-
-        if(keyCode == gameKey[keyID.down.getID()]){
-            //println("/o/");
-            cursorNum++;
-            refreshPos();
         }
     }
 }
