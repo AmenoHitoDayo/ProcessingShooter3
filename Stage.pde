@@ -30,7 +30,7 @@ class Stage{
         setBGM("sol_battle047.mp3");
         
         clearJingle = minim.loadFile("sol_fanfare002.mp3");
-        clearJingle.setGain(-10f);
+        setBGMGain(clearJingle, 0f);
         
         bgm.printControls();
     }
@@ -190,7 +190,7 @@ class Stage01 extends Stage{
     Stage01(){
         super();
         setBGM(stageBGM);
-        getBGM().setGain(-10f);
+        setBGMGain(getBGM(), 0);
         count = 0;
     }
 
@@ -329,7 +329,7 @@ class Stage01 extends Stage{
                         //音楽を変える
                         bgm.pause();
                         setBGM(bossBGM);
-                        getBGM().setGain(-10f);
+                        setBGMGain(getBGM(), 0f);
                         bgm.loop(0);
 
                         Enemy e = new Boss_Mauve(width, height / 2);

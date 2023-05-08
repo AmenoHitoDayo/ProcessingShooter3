@@ -145,3 +145,13 @@ String getStringFromCode(int i){
 
     return s;
 }
+
+void setSEGain(AudioPlayer se, float defaultGain){
+    float gain = defaultGain - 10 * (10 - gameConfig.seVolume);
+    se.setGain(gain);
+}
+
+void setBGMGain(AudioPlayer bgm, float defaultGain){
+    float gain = defaultGain - 10 * (10 - gameConfig.bgmVolume);
+    bgm.setGain(gain);
+}

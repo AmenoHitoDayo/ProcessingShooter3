@@ -11,9 +11,9 @@ class Enemy extends Machine{
         col = color(255);
 
         deadSound = minim.loadFile("魔王魂  戦闘18.mp3");
-        deadSound.setGain(-10f);
+        setSEGain(deadSound, 0f);
         hitSound = minim.loadFile("魔王魂  戦闘07.mp3");
-        hitSound.setGain(-15f);
+        setSEGain(hitSound, -5f);
     }
 
     //移動とかのショット以外の挙動はここに書く
