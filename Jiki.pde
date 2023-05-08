@@ -36,17 +36,17 @@ class Jiki extends Machine{
     BlueP = 0;
 
     shotSound = minim.loadFile("maou_se_battle11.mp3");
-    shotSound.setGain(-30f);
+    setSEGain(shotSound, -20f);
     hitSound = minim.loadFile("魔王魂 効果音 システム09.mp3");
-    hitSound.setGain(-10f);
+    setSEGain(hitSound, 0f);
     absorbSound = minim.loadFile("魔王魂  マジカル15.mp3");
-    absorbSound.setGain(-10f);
+    setSEGain(absorbSound, 0f);
     itemSound = minim.loadFile("魔王魂 効果音 ジッポ-開ける音.mp3");
-    itemSound.setGain(-10f);
+    setSEGain(itemSound, 0f);
     extendSound = minim.loadFile("maou_se_magical14.mp3");
-    extendSound.setGain(-10f);
+    setSEGain(extendSound, 0f);
     releaseSound = minim.loadFile("maou_se_magical14.mp3");
-    releaseSound.setGain(-10f);
+    setSEGain(releaseSound, 0f);
   }
 
   void updateMe(Stage _s){
