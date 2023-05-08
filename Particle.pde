@@ -4,7 +4,7 @@ class Particle extends Mover{
         super(_x, _y);
         col =(_c);
     }
-
+    
     @Override
     void updateMe(){
         super.updateMe();
@@ -109,7 +109,16 @@ class GlowBallParticle extends Particle{
                 pg.pop();
             pg.endDraw();
         }else{
-
+            /*
+            pg.beginDraw();
+                pg.push();
+                pg.blendMode(BLEND);
+                    pg.fill(col);
+                    pg.noStroke();
+                    pg.circle(pos.x, pos.y, size);
+                pg.pop();
+            pg.endDraw();
+            */
         }
     }
 }

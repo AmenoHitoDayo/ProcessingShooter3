@@ -166,9 +166,9 @@ class Jiki extends Machine{
         for(int i = 0; i < 4; i++){
           Shot shot = new Shot(pos.x + 24, pos.y - kyori + i * kyori * 0.75, 0, 0);
           shot.size =(4);
-          shot.col = (color(255, 180));
+          shot.col = (color(180));
           shot.accel =(new PVector(0.25 * cos(radians(-kakudo + kakudo * 0.75 * i)), 0.25 * sin(radians(-kakudo + kakudo * 0.75 * i))));
-          shot.setBlendStyle(ADD);
+          //shot.setBlendStyle(ADD);
           stage.addJikiShot(shot);
         }
       }
@@ -280,7 +280,11 @@ class Jiki extends Machine{
       pg.beginDraw();
       pg.stroke(255);
       pg.strokeWeight(1);
-      pg.fill(255, 180 / absorbFrame * (absorbCount - count));
+      if(gameConfig.isGlow){
+        pg.fill(255, 180 / absorbFrame * (absorbCount - count));
+      }else{
+        pg.noFill();
+      }
       pg.ellipse(pos.x, pos.y, absorbArea * 2, absorbArea * 2);
       pg.endDraw();
     }else{

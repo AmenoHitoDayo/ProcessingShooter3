@@ -509,8 +509,13 @@ class JikiBarrierShot extends Shot{
 
             pg.blendMode(blendStyle);
             pg.strokeWeight(2);
-            pg.stroke(255);
-            pg.fill(0, 255, 0, 32);
+            if(gameConfig.isGlow){
+                pg.stroke(255);
+                pg.fill(0, 255, 0, 32);
+            }else{
+                pg.stroke(0, 255, 0);
+                pg.noFill();
+            }
             pg.ellipse(pos.x, pos.y, size * 2, size * 2);
 
             pg.pop();
@@ -542,7 +547,11 @@ class JikiBlueLaser extends Shot{
         super(_x, _y, 64);
         vel = (new PVector(10, 0));
         accel = (new PVector(0.1, 0));
-        col = (color(64, 64, 255, 180));
+        if(gameConfig.isGlow){
+            col = (color(64, 64, 255, 180));
+        }else{
+            col = (color(64, 64, 255));
+        }
         setDeletable(false);
         setHittable(true);
         setBlendStyle(BLEND);
@@ -556,7 +565,6 @@ class JikiBlueLaser extends Shot{
             this.kill();
         }
         tamaKeshi();
-        
     }
 
     @Override
