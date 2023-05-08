@@ -1,5 +1,7 @@
 # ProcessingShooter3
 
+うちかえったら、Windowsのほうに音量調整のできるStage.pdeがあるはずなんで、探すこと！！！！
+
 
 ダウンロードリンク
 https://drive.google.com/file/d/1xoZ3Gj55HdsobOhN2TEyrdyeQBs_VQEi/view?usp=share_link
