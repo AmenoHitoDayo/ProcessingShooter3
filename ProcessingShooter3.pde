@@ -51,7 +51,7 @@ void draw() {
     
     switch(scene){
         case TitleScene:
-            title.updateMe();
+            //title.updateMe();
             title.drawMe();
         break;
         case GameScene:

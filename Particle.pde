@@ -84,14 +84,14 @@ class GlowBallParticle extends Particle{
     void updateMe(){
         super.updateMe();
         size -= 0.01;
-        if(size <= 0)kill();
+        if(count > 60 && (size <= 0 || isOutOfScreen()))kill();
     }
 
     @Override
     void drawMe(PGraphics pg){
         pg.beginDraw();
             pg.push();
-            pg.blendMode(EXCLUSION);
+            pg.blendMode(SCREEN);
             for(int i = 0; i < 10; i++){
                 pg.fill(col, 10);
                 pg.noStroke();
