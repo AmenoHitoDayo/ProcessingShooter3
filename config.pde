@@ -128,7 +128,7 @@ class Config extends Menu{   //設定画面
 
 public class ConfigStruct{
     int defaultLife;
-    boolean  isControlAssist;
+    boolean isControlAssist;
     int bgmVolume;
     int seVolume;
     boolean isGlow = true;

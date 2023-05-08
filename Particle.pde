@@ -32,10 +32,14 @@ class RectParticle extends Particle{
         this.size =(size + maxSize / lifeTime);
 
         pg.push();
-            pg.blendMode(ADD);
+            if(gameConfig.isGlow){
+                pg.blendMode(ADD);
+                pg.stroke(col, 255 - (190 / lifeTime) * count);
+            }else{
+                pg.stroke(col);
+            }
             pg.noFill();
             pg.strokeWeight(5);
-            pg.stroke(col, 255 - (190 / lifeTime) * count);
             pg.translate(pos.x, pos.y);
             pg.rotate(baseAngle + radians(count * 2 + 45));
             pg.rect(0, 0, size + count, size + count);
@@ -61,10 +65,14 @@ class CircleParticle extends Particle{
         this.size =(size + maxSize / lifeTime);
 
         pg.push();
-            pg.blendMode(ADD);
+            if(gameConfig.isGlow){
+                pg.blendMode(ADD);
+                pg.stroke(col, 255 - (190 / lifeTime) * count);
+            }else{
+                pg.stroke(col);
+            }
             pg.noFill();
             pg.strokeWeight(5);
-            pg.stroke(col, 255 - (190 / lifeTime) * count);
             pg.ellipse(pos.x, pos.y, size + count, size + count);
         pg.pop();
 
@@ -89,15 +97,19 @@ class GlowBallParticle extends Particle{
 
     @Override
     void drawMe(PGraphics pg){
-        pg.beginDraw();
-            pg.push();
-            pg.blendMode(SCREEN);
-            for(int i = 0; i < 10; i++){
-                pg.fill(col, 10);
-                pg.noStroke();
-                pg.ellipse(pos.x, pos.y, size * pow(0.95, i), size * pow(0.95, i));
-            }
-            pg.pop();
-        pg.endDraw();
+        if(gameConfig.isGlow){
+            pg.beginDraw();
+                pg.push();
+                pg.blendMode(SCREEN);
+                for(int i = 0; i < 10; i++){
+                    pg.fill(col, 10);
+                    pg.noStroke();
+                    pg.ellipse(pos.x, pos.y, size * pow(0.95, i), size * pow(0.95, i));
+                }
+                pg.pop();
+            pg.endDraw();
+        }else{
+
+        }
     }
 }

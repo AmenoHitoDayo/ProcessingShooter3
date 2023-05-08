@@ -12,19 +12,32 @@ public void orbShotDraw(PGraphics pg, Shot shot){
 }
 
 public void ovalShotDraw(PGraphics pg, Shot shot){
-    float lineWeight = shot.getSize() / 3;
+    if(gameConfig.isGlow){
+        float lineWeight = shot.getSize() / 3;
 
-    pg.beginDraw();
-        pg.push();
-            pg.blendMode(shot.getBlendStyle());
-            pg.translate(shot.getX(), shot.getY());
-            pg.rotate(shot.getVel().heading());
-            pg.strokeWeight(lineWeight);
-            pg.stroke(shot.getColor());
-            pg.fill(shot.getColor(), 180);
-            pg.ellipse(0, 0, shot.getSize() * 3, shot.getSize() * 2);
-        pg.pop();
-    pg.endDraw();
+        pg.beginDraw();
+            pg.push();
+                pg.blendMode(shot.getBlendStyle());
+                pg.translate(shot.getX(), shot.getY());
+                pg.rotate(shot.getVel().heading());
+                pg.strokeWeight(lineWeight);
+                pg.stroke(shot.getColor());
+                pg.fill(shot.getColor(), 180);
+                pg.ellipse(0, 0, shot.getSize() * 3, shot.getSize() * 2);
+            pg.pop();
+        pg.endDraw();
+    }else{
+        pg.beginDraw();
+            pg.push();
+                pg.blendMode(shot.getBlendStyle());
+                pg.translate(shot.getX(), shot.getY());
+                pg.rotate(shot.getVel().heading());
+                pg.noStroke();
+                pg.fill(shot.getColor());
+                pg.ellipse(0, 0, shot.getSize() * 3, shot.getSize() * 2);
+            pg.pop();
+        pg.endDraw();
+    }
 }
 
 public void rectShotDraw(PGraphics pg, Shot shot){
@@ -46,22 +59,36 @@ public void rectShotDraw(PGraphics pg, Shot shot){
 }
 
 public void glowShotDraw(PGraphics pg, Shot shot){
-    pg.beginDraw();
-        pg.push();
-            pg.blendMode(shot.getBlendStyle());
-            pg.noStroke();
-            for(int i = 1; i <= 3; i++){
-                pg.fill(shot.getColor(), 255 / 3);
-                float glowSize = shot.getSize() * (pow(1.25, i));
-                pg.ellipse(shot.getX(), shot.getY(), glowSize * 2, glowSize * 2);
-            }
-            pg.fill(255);
-            pg.ellipse(shot.getX(), shot.getY(), shot.getSize() * 2, shot.getSize() * 2);
-        pg.pop();
-    pg.endDraw();
+    if(gameConfig.isGlow){
+        pg.beginDraw();
+            pg.push();
+                pg.blendMode(shot.getBlendStyle());
+                pg.noStroke();
+                for(int i = 1; i <= 3; i++){
+                    pg.fill(shot.getColor(), 255 / 3);
+                    float glowSize = shot.getSize() * (pow(1.25, i));
+                    pg.ellipse(shot.getX(), shot.getY(), glowSize * 2, glowSize * 2);
+                }
+                pg.fill(255);
+                pg.ellipse(shot.getX(), shot.getY(), shot.getSize() * 2, shot.getSize() * 2);
+            pg.pop();
+        pg.endDraw();
+    }else{
+        float lineWeight = shot.getSize() / 2;
+        pg.beginDraw();
+            pg.push();
+                pg.blendMode(shot.getBlendStyle());
+                pg.strokeWeight(lineWeight);
+                pg.stroke(shot.getColor());
+                pg.fill(255);
+                pg.ellipse(shot.getX(), shot.getY(), shot.getSize() * 2, shot.getSize() * 2);
+            pg.pop();
+        pg.endDraw();
+    }
 }
 
 public void orbDelayDraw(PGraphics pg, Shot shot){
+    if(gameConfig.isGlow){
         pg.beginDraw();
 
         pg.push();
@@ -75,9 +102,22 @@ public void orbDelayDraw(PGraphics pg, Shot shot){
         pg.pop();
 
         pg.endDraw();
+    }else{
+        pg.beginDraw();
+
+        pg.push();
+            pg.blendMode(ADD);
+            pg.noStroke();
+            pg.fill(shot.getColor());
+            pg.ellipse(shot.getX(), shot.getY(), shot.getSize(), shot.getSize());
+        pg.pop();
+
+        pg.endDraw();
+    }
 }
 
 public void rectDelayDraw(PGraphics pg, Shot shot){
+    if(gameConfig.isGlow){
         float lineWeight =  shot.getSize() / 3;
 
         pg.beginDraw();
@@ -96,4 +136,22 @@ public void rectDelayDraw(PGraphics pg, Shot shot){
         pg.pop();
 
         pg.endDraw();
+    }else{
+        float lineWeight =  shot.getSize() / 3;
+
+        pg.beginDraw();
+
+        pg.push();
+            pg.blendMode(ADD);
+            pg.translate(shot.getX(), shot.getY());
+            pg.rotate(shot.getVel().heading() + TWO_PI / 4);
+            pg.strokeWeight(lineWeight);
+            pg.stroke(shot.getColor());
+            pg.noFill();
+            float delaySize = shot.getSize() / 2;
+            pg.rect(0, 0, delaySize * 2, delaySize * 2, delaySize / 4);
+        pg.pop();
+
+        pg.endDraw();
+    }
 }
