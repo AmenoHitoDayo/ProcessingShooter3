@@ -4,7 +4,7 @@
 
 
 ダウンロードリンク
-https://drive.google.com/file/d/1xoZ3Gj55HdsobOhN2TEyrdyeQBs_VQEi/view?usp=share_link
+https://drive.google.com/file/d/1XC6L7YxtQtmzqbO9hJYLndbS6nA7glXC/view?usp=share_link
 
 5/8これからやること
 ★コンフィグを全部実装する
