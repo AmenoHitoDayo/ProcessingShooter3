@@ -3,6 +3,9 @@
     "tasks": [
       {
         "label": "Run",
+        //Windowsでやるときはこっち
+        //"command": "D:\\Application\\processing-4.0.1\\processing-java.exe",
+        //macでやるときはこっち
         "command": "processing-java",
         "type": "process",
         "args": [
