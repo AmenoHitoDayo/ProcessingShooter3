@@ -15,11 +15,11 @@ class UI{
         //drawEnemyCount();
         //drawTekidanCount();
         drawScoreCount();
+        if(gameConfig.isControlAssist)drawControlAssist();
         if(isGaugeUsing == true && gauge.getBaseEnemy() != null){
             gauge.drawMe(_pg);
         }
     }
-    
     void updateMe(){
         if(isGaugeUsing){
             if(gauge.getBaseEnemy().areYouDead() || gauge.getBaseEnemy() == null){
@@ -106,8 +106,29 @@ class UI{
         pg.endDraw();
     }
 
+    int cTextSize = 16;
+    int cTextSize2 = 20;
     void drawControlAssist(){
-        
+        pg.beginDraw();
+
+        pg.push();
+        pg.noStroke();
+        pg.fill(255);
+        pg.textSize(cTextSize);
+        pg.textAlign(RIGHT, BOTTOM);
+        pg.text(getStringFromCode(gameKey[keyID.shot.getID()]) + ": Shot", width, height - cTextSize * 2);
+        pg.text(getStringFromCode(gameKey[keyID.special.getID()]) + ": Special", width, height - cTextSize);
+        pg.text(getStringFromCode(gameKey[keyID.absorb.getID()]) + ": Absorb", width, height);
+
+        pg.textSize(cTextSize2);
+        pg.text(getStringFromCode(gameKey[keyID.up.getID()]), width - cTextSize * 6, height - cTextSize2);
+        pg.text(getStringFromCode(gameKey[keyID.down.getID()]), width - cTextSize * 6, height);
+        pg.text(getStringFromCode(gameKey[keyID.right.getID()]), width - cTextSize * 6 + cTextSize2, height);
+        pg.text(getStringFromCode(gameKey[keyID.left.getID()]), width - cTextSize * 6 - cTextSize2, height);
+
+        pg.pop();
+
+        pg.endDraw();
     }
 
     public void makeGauge(Enemy _e){
