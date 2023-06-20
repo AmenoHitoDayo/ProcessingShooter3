@@ -20,7 +20,6 @@ class UI{
             gauge.drawMe(_pg);
         }
     }
-
     void updateMe(){
         if(isGaugeUsing){
             if(gauge.getBaseEnemy().areYouDead() || gauge.getBaseEnemy() == null){
@@ -106,7 +105,6 @@ class UI{
             pg.text("Score : " + playingStage.getJiki().getScore(), 0, 16 * 3);
         pg.endDraw();
     }
-
 
     int cTextSize = 16;
     int cTextSize2 = 20;
