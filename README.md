@@ -23,5 +23,5 @@ https://drive.google.com/file/d/1XC6L7YxtQtmzqbO9hJYLndbS6nA7glXC/view?usp=share
 
 ★Protectにして、自分および子クラスからはメンバ変数触っていい。それ以外はget/setで触る。というルールで
 
-★Iterator問題：ShotからShotを追加、EnemyからEnemyを追加、などするとIteratorがConcurrent以下略を出す。たぶんupdateMeのIterator回してる途中に配列に要素入れちゃっているからだと思う。解決法としては、削除されたもの/追加されたもの　という配列を作って、updateMeの最後に比較をして消すとか？？
+★Iterator問題(解決済み)：ShotからShotを追加、EnemyからEnemyを追加、などするとIteratorがConcurrent以下略を出す。たぶんupdateMeのIterator回してる途中に配列に要素入れちゃっているからだと思う。解決法としては、削除されたもの/追加されたもの　という配列を作って、updateMeの最後に比較をして消すとか？？
 
