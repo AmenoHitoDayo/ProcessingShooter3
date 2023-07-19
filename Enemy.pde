@@ -90,7 +90,8 @@ class SampleEnemy extends Enemy{
                 */
                 playingStage.addEnemyShot(shot);
 
-                Shot shot2 = new Shot(pos.x, pos.y, 30);
+                Shot shot2 = new Shot(pos.x, pos.y);
+                shot2.setDelay(30);
                 shot2.setVelocityFromSpeedAngle(2, radians(angle + 45) + TWO_PI / way * i);
                 shot2.setSize(6);
                 shot2.setColor(HSVtoRGB(hue, 255 - 64, 255));
@@ -275,7 +276,7 @@ class Circle01 extends Enemy{
         float hue = shotCount * 10;
         if(shotCount % 2 == 0){
             for(int i = 0; i < 13; i++){
-                Shot shot = new Shot(pos.x, pos.y, 15);
+                Shot shot = new Shot(pos.x, pos.y);
                 shot.setVelocityFromSpeedAngle(3, angle + TWO_PI / 13 * i);
                 shot.setSize(8);
                 shot.setColor(HSVtoRGB(hue, 255, 255));
@@ -286,7 +287,7 @@ class Circle01 extends Enemy{
         }else{
             angle += TWO_PI / 14 / 2;
             for(int i = 0; i < 14; i++){
-                Shot shot = new Shot(pos.x, pos.y, 15);
+                Shot shot = new Shot(pos.x, pos.y);
                 shot.setVelocityFromSpeedAngle(3, angle + TWO_PI / 14 * i);
                 shot.setSize(8);
                 shot.setColor(HSVtoRGB(hue, 255, 255));
@@ -344,7 +345,7 @@ class ShotGun01 extends Enemy{
     void shot(){
         if(count == 65){
             for(int i = 0; i < 30; i++){
-                Shot shot = new Shot(getX(), getY(), 15);
+                Shot shot = new Shot(getX(), getY());
                 float angle = shotAngle + radians(random(-bure, bure));
                 shot.setVelocityFromSpeedAngle(3 + random(-1, 1), angle);
                 shot.setSize(4);
@@ -382,7 +383,7 @@ class Red01 extends Enemy{
     void shot(){
         if(count >= 30 && count <= 300){
             if(count % 5 == 0){
-                Shot shot = new Shot(pos.x, pos.y, 15);
+                Shot shot = new Shot(pos.x, pos.y);
                 shot.setSize(8);
                 shot.setColor(col);
                 shot.setVelocityFromSpeedAngle(2, angle);
@@ -435,7 +436,7 @@ class Green01 extends Enemy{
     void shot(){
         if(count >= 30 && count <= 300){
             if(count % 5 == 0){
-                Shot shot = new Shot(pos.x, pos.y, 15);
+                Shot shot = new Shot(pos.x, pos.y);
                 shot.setSize(8);
                 shot.setColor(col);
                 shot.setVelocityFromSpeedAngle(1, angle);
@@ -488,7 +489,8 @@ class Blue01 extends Enemy{
     void shot(){
         if(count >= 30 && count <= 300){
             if(count % 5 == 0){
-                Shot shot = new Shot(pos.x, pos.y, 30);
+                Shot shot = new Shot(pos.x, pos.y);
+                shot.setDelay(30);
                 shot.setSize(8);
                 shot.setColor(col);
                 shot.setVelocityFromSpeedAngle(1, angle);
@@ -721,7 +723,8 @@ class Lissajous01 extends Enemy{
         float angle = radians(count * 7) % TWO_PI;
         float radius = 50f;
         PVector liss = new PVector(pos.x + radius * cos(3 * angle), pos.y + radius * sin(2 * angle));
-        Shot s = new Shot(liss.x, liss.y, 30);
+        Shot s = new Shot(liss.x, liss.y);
+        s.setDelay(30);
         s.setColor(color(0, 255, 255));
         s.setShotStyle(ShotStyle.Oval);
         s.setSize(4);
@@ -814,7 +817,8 @@ class MidBoss01 extends Enemy{
         float a0 = random(TWO_PI);
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 5; j++){
-                Shot shot = new Shot(bits[0].getX(), bits[0].getY(), 10);
+                Shot shot = new Shot(bits[0].getX(), bits[0].getY());
+                shot.setDelay(10);
                 shot.setShotStyle(ShotStyle.Rect);
                 shot.setSize(6);
                 shot.setVelocityFromSpeedAngle(1.5 + j * 0.5, TWO_PI / 3 * i + radians(7.5) * j);
@@ -846,7 +850,8 @@ class MidBoss01 extends Enemy{
         if(count % 90 > 45) return;
 
         float a2 = map(count % 90, 0, 45, 0, TWO_PI);
-        Shot shot = new Shot(bits[2].getX(), bits[2].getY(), 30);
+        Shot shot = new Shot(bits[2].getX(), bits[2].getY());
+        shot.setDelay(30);
         shot.setVelocityFromSpeedAngle(0, a2);
         shot.setAccelerationFromAccelAngle(0.05, a2);
         shot.setShotStyle(ShotStyle.Oval);
@@ -862,7 +867,8 @@ class MidBoss01 extends Enemy{
         float a3 = new PVector(playingStage.getJiki().getX() - bits[3].getX(), playingStage.getJiki().getY() - bits[3].getY()).heading();
         for(int i = 0; i < 6; i++){
             for(int j = 0; j < 3; j++){
-                Shot shot = new Shot(bits[3].getX() + cos(a3) * j * 30, bits[3].getY() + sin(a3) * j * 30, 10);
+                Shot shot = new Shot(bits[3].getX() + cos(a3) * j * 30, bits[3].getY() + sin(a3) * j * 30);
+                shot.setDelay(10);
                 shot.setShotStyle(ShotStyle.Glow);
                 shot.setSize(8);
                 shot.setVelocityFromSpeedAngle(2, a3);
@@ -1084,7 +1090,8 @@ class Boss_Mauve extends Enemy{
         
         for(int i = 0; i < 3; i++){
             float angle = aimAngle + TWO_PI / 3 * i;
-            Shot s = new Shot(pos.x + cos(angle) * 72, pos.y + sin(angle) * 72, 60);
+            Shot s = new Shot(pos.x + cos(angle) * 72, pos.y + sin(angle) * 72);
+            s.setDelay(60);
             s.setSize(8);
             s.setShotStyle(ShotStyle.Orb); 
             //-s.setBlendStyle(ADD);

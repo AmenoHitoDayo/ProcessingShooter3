@@ -2,6 +2,9 @@
 //いちいちbegin/endするのはめんどいから、Stage/Title/Config(一番外側)でbegin/endすればいい？
 //不用意にenddrawするとその後のものが現れなくなる可能性があるs
 
+//俺より:とりあえず最適化とか、処理効率のことは考えないで作っていいです。
+//https://www.ikemo3.com/dic/premature-optimization/
+
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;

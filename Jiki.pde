@@ -164,7 +164,7 @@ class Jiki extends Machine{
         float kakudo = 10;
         float kyori = 2;
         for(int i = 0; i < 4; i++){
-          Shot shot = new Shot(pos.x + 24, pos.y - kyori + i * kyori * 0.75, 0, 0);
+          Shot shot = new Shot(pos.x + 24, pos.y - kyori + i * kyori * 0.75);
           shot.size =(4);
           shot.col = (color(180));
           shot.accel =(new PVector(0.25 * cos(radians(-kakudo + kakudo * 0.75 * i)), 0.25 * sin(radians(-kakudo + kakudo * 0.75 * i))));

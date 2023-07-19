@@ -1,8 +1,9 @@
 class Shot extends Mover{
     protected int delay = 0;
     protected ArrayList<ShotMoveCue> cues;
-    protected boolean isDeletable = true;
-    protected boolean isHittable = true;
+    protected boolean isDeletable = true;   //弾消し耐性
+    protected boolean isHittable = true;    //ヒットするか（主にディレイ中に弾に当たらないようにする処理に使う）
+    protected boolean isAbsorbed = false;   //吸収されたとき、直接消すのではなく弾の残骸が残るようにしたいので、それ用
     protected int blendStyle = BLEND;
     protected Mover parent = null;
     protected ShotStyle shotStyle = ShotStyle.Orb;
@@ -11,20 +12,6 @@ class Shot extends Mover{
         super(_x, _y);
         vel = (new PVector(0, 0));
         delay = 15;
-        cues = new ArrayList<ShotMoveCue>();
-    }
-
-    Shot(float _x, float _y, int _delay){
-        super(_x, _y);
-        vel = (new PVector(0, 0));
-        delay = _delay;
-        cues = new ArrayList<ShotMoveCue>();
-    }
-
-    Shot(float _x, float _y, float speed, float angle){
-        super(_x, _y);
-        setVelocityFromSpeedAngle(speed, angle);
-        delay = 0;
         cues = new ArrayList<ShotMoveCue>();
     }
 
@@ -544,7 +531,8 @@ class JikiBarrierShot extends Shot{
 //青ﾊﾟﾜ弾　敵弾を搔き消せる
 class JikiBlueLaser extends Shot{
     JikiBlueLaser(float _x, float _y){
-        super(_x, _y, 64);
+        super(_x, _y);
+        this.setDelay(64);
         vel = (new PVector(10, 0));
         accel = (new PVector(0.1, 0));
         if(gameConfig.isGlow){
