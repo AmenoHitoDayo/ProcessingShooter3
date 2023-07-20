@@ -158,13 +158,12 @@ public void rectDelayDraw(PGraphics pg, Shot shot){
 
 public void absorbedShotDraw(PGraphics pg, Shot shot){
     pg.beginDraw();
-
         pg.push();
             pg.translate(shot.getX(), shot.getY());
             pg.noFill();
-            pg.stroke(255);
+            pg.strokeWeight(0.75);
+            pg.stroke(shot.getColor(), 127);
             pg.circle(0, 0, shot.getSize());
         pg.pop();
-
     pg.endDraw();
 }
