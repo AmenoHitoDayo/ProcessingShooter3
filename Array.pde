@@ -76,7 +76,7 @@ class Enemys extends Movers{
             if(!(m instanceof Shot))continue;
             Shot s = (Shot)m;
 
-            if(s.collision(enemy) && s.isHittable){
+            if(s.collision(enemy) && s.isHittable()){
                 enemy.playHitSound();
                 if(s.isDeletable){
                     s.kill();
@@ -87,7 +87,6 @@ class Enemys extends Movers{
             }
         }
     }
-
 }
 
 class Items extends Movers{

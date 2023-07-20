@@ -1,6 +1,6 @@
 class Shot extends Mover{
     protected int delay = 0;
-    protected ArrayList<ShotMoveCue> cues;
+    protected List<ShotMoveCue> cues;
     protected boolean isDeletable = true;   //弾消し耐性
     protected boolean isHittable = true;    //ヒットするか（主にディレイ中に弾に当たらないようにする処理に使う）
     protected boolean isAbsorbed = false;   //吸収されたとき、直接消すのではなく弾の残骸が残るようにしたいので、それ用
@@ -21,9 +21,8 @@ class Shot extends Mover{
         executeCue();
         if(count < delay){
             isHittable = false;
-        }else{
-            isHittable = true;
         }
+        isHittable = !isAbsorbed;
         if(isOutOfScreen()){
             kill();
         }
@@ -32,7 +31,6 @@ class Shot extends Mover{
         if(parent != null && parent.isDead && !parent.isOutOfScreen()){
             Item item = new Item(pos.x, pos.y, 0, 0, 0);
             playingStage.addItem(item);
-
             kill();
         }
     }
@@ -56,22 +54,26 @@ class Shot extends Mover{
     }
 
     void shotDraw(PGraphics pg){
-        switch(shotStyle){
-            case Orb:
-                orbShotDraw(pg, this);
-            break;
-            case Oval:
-                ovalShotDraw(pg, this);
-            break;
-            case Rect:
-                rectShotDraw(pg, this);
-            break;
-            case Glow:
-                glowShotDraw(pg, this);
-            break;
-            default:
-                orbShotDraw(pg, this);
-            break;
+        if(isAbsorbed){
+            absorbedShotDraw(pg, this);
+        }else{
+            switch(shotStyle){
+                case Orb:
+                    orbShotDraw(pg, this);
+                break;
+                case Oval:
+                    ovalShotDraw(pg, this);
+                break;
+                case Rect:
+                    rectShotDraw(pg, this);
+                break;
+                case Glow:
+                    glowShotDraw(pg, this);
+                break;
+                default:
+                    orbShotDraw(pg, this);
+                break;
+            }
         }
     }
 
@@ -112,12 +114,20 @@ class Shot extends Mover{
         cues.add(cue);
     }
 
+    public void absorbed(){
+        this.isAbsorbed = true;
+    }
+
     public int getBlendStyle(){
         return blendStyle;
     }
 
     public boolean isHittable(){
         return isHittable;
+    }
+
+    public boolean isDeletable(){
+        return isDeletable;
     }
 
     public int getDelay(){

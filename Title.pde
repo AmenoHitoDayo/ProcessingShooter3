@@ -1,5 +1,5 @@
 class Title extends Menu{
-    ArrayList<Particle> particles;
+    List<Particle> particles;
     int count = 0;
 
     Title(){
@@ -16,7 +16,7 @@ class Title extends Menu{
             )
         );
 
-        particles = new ArrayList<Particle>();
+        particles = new LinkedList<Particle>();
         refreshPos();
     }
 

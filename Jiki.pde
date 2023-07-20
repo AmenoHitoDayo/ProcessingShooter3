@@ -216,9 +216,9 @@ class Jiki extends Machine{
 
       //被弾判定
       //collision関数はmoverのデフォであったほうがいいね多分これ・・
-      if(s.collision(this) && s.isHittable){
+      if(s.collision(this) && s.isHittable()){
         hitSound.play(0);
-        if(s.isDeletable){s.kill();}
+        if(s.isDeletable()){s.kill();}
         HPDown(1);
         continue; //被弾した弾を吸収しないようにする（この状況は発生するんか？）
       }
@@ -226,9 +226,10 @@ class Jiki extends Machine{
       //吸収システム用の判定(吸収円にさわった敵弾をアイテム化)
       if(isAbsorbing()){
         float d = dist(pos.x, pos.y, s.getX(), s.getY());
-        if(d < s.getSize() + absorbArea && s.isDeletable == true && s.isHittable){
+        //absorbedがtrue = hittableがfalse になるはずなんで、absorbedでの分岐は書いてないが、変だったらその分岐も書く。
+        if(d < s.getSize() + absorbArea && s.isDeletable == true && s.isHittable()){
           Item i = new Item(s.getX(), s.getY(), red(s.getColor()), green(s.getColor()), blue(s.getColor()));
-          s.kill();
+          s.absorbed();
           stage.addItem(i);
           //print("absorb");
         }

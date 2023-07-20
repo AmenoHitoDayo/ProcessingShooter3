@@ -194,6 +194,7 @@ class Stage01 extends Stage{
         count = 0;
     }
 
+//これハードコーディングじゃなくてJSONかなんかで制御するようにした方がいいらしいです。やりかたしらべろ
     void stageStructure(){
         if(count == 30 || count == 60 || count == 90 || count == 120 || count == 150){
             addEnemy(new March01(width - 120, 0));
@@ -293,7 +294,6 @@ class Stage01 extends Stage{
         }
         
 
-        
         if(count == 1215){
             addEnemy(new Fountain01(250, 0, radians(90)));
         }
