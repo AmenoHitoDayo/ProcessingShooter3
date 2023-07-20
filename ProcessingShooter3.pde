@@ -23,6 +23,7 @@ public Title title;
 public Config config;
 public KeyConfig keyConfig;
 public Scene scene = Scene.TitleScene;
+public FPSChecker checker;
 Minim minim;
 public float fps = 60.0f;
 public int finalScore = 0;
@@ -47,10 +48,12 @@ void setup() {
     title = new Title();
     config = new Config();
     keyConfig = new KeyConfig();
+    checker = new FPSChecker();
 }
 
 void draw() {
     //background(0);
+    println(checker.getFPS());
     
     switch(scene){
         case TitleScene:
