@@ -6,7 +6,7 @@ public void orbShotDraw(PGraphics pg, Shot shot){
             pg.blendMode(shot.getBlendStyle());
             pg.noStroke();
             pg.fill(shot.getColor());
-            pg.ellipse(shot.getX(), shot.getY(), shot.getSize() * 2, shot.getSize() * 2);
+            pg.circle(shot.getX(), shot.getY(), shot.getSize() * 2);
         pg.pop();
     pg.endDraw();
 }
@@ -67,10 +67,10 @@ public void glowShotDraw(PGraphics pg, Shot shot){
                 for(int i = 1; i <= 3; i++){
                     pg.fill(shot.getColor(), 255 / 3);
                     float glowSize = shot.getSize() * (pow(1.25, i));
-                    pg.ellipse(shot.getX(), shot.getY(), glowSize * 2, glowSize * 2);
+                    pg.circle(shot.getX(), shot.getY(), glowSize * 2);
                 }
                 pg.fill(255);
-                pg.ellipse(shot.getX(), shot.getY(), shot.getSize() * 2, shot.getSize() * 2);
+                pg.circle(shot.getX(), shot.getY(), shot.getSize() * 2);
             pg.pop();
         pg.endDraw();
     }else{
@@ -81,7 +81,7 @@ public void glowShotDraw(PGraphics pg, Shot shot){
                 pg.strokeWeight(lineWeight);
                 pg.stroke(shot.getColor());
                 pg.fill(255);
-                pg.ellipse(shot.getX(), shot.getY(), shot.getSize() * 2, shot.getSize() * 2);
+                pg.circle(shot.getX(), shot.getY(), shot.getSize() * 2);
             pg.pop();
         pg.endDraw();
     }
@@ -97,7 +97,7 @@ public void orbDelayDraw(PGraphics pg, Shot shot){
                 pg.noStroke();
                 pg.fill(shot.getColor(), map(shot.getDelay() - shot.getCount(), 0, shot.getDelay(), 255, 0) / 1.5);
                 float delaysize = map(shot.getDelay() - shot.getCount(), 0, shot.getDelay(), shot.getSize(), shot.getSize() * 4);
-                pg.ellipse(shot.getX(), shot.getY(), delaysize * 2 * 0.25 * i, delaysize * 2 * 0.25 * i);
+                pg.circle(shot.getX(), shot.getY(), delaysize * 2 * 0.25 * i);
             }
         pg.pop();
 
@@ -109,7 +109,7 @@ public void orbDelayDraw(PGraphics pg, Shot shot){
             pg.blendMode(ADD);
             pg.noStroke();
             pg.fill(shot.getColor());
-            pg.ellipse(shot.getX(), shot.getY(), shot.getSize(), shot.getSize());
+            pg.circle(shot.getX(), shot.getY(), shot.getSize());
         pg.pop();
 
         pg.endDraw();
@@ -154,4 +154,17 @@ public void rectDelayDraw(PGraphics pg, Shot shot){
 
         pg.endDraw();
     }
+}
+
+public void absorbedShotDraw(PGraphics pg, Shot shot){
+    pg.beginDraw();
+
+        pg.push();
+            pg.translate(shot.getX(), shot.getY());
+            pg.noFill();
+            pg.stroke(255);
+            pg.circle(0, 0, shot.getSize());
+        pg.pop();
+
+    pg.endDraw();
 }

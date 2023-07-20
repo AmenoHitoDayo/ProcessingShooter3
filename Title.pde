@@ -49,9 +49,6 @@ class Title extends Menu{
         buffer.noStroke();
         buffer.fill(255);
         buffer.text("Shooting of Color", width / 2, height / 2 - 64);
-        buffer.textAlign(RIGHT, BOTTOM);
-        buffer.textSize(24);
-        buffer.text("alpha 0.2", width, height);
 
         buffer.pop();
 
