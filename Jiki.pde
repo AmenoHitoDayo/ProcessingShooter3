@@ -3,16 +3,16 @@ class Jiki extends Machine{
   private float slowSpeed = 1.5f;
   private int invincibleFrame = 30;
   private int invincibleCount = 0;
-  private int absorbFrame = 60;
-  private int absorbCount = 0;
-  private int absorbArea = 0;
-  private int absorbMaxArea = 64;
+  private int absorbMaxFrame = 120; //何Fまで吸収フィールドを開けていられるか
+  private int absorbFrame = absorbMaxFrame;
+  private int absorbArea = 64;
   private int releaseWaitFrame = 30;
   private int releaseWaitCount = 0;
   private float RedP, GreenP, BlueP;
   private boolean isRelease = false;  //開放しているかどうか
   private float absorbPower = 0;  //吸収は連打できるようにしない。時間で吸収用のパワが増える
   private int totalItem = 0;  //集めたアイテムの総数　特定個でエクステンド
+  private int absorbForbidCount = 0;
 
   private AudioPlayer shotSound;
   private AudioPlayer hitSound;
@@ -156,7 +156,7 @@ class Jiki extends Machine{
     pos = new PVector(min(max(pos.x, 0), width), min(max(pos.y, 0), height));
   }
 
-  void shot(){
+  void shot(){  //通常ショットを、色パワーを消費して射撃するものに
     if(z){
       if(count % 8 == 0){
         shotSound.play(0);
@@ -231,7 +231,6 @@ class Jiki extends Machine{
           Item i = new Item(s.getX(), s.getY(), red(s.getColor()), green(s.getColor()), blue(s.getColor()));
           s.absorbed();
           stage.addItem(i);
-          //print("absorb");
         }
       }
       
@@ -277,28 +276,19 @@ class Jiki extends Machine{
 
   void absorb(PGraphics pg){
     if(isAbsorbing()){
-      absorbArea += absorbMaxArea / absorbFrame;
       pg.beginDraw();
-      pg.stroke(255);
-      pg.strokeWeight(1);
-      if(gameConfig.isGlow){
-        pg.fill(255, 180 / absorbFrame * (absorbCount - count));
-      }else{
-        pg.noFill();
-      }
-      pg.ellipse(pos.x, pos.y, absorbArea * 2, absorbArea * 2);
+        pg.stroke(255);
+        pg.strokeWeight(1);
+        pg.fill(255, 127);
+        pg.circle(pos.x, pos.y, absorbArea * 2);
       pg.endDraw();
-    }else{
-      if(!isInvincible() && !isRelease && c){
-        if(absorbArea > 0){
-          absorbArea = 0;
-        }
 
-        //ここ吸収ボタンおしたときの処理
-        absorbSound.play(0);
-        absorbCount = count + absorbFrame;
-        //print("c");
-      }
+      absorbFrame--;
+
+      if(absorbFrame == 0)absorbForbidCount = 60;
+    }else{
+      if(count % 2 == 0)absorbFrame = min(absorbFrame + 1, absorbMaxFrame);
+      if(absorbForbidCount > 0)absorbForbidCount--;
     }
   }
 
@@ -367,11 +357,7 @@ class Jiki extends Machine{
   }
 
   boolean isAbsorbing(){
-    if(absorbCount > count){
-      return true;
-    }else{
-      return false;
-    }
+    return c && (absorbFrame >= 0) && (absorbForbidCount == 0);
   }
 
   boolean canRelease(){
