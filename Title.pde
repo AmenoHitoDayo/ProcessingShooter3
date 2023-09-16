@@ -62,7 +62,7 @@ class Title extends Menu{
             switch(selection){
                 case 0:
                     particles.clear();
-                    playingStage = new Stage01();
+                    playingStage = new Stage_Test();
                     scene = Scene.GameScene;
                     break;
                 case 1:

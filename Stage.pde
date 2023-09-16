@@ -180,14 +180,14 @@ class SampleStage extends Stage{
     }
 }
 
-class Stage01 extends Stage{
+class Stage_Test extends Stage{
     boolean isMidBossAppeared = false;
     boolean isBossAppeared = false;
 
     private String stageBGM = "sol_battle047.mp3";
     private String bossBGM = "sol_battle046.mp3";
 
-    Stage01(){
+    Stage_Test(){
         super();
         setBGM(stageBGM);
         setBGMGain(getBGM(), 0);
@@ -351,5 +351,17 @@ class Stage01 extends Stage{
                 endStage();
             }
         }
+    }
+}
+
+class Stage01 extends Stage{
+    private String stageBGM = "sol_battle047.mp3";
+    private String bossBGM = "sol_battle046.mp3";
+
+    Stage01(){
+        super();
+        setBGM(stageBGM);
+        setBGMGain(getBGM(), 0);
+        count = 0;
     }
 }

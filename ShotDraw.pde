@@ -162,7 +162,7 @@ public void absorbedShotDraw(PGraphics pg, Shot shot){
             pg.translate(shot.getX(), shot.getY());
             pg.noFill();
             pg.strokeWeight(0.75);
-            pg.stroke(shot.getColor(), 127);
+            pg.stroke(255, 127);
             pg.circle(0, 0, shot.getSize());
         pg.pop();
     pg.endDraw();
