@@ -1,12 +1,13 @@
 class Jiki extends Machine{
   private float speed = 3.0f;
   private float slowSpeed = 1.5f;
-  private int invincibleFrame = 30;
+  private final int invincibleFrame = 30;  //無敵時間さん！？の長さ
   private int invincibleCount = 0;
-  private int absorbMaxFrame = 120; //何Fまで吸収フィールドを開けていられるか
+  private final int absorbMaxFrame = 240; //何Fまで吸収フィールドを開けていられるか
   private int absorbFrame = absorbMaxFrame;
   private int absorbArea = 64;
-  private int releaseWaitFrame = 30;
+  private final int absorbMaxArea = 128;
+  private final int releaseWaitFrame = 30;
   private int releaseWaitCount = 0;
   private float RedP, GreenP, BlueP;
   private boolean isRelease = false;  //開放しているかどうか
@@ -31,9 +32,9 @@ class Jiki extends Machine{
     super(width / 2, height / 2, gameConfig.defaultLife);
     col = (color(255, 255, 255, 255));
     size =(4);
-    RedP = 0;
-    GreenP = 0;
-    BlueP = 0;
+    RedP = 127;
+    GreenP = 127;
+    BlueP = 127;
 
     shotSound = minim.loadFile("maou_se_battle11.mp3");
     setSEGain(shotSound, -20f);
@@ -73,81 +74,28 @@ class Jiki extends Machine{
     }else{
       vel.mult(speed);
     }
+    bound();
+
     shot();
     hit();
     absorb(playingStage.buffer);
     release();
-    bound();
   }
 
   @Override
-  //ここ醜すぎるので後でなおす
   void drawMe(PGraphics pg){
     pg.beginDraw();
 
-    pg.push();
-      pg.blendMode(ADD);
-      if(!slow){
-        //通常時のエフェクト
-        pg.noStroke();
-        pg.fill(255, 0, 0, RedP);
-        easyTriangle(pg, pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
-        pg.fill(0, 255, 0, GreenP);
-        easyTriangle(pg, pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
-        pg.fill(0, 0, 255, BlueP);
-        easyTriangle(pg, pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
-      }else{
-        if(isRelease){
-          //開放中のエフェクト
-          pg.noStroke();
-          pg.fill(255, 0, 0, RedP / 2);
-          easyTriangle(pg, pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
-          pg.fill(0, 255, 0, GreenP / 2);
-          easyTriangle(pg, pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
-          pg.fill(0, 0, 255, BlueP / 2);
-          easyTriangle(pg, pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
-        }else{
-          //低速移動の時のエフェクト
-          pg.noFill();
-          pg.strokeWeight(1.5);
-          pg.stroke(255, 0, 0, RedP);
-          easyTriangle(pg, pos.x + cos(radians(0 + count)) * 8, pos.y + sin(radians(0 + count)) * 8, 0, 16);
-          pg.stroke(0, 255, 0, GreenP);
-          easyTriangle(pg, pos.x + cos(radians(120 + count)) * 8, pos.y + sin(radians(120 + count)) * 8, 0, 16);
-          pg.stroke(0, 0, 255, BlueP);
-          easyTriangle(pg, pos.x + cos(radians(240 + count)) * 8, pos.y + sin(radians(240 + count)) * 8, 0, 16);
-        }
-      }
-      if((isInvincible() && count % 2 == 0) || isRelease == true){
-        //無敵時間さん！？の機体点滅
-        pg.fill(0);
-      }else if(slow){
-        //低速移動の時は機体の色薄くする
-        pg.fill(getColor(), 127);
-      }else{
-        //通常時の機体色
-        pg.fill(getColor());
-      }
-      pg.strokeWeight(1.5);
-      pg.stroke(getColor());
-      easyTriangle(pg, pos, 0, 16);
-    pg.pop();
-
-    pg.endDraw();
-    pg.beginDraw();
-
-    pg.noStroke();
-    if(isRelease){
-      pg.stroke(0);
-      pg.strokeWeight(1);
-      pg.fill(255);
-    }else{
-      pg.noStroke();
-      pg.fill(0);
-    }
+    pg.strokeWeight(1);
+    pg.stroke(255);
+    pg.fill(RedP, GreenP, BlueP);
+    easyTriangle(pg, pos.x, pos.y, 0, 16);
 
     //当たり判定部分
-    pg.ellipse(pos.x, pos.y, size * 2, size * 2);
+    pg.strokeWeight(0.5);
+    pg.stroke(255);
+    pg.fill(0);
+    pg.circle(pos.x, pos.y, size * 2);
 
     pg.endDraw();
   }
@@ -160,44 +108,24 @@ class Jiki extends Machine{
     if(z){
       if(count % 8 == 0){
         shotSound.play(0);
-        //print("z");
-        float kakudo = 10;
-        float kyori = 2;
-        for(int i = 0; i < 4; i++){
-          Shot shot = new Shot(pos.x + 24, pos.y - kyori + i * kyori * 0.75);
-          shot.size =(4);
-          shot.col = (color(180));
-          shot.accel =(new PVector(0.25 * cos(radians(-kakudo + kakudo * 0.75 * i)), 0.25 * sin(radians(-kakudo + kakudo * 0.75 * i))));
-          //shot.setBlendStyle(ADD);
-          stage.addJikiShot(shot);
+
+        if(RedP > 0){
+          JikiRedShot rs = new JikiRedShot(pos.x + 24, pos.y - 16);
+          stage.addJikiShot(rs);
+          RedP--;
         }
-      }
-    }
-  }
 
-  //赤：追尾弾
-  //青：デカレーザー、弾消し効果あり
-  //緑：自機周りのバリア、確率で弾消し
-  void releaseShot(){
-    if(RedP > 0){
-      if(count % 5 == 0){
-        RedP = max(RedP - 30, 0);
-        JikiRockOnShot redShot = new JikiRockOnShot(pos.x, pos.y);
-        redShot.setSize(10);
+        if(GreenP > 0){
+          JikiGreenShot gs = new JikiGreenShot(pos.x + 24, pos.y);
+          stage.addJikiShot(gs);
+          GreenP--;
+        }
 
-        stage.addJikiShot(redShot);
-      }
-    }
-    if(GreenP > 0){
-      GreenP = max(GreenP - 5, 0);
-      JikiBarrierShot greenShot = new JikiBarrierShot(pos.x, pos.y);
-      stage.addJikiShot(greenShot);
-    }
-    if(BlueP > 0){
-      if(count % 3 == 0){
-        BlueP = max(BlueP - 16, 0);
-        JikiBlueLaser blueShot = new JikiBlueLaser(pos.x + 10, pos.y);
-        stage.addJikiShot(blueShot);
+        if(BlueP > 0){
+          JikiBlueShot bs = new JikiBlueShot(pos.x + 24, pos.y + 16);
+          stage.addJikiShot(bs);
+          BlueP--;
+        }
       }
     }
   }
@@ -276,10 +204,12 @@ class Jiki extends Machine{
 
   void absorb(PGraphics pg){
     if(isAbsorbing()){
+      absorbArea = floor(map(absorbFrame, 0, absorbMaxFrame, size * 2, absorbMaxArea));
+
       pg.beginDraw();
         pg.stroke(255);
         pg.strokeWeight(1);
-        pg.fill(255, 127);
+        pg.fill(255, 64);
         pg.circle(pos.x, pos.y, absorbArea * 2);
       pg.endDraw();
 
@@ -294,17 +224,16 @@ class Jiki extends Machine{
 
   //リリース処理とリリース時の挙動が一緒に書いてあるのでわかりづらい・・・
   void release(){
-    if(isRelease){
-      releaseShot();
-      if(!canRelease() || (x && count > releaseWaitCount)){
-        isRelease = false;
+    if(x){
+      if(RedP > 1 && GreenP > 1 && BlueP > 1 && releaseWaitCount == 0){
+        //全弾削除処理
+        //全敵にダメージ処理
+        //エフェクト処理
+        RedP = GreenP = BlueP = 0;
+        releaseWaitCount = releaseWaitFrame;
       }
     }else{
-      if(x && canRelease()){
-        releaseSound.play(0);
-        releaseWaitCount = count + releaseWaitFrame;
-        isRelease = true;
-      }
+      releaseWaitCount = max(0, releaseWaitCount - 1);
     }
   }
 

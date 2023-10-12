@@ -100,6 +100,10 @@ class Mover{
     return size;
   }
 
+  public float getAngle(){
+    return vel.heading();
+  }
+
   public void setPos(float _x, float _y){
     pos = new PVector(_x, _y);
   }

@@ -392,6 +392,69 @@ class LaserShot extends Shot{
     
 }
 
+class JikiRedShot extends Shot{
+    JikiRedShot(float _x, float _y){
+        super(_x, _y);
+        size = 8;
+        delay = 0;
+        col = color(255, 0, 0);
+        vel = new PVector(4, 0);
+    }
+
+    @Override
+    void shotDraw(PGraphics pg){
+        pg.beginDraw();
+
+            pg.noStroke();
+            pg.fill(col);
+            easyTriangle(pg, pos.x, pos.y, this.getAngle(), size);
+
+        pg.endDraw();
+    }
+}
+
+class JikiGreenShot extends Shot{
+    JikiGreenShot(float _x, float _y){
+        super(_x, _y);
+        size = 8;
+        delay = 0;
+        col = color(0, 255, 0);
+        vel = new PVector(4, 0);
+    }
+
+    @Override
+    void shotDraw(PGraphics pg){
+        pg.beginDraw();
+
+            pg.noStroke();
+            pg.fill(col);
+            easyTriangle(pg, pos.x, pos.y, this.getAngle(), size);
+
+        pg.endDraw();
+    }
+}
+
+class JikiBlueShot extends Shot{
+    JikiBlueShot(float _x, float _y){
+        super(_x, _y);
+        size = 8;
+        delay = 0;
+        col = color(0, 0, 255);
+        vel = new PVector(4, 0);
+    }
+
+    @Override
+    void shotDraw(PGraphics pg){
+        pg.beginDraw();
+
+            pg.noStroke();
+            pg.fill(col);
+            easyTriangle(pg, pos.x, pos.y, this.getAngle(), size);
+
+        pg.endDraw();
+    }
+}
+
 class JikiRockOnShot extends Shot{
     Enemy target = null;
     float maxAngle = radians(120);
@@ -402,7 +465,7 @@ class JikiRockOnShot extends Shot{
         super(_x, _y);
         vel = (new PVector(0, 0));
         accel = (new PVector(0.1, 0));
-        col = (color(255, 0, 0));
+        col = (color(0, 0, 255));
         searchTarget();
     }
 
