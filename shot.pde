@@ -283,7 +283,7 @@ class LaserShot extends Shot{
         super.updateMe();
 
         if(leng < mxLeng){
-            if(vel.mag == 0 && accel.mag == 0){
+            if(vel.mag() == 0 && accel.mag() == 0){
                 //レーザー自体が動かない場合に、伸ばせるようにしないとレーザーがでん
                 //なのでこれないと設置型レーザーできないとおも
                 expSpeed = 3.0f;
@@ -402,10 +402,11 @@ class LaserShot extends Shot{
     
 }
 
+/*
 class JikiShot extends Shot{
     protected int damage = 1;
 }
-
+*/
 class JikiRedShot extends Shot{
     JikiRedShot(float _x, float _y){
         super(_x, _y);
