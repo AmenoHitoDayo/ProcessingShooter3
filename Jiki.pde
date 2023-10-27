@@ -161,7 +161,6 @@ class Jiki extends Machine{
           stage.addItem(i);
         }
       }
-      
     }
   
     Iterator<Mover> it2 = stage.getEnemys().iterator();
@@ -222,7 +221,6 @@ class Jiki extends Machine{
     }
   }
 
-  //リリース処理とリリース時の挙動が一緒に書いてあるのでわかりづらい・・・
   void release(){
     if(x){
       if(RedP > 1 && GreenP > 1 && BlueP > 1 && releaseWaitCount == 0){

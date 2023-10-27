@@ -26,7 +26,7 @@ class Shot extends Mover{
         if(isOutOfScreen()){
             kill();
         }
-        //大きい敵を倒すと弾が消えるあれ
+        //大きい敵を倒すと弾が消えるあれ(永夜抄)
         //画面外で死んでもなるのはよくない。
         if(parent != null && parent.isDead && !parent.isOutOfScreen()){
             Item item = new Item(pos.x, pos.y, 0, 0, 0);
@@ -266,6 +266,7 @@ class LaserShot extends Shot{
     protected float mxLeng = 0;
     protected PVector apex;   //先端の位置
     protected PVector defPos; //初期位置
+    protected float expSpeed = 3.0f;   //1f当たりに伸びる長さ
 
     LaserShot(float _x, float _y, float _l, float _w){
         super(_x, _y);
@@ -277,10 +278,19 @@ class LaserShot extends Shot{
     }
 
     @Override
+    //レーザー伸び挙動をテストすること
     void updateMe(){
         super.updateMe();
+
         if(leng < mxLeng){
-            leng = min(leng + vel.mag(), mxLeng);
+            if(vel.mag == 0 && accel.mag == 0){
+                //レーザー自体が動かない場合に、伸ばせるようにしないとレーザーがでん
+                //なのでこれないと設置型レーザーできないとおも
+                expSpeed = 3.0f;
+            }else{
+                expSpeed = vel.mag();
+            }
+            leng = min(leng + expSpeed, mxLeng);
             pos = (defPos);
         }
         apex = PVector.add(pos, PVector.mult(vel.normalize(null), leng));
@@ -390,6 +400,10 @@ class LaserShot extends Shot{
         */
     }
     
+}
+
+class JikiShot extends Shot{
+    protected int damage = 1;
 }
 
 class JikiRedShot extends Shot{
@@ -569,13 +583,8 @@ class JikiBarrierShot extends Shot{
 
             pg.blendMode(blendStyle);
             pg.strokeWeight(2);
-            if(gameConfig.isGlow){
-                pg.stroke(255);
-                pg.fill(0, 255, 0, 32);
-            }else{
-                pg.stroke(0, 255, 0);
-                pg.noFill();
-            }
+            pg.stroke(255);
+            pg.fill(0, 255, 0, 32);
             pg.ellipse(pos.x, pos.y, size * 2, size * 2);
 
             pg.pop();
@@ -608,11 +617,7 @@ class JikiBlueLaser extends Shot{
         this.setDelay(64);
         vel = (new PVector(10, 0));
         accel = (new PVector(0.1, 0));
-        if(gameConfig.isGlow){
-            col = (color(64, 64, 255, 180));
-        }else{
-            col = (color(64, 64, 255));
-        }
+        col = (color(64, 64, 255, 180));
         setDeletable(false);
         setHittable(true);
         setBlendStyle(BLEND);

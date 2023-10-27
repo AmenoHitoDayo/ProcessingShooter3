@@ -174,7 +174,7 @@ class SampleStage extends Stage{
     }
 
     void enemySpawn(){
-        if(count % 10 == 0 && getEnemyCount() <= 0){
+    if(count % 10 == 0 && getEnemyCount() <= 0){
             addEnemy(new SampleEnemy());
         }
     }
@@ -354,6 +354,7 @@ class Stage_Test extends Stage{
     }
 }
 
+//1面:テーマ:黒
 class Stage01 extends Stage{
     private String stageBGM = "sol_battle047.mp3";
     private String bossBGM = "sol_battle046.mp3";
@@ -364,4 +365,13 @@ class Stage01 extends Stage{
         setBGMGain(getBGM(), 0);
         count = 0;
     }
+
+    void stageStructure(){
+
+    }
 }
+
+//2面:テーマ:むらさき
+
+
+//3面:テーマ:茶色

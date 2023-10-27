@@ -32,12 +32,8 @@ class RectParticle extends Particle{
         this.size =(size + maxSize / lifeTime);
 
         pg.push();
-            if(gameConfig.isGlow){
-                pg.blendMode(ADD);
-                pg.stroke(col, 255 - (190 / lifeTime) * count);
-            }else{
-                pg.stroke(col);
-            }
+            pg.blendMode(ADD);
+            pg.stroke(col, 255 - (190 / lifeTime) * count);
             pg.noFill();
             pg.strokeWeight(5);
             pg.translate(pos.x, pos.y);
@@ -65,12 +61,8 @@ class CircleParticle extends Particle{
         this.size =(size + maxSize / lifeTime);
 
         pg.push();
-            if(gameConfig.isGlow){
-                pg.blendMode(ADD);
-                pg.stroke(col, 255 - (190 / lifeTime) * count);
-            }else{
-                pg.stroke(col);
-            }
+            pg.blendMode(ADD);
+            pg.stroke(col, 255 - (190 / lifeTime) * count);
             pg.noFill();
             pg.strokeWeight(5);
             pg.ellipse(pos.x, pos.y, size + count, size + count);
@@ -97,28 +89,15 @@ class GlowBallParticle extends Particle{
 
     @Override
     void drawMe(PGraphics pg){
-        if(gameConfig.isGlow){
-            pg.beginDraw();
-                pg.push();
-                pg.blendMode(SCREEN);
-                for(int i = 0; i < 10; i++){
-                    pg.fill(col, 10);
-                    pg.noStroke();
-                    pg.ellipse(pos.x, pos.y, size * pow(0.95, i), size * pow(0.95, i));
-                }
-                pg.pop();
-            pg.endDraw();
-        }else{
-            /*
-            pg.beginDraw();
-                pg.push();
-                pg.blendMode(BLEND);
-                    pg.fill(col);
-                    pg.noStroke();
-                    pg.circle(pos.x, pos.y, size);
-                pg.pop();
-            pg.endDraw();
-            */
-        }
+        pg.beginDraw();
+            pg.push();
+            pg.blendMode(SCREEN);
+            for(int i = 0; i < 10; i++){
+                pg.fill(col, 10);
+                pg.noStroke();
+                pg.ellipse(pos.x, pos.y, size * pow(0.95, i), size * pow(0.95, i));
+            }
+            pg.pop();
+        pg.endDraw();
     }
 }

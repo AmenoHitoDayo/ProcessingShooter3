@@ -1118,3 +1118,58 @@ class Boss_Mauve extends Enemy{
         vel = makeVectorForPointSecond(pos, p, 30);
     }
 }
+
+//汎用雑魚(直線移動)
+class zakoMarch extends Enemy{
+    March01(float _x, float _y){
+        super(_x, _y, 2);
+        vel = new PVector(-0.07, 1);
+        col = HSVtoRGB(255, 255, 255);
+    }
+
+    void drawMe(PGraphics pg){
+        pg.beginDraw();
+            pg.stroke(255);
+            pg.fill(col);
+            easyTriangle(pg, this.pos, 0, this.size);
+        pg.endDraw();
+    }
+}
+
+//ここから本編1面
+class s13w1 extends Enemy(){    //白3way
+    s13w1(float _x, float _y){
+        super(_x, _y, 2);
+        vel = new PVector(-0.07, 1);
+        col = HSVtoRGB(127, 127, 127);
+    }
+}
+
+    //白の3way
+    //黒のnway
+    //白黒の複数way or 円
+    //3色を加算で出してくるもの
+
+class s1bw72 extends Enemy(){   //白黒固定7w
+    s1bw72(float _x, float _y){
+        super(_x, _y, 15);
+        vel = new PVector(-0.07, 1);
+        col = HSVtoRGB(127, 127, 127);
+    }
+
+    shot(){
+        if(count != 60) return;
+        //7way白黒
+        List<Shot> shots = nWay(pos, 5, 3, radians(180), radians(15));
+        for(int i = 0; i < shots.size(); i++){
+            if(i % 2 == 0){
+                s.setColor(0);
+            }else{
+                s.setColor(255);
+            }
+            s.setShotStyle(ShotStyle.Orb);
+            s.setSize(4);
+            playingStage.addEnemyShot(s);
+        }
+    }
+}
